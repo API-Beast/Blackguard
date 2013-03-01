@@ -48,7 +48,7 @@ Game::Game()
 #ifdef GRG_PREFER_INSTALLED_VERSION
   mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
 #else
-  std::vector<std::string> paths{"//", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/usr/share/grg"};
+  std::vector<std::string> paths{".", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/usr/share/grg"};
   for(const std::string& path : paths)
   {
     if(FileExists(path+"/AssetInfo.txt"))
