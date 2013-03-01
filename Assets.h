@@ -18,38 +18,22 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_GAME_H
-#define GRG_GAME_H
-
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <string>
-
-#include "Assets.h"
+#ifndef GRG_ASSETS_H
+#define GRG_ASSETS_H
+#include <SFML/Graphics/Texture.hpp>
 
 namespace GRG {
 
-class Game
+class Assets
 {
 public:
-  Game();
-  virtual ~Game();
-  int run();
-  float getDeltaTime() const;
-  std::string getAssetPath(const std::string& path="");
-  void draw();
-  void update();
-  void processEvents();
+  void initialize();
 public:
-  static Game* instance;
-  Assets assets;
-private:
-  sf::RenderWindow* mWindow;
-  sf::Clock mClock;
-  float mDeltaTime;
-  bool mQuit;
-  std::string mDataPath;
+  struct
+  {
+    sf::Texture TitleTest;
+  } Textures;
 };
 }
 
-#endif // GRG_GAME_H
+#endif // GRG_ASSETS_H

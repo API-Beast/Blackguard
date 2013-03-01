@@ -19,13 +19,47 @@
  */
 
 #include "Game.h"
+#include "config.h"
+
+#include <iostream>
 
 using namespace GRG;
 
+namespace
+{
+  #include <sys/stat.h>
+  
+  bool FileExists(const std::string& path)
+  {
+    struct stat fileInfo;
+    int failed;
+    failed = stat(path.c_str(), &fileInfo);
+    return !failed && !(fileInfo.st_mode & S_IFDIR);
+  }
+}
+
+Game* Game::instance=NULL;
+
 Game::Game()
 {
+  instance = this;
   mWindow = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
   mWindow->setVerticalSyncEnabled(true);
+#ifdef GRG_PREFER_INSTALLED_VERSION
+  mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
+#else
+  std::vector<std::string> paths{"//", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/usr/share/grg"};
+  for(const std::string& path : paths)
+  {
+    if(FileExists(path+"/AssetInfo.txt"))
+    {
+      mDataPath = path;
+      break;
+    }
+  }
+#endif
+  std::cout << "Using data from " << mDataPath << std::endl;
+  assets.initialize();
 }
 
 Game::~Game()
@@ -55,7 +89,12 @@ int Game::run()
 void Game::draw()
 {
   mWindow->clear();
-  // TODO
+  
+  sf::Sprite helloWorld(assets.Textures.TitleTest);
+  helloWorld.setOrigin( sf::Vector2f(assets.Textures.TitleTest.getSize()) / 2.f);
+  helloWorld.setPosition(mWindow->getView().getCenter());
+  mWindow->draw(helloWorld);
+  
   mWindow->display();
 }
 
@@ -75,4 +114,9 @@ void Game::processEvents()
 void Game::update()
 {
   // TODO
+}
+
+std::string Game::getAssetPath(const std::string& path)
+{
+  return mDataPath+"/"+path;
 }

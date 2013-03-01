@@ -1,0 +1,8 @@
+#cmakedefine GRG_WINDOWS
+#cmakedefine GRG_MAC
+#cmakedefine GRG_LINUX
+#cmakedefine GRG_UNKNOWN
+
+#define GRG_SOURCE_DIR "@CMAKE_CURRENT_SOURCE_DIR@"
+#define GRG_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+#cmakedefine GRG_PREFER_INSTALLED_VERSION
