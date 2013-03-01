@@ -2,3 +2,9 @@
 .kdev4/
 .kdev_include_paths
 *~
+CMakeFiles/*
+Makefile
+cmake_install.cmake
+config.h
+grg
+CMakeCache.txt
