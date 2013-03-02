@@ -21,6 +21,7 @@
 #ifndef GRG_ASSETS_H
 #define GRG_ASSETS_H
 #include <SFML/Graphics/Texture.hpp>
+#include <map>
 
 namespace GRG {
 
@@ -29,10 +30,7 @@ class Assets
 public:
   void initialize();
 public:
-  struct
-  {
-    sf::Texture TitleTest;
-  } Textures;
+  std::map<std::string, sf::Texture> textures;
 };
 }
 

@@ -48,6 +48,7 @@ private:
   sf::Clock clock;
   float deltaTime;
   bool quit;
+  sf::Sprite titleScreen;
   std::string dataPath;
 };
 }

@@ -25,5 +25,5 @@ using namespace GRG;
 
 void Assets::initialize()
 {
-  Textures.TitleTest.loadFromFile(Game::instance->getAssetPath("TitleTest.png"));
+  textures["TitleTest"].loadFromFile(Game::instance->getAssetPath("TitleTest.png"));
 }

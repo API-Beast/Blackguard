@@ -60,6 +60,11 @@ Game::Game()
 #endif
   std::cout << "Using data from " << dataPath << std::endl;
   assets.initialize();
+  
+  const sf::Texture& texture = assets.textures["TitleTest"];
+  titleScreen.setTexture(texture);
+  titleScreen.setOrigin(sf::Vector2f(texture.getSize()) / 2.f);
+  titleScreen.setPosition(window->getView().getCenter());
 }
 
 Game::~Game()
@@ -90,10 +95,7 @@ void Game::draw()
 {
   window->clear();
   
-  sf::Sprite helloWorld(assets.Textures.TitleTest);
-  helloWorld.setOrigin( sf::Vector2f(assets.Textures.TitleTest.getSize()) / 2.f);
-  helloWorld.setPosition(window->getView().getCenter());
-  window->draw(helloWorld);
+  window->draw(titleScreen);
   
   window->display();
 }
