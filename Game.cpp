@@ -21,22 +21,7 @@
 #include "Game.h"
 #include "config.h"
 
-#include <iostream>
-
 using namespace GRG;
-
-namespace
-{
-  #include <sys/stat.h>
-  
-  bool FileExists(const std::string& path)
-  {
-    struct stat fileInfo;
-    int failed;
-    failed = stat(path.c_str(), &fileInfo);
-    return !failed && !(fileInfo.st_mode & S_IFDIR);
-  }
-}
 
 Game* Game::instance=NULL;
 
@@ -45,21 +30,8 @@ Game::Game()
   Game::instance = this;
   window = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
   window->setVerticalSyncEnabled(true);
-#ifdef GRG_PREFER_INSTALLED_VERSION
-  mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
-#else
-  std::vector<std::string> paths{".", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/usr/share/grg"};
-  for(const std::string& path : paths)
-  {
-    if(FileExists(path+"/AssetInfo.txt"))
-    {
-      dataPath = path;
-      break;
-    }
-  }
-#endif
-  std::cout << "Using data from " << dataPath << std::endl;
-  assets.initialize();
+
+  assets.load();
   
   const sf::Texture& texture = assets.textures["TitleTest"];
   titleScreen.setTexture(texture);
@@ -120,9 +92,4 @@ void Game::processEvents()
 void Game::update()
 {
   // TODO
-}
-
-std::string Game::getAssetPath(const std::string& path)
-{
-  return dataPath+"/"+path;
 }

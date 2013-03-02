@@ -22,15 +22,19 @@
 #define GRG_ASSETS_H
 #include <SFML/Graphics/Texture.hpp>
 #include <map>
+#include "config.h"
 
 namespace GRG {
 
 class Assets
 {
 public:
-  void initialize();
+  Assets();
+  void load();
+  std::string getPath(const std::string&) const;
 public:
   std::map<std::string, sf::Texture> textures;
+  std::string path;
 };
 }
 

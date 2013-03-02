@@ -36,7 +36,6 @@ public:
   virtual ~Game();
   int run();
   float getDeltaTime() const;
-  std::string getAssetPath(const std::string& path="");
   void draw();
   void update();
   void processEvents();
@@ -49,7 +48,6 @@ private:
   float deltaTime;
   bool quit;
   sf::Sprite titleScreen;
-  std::string dataPath;
 };
 }
 

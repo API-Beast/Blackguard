@@ -21,9 +21,47 @@
 #include "Assets.h"
 #include "Game.h"
 
+#include <iostream>
+
 using namespace GRG;
 
-void Assets::initialize()
+namespace
 {
-  textures["TitleTest"].loadFromFile(Game::instance->getAssetPath("TitleTest.png"));
+  #include <sys/stat.h>
+  
+  bool FileExists(const std::string& path)
+  {
+    struct stat fileInfo;
+    int failed;
+    failed = stat(path.c_str(), &fileInfo);
+    return !failed && !(fileInfo.st_mode & S_IFDIR);
+  }
+}
+
+Assets::Assets()
+{
+#ifdef GRG_PREFER_INSTALLED_VERSION
+  mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
+#else
+  std::vector<std::string> paths{"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
+  for(const std::string& path : paths)
+  {
+    if(FileExists(path+"/AssetInfo.txt"))
+    {
+      this->path = path;
+      break;
+    }
+  }
+#endif
+  std::cout << "Using data from " << path << std::endl;
+}
+
+void Assets::load()
+{
+  textures["TitleTest"].loadFromFile(this->getPath("TitleTest.png"));
+}
+
+std::string Assets::getPath(const std::string& path) const
+{
+  return this->path+"/"+path;
 }
