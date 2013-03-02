@@ -44,11 +44,11 @@ public:
   static Game* instance;
   Assets assets;
 private:
-  sf::RenderWindow* mWindow;
-  sf::Clock mClock;
-  float mDeltaTime;
-  bool mQuit;
-  std::string mDataPath;
+  sf::RenderWindow* window;
+  sf::Clock clock;
+  float deltaTime;
+  bool quit;
+  std::string dataPath;
 };
 }
 

@@ -42,9 +42,9 @@ Game* Game::instance=NULL;
 
 Game::Game()
 {
-  instance = this;
-  mWindow = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
-  mWindow->setVerticalSyncEnabled(true);
+  Game::instance = this;
+  window = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
+  window->setVerticalSyncEnabled(true);
 #ifdef GRG_PREFER_INSTALLED_VERSION
   mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
 #else
@@ -53,32 +53,32 @@ Game::Game()
   {
     if(FileExists(path+"/AssetInfo.txt"))
     {
-      mDataPath = path;
+      dataPath = path;
       break;
     }
   }
 #endif
-  std::cout << "Using data from " << mDataPath << std::endl;
+  std::cout << "Using data from " << dataPath << std::endl;
   assets.initialize();
 }
 
 Game::~Game()
 {
-  delete mWindow;
+  delete window;
 }
 
 float Game::getDeltaTime() const
 {
-  return mDeltaTime;
+  return deltaTime;
 }
 
 int Game::run()
 {
   while(true)
   {
-    if(!mWindow->isOpen()) return EXIT_SUCCESS;
+    if(!window->isOpen()) return EXIT_SUCCESS;
     
-    mDeltaTime = mClock.restart().asSeconds();
+    this->deltaTime = clock.restart().asSeconds();
     
     draw();
     processEvents();
@@ -88,27 +88,31 @@ int Game::run()
 
 void Game::draw()
 {
-  mWindow->clear();
+  window->clear();
   
   sf::Sprite helloWorld(assets.Textures.TitleTest);
   helloWorld.setOrigin( sf::Vector2f(assets.Textures.TitleTest.getSize()) / 2.f);
-  helloWorld.setPosition(mWindow->getView().getCenter());
-  mWindow->draw(helloWorld);
+  helloWorld.setPosition(window->getView().getCenter());
+  window->draw(helloWorld);
   
-  mWindow->display();
+  window->display();
 }
 
 void Game::processEvents()
 {
-    sf::Event event;
-    while(mWindow->pollEvent(event))
+  sf::Event event;
+  while(window->pollEvent(event))
+  {
+    if(event.type == sf::Event::Closed) window->close();
+    
+    if(event.type == sf::Event::KeyPressed)
     {
-      if(event.type == sf::Event::Closed)
-        mWindow->close();
-      if(event.type == sf::Event::KeyPressed)
-        if(event.key.code == sf::Keyboard::Escape)
-          mWindow->close();
+      if(event.key.code == sf::Keyboard::Escape)
+      {
+        window->close();
+      }
     }
+  }
 }
 
 void Game::update()
@@ -118,5 +122,5 @@ void Game::update()
 
 std::string Game::getAssetPath(const std::string& path)
 {
-  return mDataPath+"/"+path;
+  return dataPath+"/"+path;
 }
