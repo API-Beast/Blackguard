@@ -31,10 +31,10 @@ namespace
   
   bool FileExists(const std::string& path)
   {
-    struct stat fileInfo;
-    int failed;
-    failed = stat(path.c_str(), &fileInfo);
-    return !failed && !(fileInfo.st_mode & S_IFDIR);
+	struct stat fileInfo;
+	int failed;
+	failed = stat(path.c_str(), &fileInfo);
+	return !failed && !(fileInfo.st_mode & S_IFDIR);
   }
 }
 
@@ -43,14 +43,18 @@ Assets::Assets()
 #ifdef GRG_PREFER_INSTALLED_VERSION
   mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
 #else
-  std::vector<std::string> paths{"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
+	std::string paths[]={"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
+  /*std::vector<std::string> paths;
+  paths.push_back("./Assets");
+  paths.push_back(GRG_SOURCE_DIR"/Assets");
+  paths.push_back(GRG_INSTALL_PREFIX"/share/grg");*/
   for(const std::string& path : paths)
   {
-    if(FileExists(path+"/AssetInfo.txt"))
-    {
-      this->path = path;
-      break;
-    }
+	if(FileExists(path+"/AssetInfo.txt"))
+	{
+	  this->path = path;
+	  break;
+	}
   }
 #endif
   std::cout << "Using data from " << path << std::endl;
