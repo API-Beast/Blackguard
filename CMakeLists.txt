@@ -22,4 +22,15 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ENABLE_CPP11()
 
+# On MSVC link the static STL version
+if(MSVC)
+  set(CMAKE_C_FLAGS_DEBUG "/MTd")
+  set(CMAKE_C_FLAGS_RELEASE "/MT")
+  set(CMAKE_C_FLAGS_RELEASE "/Zi")
+  set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+  set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+  set(CMAKE_TARGET_DEFINITIONS "SFML_STATIC" "WIN32")
+  add_definitions("/Zi /D \"SFML_STATIC\" /D \"_CRT_SECURE_NO_DEPRECATE\" ")
+ENDIF(MSVC)
+
 add_subdirectory(Source)
