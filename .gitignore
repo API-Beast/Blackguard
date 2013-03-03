@@ -2,6 +2,7 @@
 .kdev4/
 .kdev_include_paths
 *~
+build/*
 CMakeFiles/*
 Makefile
 cmake_install.cmake

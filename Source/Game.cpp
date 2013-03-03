@@ -21,11 +21,12 @@
 #include "Game.h"
 #include "config.h"
 
-#include "Utils/SwitchParser.h"
+#include "Utility/SwitchParser.h"
 
 #include <SFML/Graphics.hpp>
 
 using namespace GRG;
+using namespace GRG::Utility;
 
 Game* Game::instance=NULL;
 

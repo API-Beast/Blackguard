@@ -22,19 +22,20 @@
 #ifndef GRG_BURGLARYSTATE_H
 #define GRG_BURGLARYSTATE_H
 
-#include "../AbstractGameState.h"
+#include "../GameState.h"
 
 namespace GRG
 {
-
-class BurglaryState : public GRG::AbstractGameState
-{
-public:
-	virtual bool processEvent(sf::Event&);
-	virtual void update();
-	virtual void draw(sf::RenderTarget*);
-
-};
+	namespace BurglaryState
+	{
+		class BurglaryState : public GameState
+		{
+		public:
+			virtual bool processEvent(sf::Event&);
+			virtual void update();
+			virtual void draw(sf::RenderTarget*);
+		};
+	}
 }
 
 #endif // GRG_BURGLARYSTATE_H

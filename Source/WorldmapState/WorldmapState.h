@@ -22,19 +22,20 @@
 #ifndef GRG_WORLDMAPSTATE_H
 #define GRG_WORLDMAPSTATE_H
 
-#include <../../data/Projects/GenericRogueGame/Source/AbstractGameState.h>
+#include "../GameState.h"
 
 namespace GRG
 {
-
-class WorldmapState : public GRG::AbstractGameState
-{
-public:
-	virtual bool processEvent(sf::Event&);
-	virtual void update();
-	virtual void draw(sf::RenderTarget*);
-
-};
+	namespace WorldmapState
+	{
+		class WorldmapState : public GameState
+		{
+		public:
+			virtual bool processEvent(sf::Event&);
+			virtual void update();
+			virtual void draw(sf::RenderTarget*);
+		};
+	}
 }
 
 #endif // GRG_WORLDMAPSTATE_H

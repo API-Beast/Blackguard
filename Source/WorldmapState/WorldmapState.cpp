@@ -21,7 +21,7 @@
 
 #include "WorldmapState.h"
 
-using namespace GRG;
+using namespace GRG::WorldmapState;
 
 bool WorldmapState::processEvent(sf::Event&)
 {

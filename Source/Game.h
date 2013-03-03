@@ -32,40 +32,39 @@
 
 namespace sf
 {
-class RenderWindow;
+	class RenderWindow;
 }
 
 namespace GRG
 {
-	
-class AbstractGameState;
+	class GameState;
 
-class Game
-{
-public:
-	Game(int argc, char** argv);
-	virtual ~Game();
-	int run();
-	float getDeltaTime() const;
-	void draw();
-	void update();
-	void processEvents();
-public:
-	static Game* instance;
-	Assets assets;
-	GameData data;
-	
-	AbstractGameState* currentGameState;
-	struct // States
+	class Game
 	{
-		BurglaryState burglary;
-		WorldmapState worldmap;
-	} State;
-private:
-	sf::RenderWindow* window;
-	sf::Clock clock;
-	float deltaTime;
-};
+	public:
+		Game(int argc, char** argv);
+		virtual ~Game();
+		int run();
+		float getDeltaTime() const;
+		void draw();
+		void update();
+		void processEvents();
+	public:
+		static Game* instance;
+		Assets assets;
+		GameData data;
+		GameState* currentGameState;
+
+		struct // States
+		{
+			BurglaryState::BurglaryState burglary;
+			WorldmapState::WorldmapState worldmap;
+		} State;
+	private:
+		sf::RenderWindow* window;
+		sf::Clock clock;
+		float deltaTime;
+	};
 }
 
 #endif // GRG_GAME_H

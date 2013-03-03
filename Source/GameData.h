@@ -24,26 +24,24 @@
 
 namespace GRG
 {
-
-/** Persistent data across multiple game states. This is the data that would be saved in Savegames. */
-struct GameData
-{
-	struct // Player
+	/** Persistent data across multiple game states. This is the data that would be saved in Savegames. */
+	struct GameData
 	{
-		int experience;
-		int level;
-		int gold;
-		// TODO Skills
-		// TODO Equipment
-		// TODO Inventory
-	} Player;
+		struct // Player
+		{
+			int experience;
+			int level;
+			int gold;
+			// TODO Skills
+			// TODO Equipment
+			// TODO Inventory
+		} Player;
 
-	struct // World
-	{
-		// TODO
-	} World;
-};
-
+		struct // World
+		{
+			// TODO
+		} World;
+	};
 }
 
 #endif // GRG_GAMEDATA_H

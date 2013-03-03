@@ -19,21 +19,21 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_ABSTRACTGAMESTATE_H
-#define GRG_ABSTRACTGAMESTATE_H
+#ifndef GRG_GAMESTATE_H
+#define GRG_GAMESTATE_H
+
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
 
 namespace GRG
 {
-
-class AbstractGameState
-{
-public:
-	virtual void draw(sf::RenderTarget*)=0;
-	virtual void update()=0;
-	virtual bool processEvent(sf::Event&)=0;
-};
+	class GameState
+	{
+	public:
+		virtual void draw(sf::RenderTarget*)=0;
+		virtual void update()=0;
+		virtual bool processEvent(sf::Event&)=0;
+	};
 }
 
-#endif // GRG_ABSTRACTGAMESTATE_H
+#endif // GRG_GAMESTATE_H

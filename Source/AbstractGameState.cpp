@@ -19,6 +19,6 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "AbstractGameState.h"
+#include "GameState.h"
 
 using namespace GRG;

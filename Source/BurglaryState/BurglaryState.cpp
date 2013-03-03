@@ -21,7 +21,7 @@
 
 #include "BurglaryState.h"
 
-using namespace GRG;
+using namespace GRG::BurglaryState;
 
 bool BurglaryState::processEvent(sf::Event&)
 {

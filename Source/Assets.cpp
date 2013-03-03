@@ -27,15 +27,15 @@ using namespace GRG;
 
 namespace
 {
-#include <sys/stat.h>
+	#include <sys/stat.h>
 
-bool FileExists(const std::string& path)
-{
-	struct stat fileInfo;
-	int failed;
-	failed = stat(path.c_str(), &fileInfo);
-	return !failed && !(fileInfo.st_mode & S_IFDIR);
-}
+	bool FileExists(const std::string& path)
+	{
+		struct stat fileInfo;
+		int failed;
+		failed = stat(path.c_str(), &fileInfo);
+		return !failed && !(fileInfo.st_mode & S_IFDIR);
+	}
 }
 
 Assets::Assets()
