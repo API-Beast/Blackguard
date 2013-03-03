@@ -21,75 +21,78 @@
 #include "Game.h"
 #include "config.h"
 
+#include <SFML/Graphics.hpp>
+
 using namespace GRG;
 
 Game* Game::instance=NULL;
 
 Game::Game()
 {
-  Game::instance = this;
-  window = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
-  window->setVerticalSyncEnabled(true);
+	Game::instance = this;
+	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
+	window->setVerticalSyncEnabled(true);
 
-  assets.load();
-  
-  const sf::Texture& texture = assets.textures["TitleTest"];
-  titleScreen.setTexture(texture);
-  titleScreen.setOrigin(sf::Vector2f(texture.getSize()) / 2.f);
-  titleScreen.setPosition(window->getView().getCenter());
+	assets.load();
+
+	const sf::Texture& texture = assets.textures["TitleTest"];
+	titleScreen.setTexture(texture);
+	titleScreen.setOrigin(sf::Vector2f(texture.getSize()) / 2.f);
+	titleScreen.setPosition(window->getView().getCenter());
 }
 
 Game::~Game()
 {
-  delete window;
+	delete window;
 }
 
 float Game::getDeltaTime() const
 {
-  return deltaTime;
+	return deltaTime;
 }
 
 int Game::run()
 {
-  while(true)
-  {
-    if(!window->isOpen()) return EXIT_SUCCESS;
-    
-    this->deltaTime = clock.restart().asSeconds();
-    
-    draw();
-    processEvents();
-    update();
-  }
+	while(true)
+	{
+		if(!window->isOpen()) return EXIT_SUCCESS;
+
+		this->deltaTime = clock.restart().asSeconds();
+
+		draw();
+		processEvents();
+		update();
+	}
 }
 
 void Game::draw()
 {
-  window->clear();
-  
-  window->draw(titleScreen);
-  
-  window->display();
+	window->clear();
+
+	window->draw(titleScreen);
+
+	window->display();
 }
 
 void Game::processEvents()
 {
-  sf::Event event;
-  while(window->pollEvent(event))
-  {
-    if(event.type == sf::Event::Closed) window->close();
-    
-    if(event.type == sf::Event::KeyPressed)
-    {
-      if(event.key.code == sf::Keyboard::Escape)
-      {
-        window->close();
-      }
-    }
-  }
+	sf::Event event;
+
+	while(window->pollEvent(event))
+	{
+		if(event.type == sf::Event::Closed) window->close();
+
+		if(event.type == sf::Event::KeyPressed)
+		{
+			if(event.key.code == sf::Keyboard::Escape)
+			{
+				window->close();
+			}
+		}
+	}
 }
 
 void Game::update()
 {
-  // TODO
+	// TODO
 }

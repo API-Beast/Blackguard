@@ -21,33 +21,41 @@
 #ifndef GRG_GAME_H
 #define GRG_GAME_H
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <string>
 
 #include "Assets.h"
+#include "GameData.h"
 
-namespace GRG {
+namespace sf
+{
+class RenderWindow;
+}
+
+namespace GRG
+{
 
 class Game
 {
 public:
-  Game();
-  virtual ~Game();
-  int run();
-  float getDeltaTime() const;
-  void draw();
-  void update();
-  void processEvents();
+	Game();
+	virtual ~Game();
+	int run();
+	float getDeltaTime() const;
+	void draw();
+	void update();
+	void processEvents();
 public:
-  static Game* instance;
-  Assets assets;
+	static Game* instance;
+	Assets assets;
+	GameData data;
 private:
-  sf::RenderWindow* window;
-  sf::Clock clock;
-  float deltaTime;
-  bool quit;
-  sf::Sprite titleScreen;
+	sf::RenderWindow* window;
+	sf::Clock clock;
+	float deltaTime;
+	bool quit;
+	sf::Sprite titleScreen;
 };
 }
 

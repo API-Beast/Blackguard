@@ -24,17 +24,18 @@
 #include <map>
 #include "config.h"
 
-namespace GRG {
+namespace GRG
+{
 
 class Assets
 {
 public:
-  Assets();
-  void load();
-  std::string getPath(const std::string&) const;
+	Assets();
+	void load();
+	std::string getPath(const std::string&) const;
 public:
-  std::map<std::string, sf::Texture> textures;
-  std::string path;
+	std::map<std::string, sf::Texture> textures;
+	std::string path;
 };
 }
 

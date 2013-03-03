@@ -21,6 +21,6 @@
 
 int main()
 {
-  GRG::Game game;
-  return game.run();
+	GRG::Game game;
+	return game.run();
 }

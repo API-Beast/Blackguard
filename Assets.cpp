@@ -27,41 +27,43 @@ using namespace GRG;
 
 namespace
 {
-  #include <sys/stat.h>
-  
-  bool FileExists(const std::string& path)
-  {
-    struct stat fileInfo;
-    int failed;
-    failed = stat(path.c_str(), &fileInfo);
-    return !failed && !(fileInfo.st_mode & S_IFDIR);
-  }
+#include <sys/stat.h>
+
+bool FileExists(const std::string& path)
+{
+	struct stat fileInfo;
+	int failed;
+	failed = stat(path.c_str(), &fileInfo);
+	return !failed && !(fileInfo.st_mode & S_IFDIR);
+}
 }
 
 Assets::Assets()
 {
 #ifdef GRG_PREFER_INSTALLED_VERSION
-  mDataPath = GRG_INSTALL_PREFIX"/share/grg";  
+	mDataPath = GRG_INSTALL_PREFIX"/share/grg";
 #else
-  std::string paths[]={"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
-  for(const std::string& path : paths)
-  {
-    if(FileExists(path+"/AssetInfo.txt"))
-    {
-      this->path = path;
-      break;
-    }
-  }
+	std::string paths[]= {"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
+
+	for(const std::string& path : paths)
+	{
+		if(FileExists(path+"/AssetInfo.txt"))
+		{
+			this->path = path;
+			break;
+		}
+	}
+
 #endif
-  std::cout << "Using data from " << path << std::endl;
+	std::cout << "Using data from " << path << std::endl;
 }
 
 void Assets::load()
 {
-  textures["TitleTest"].loadFromFile(this->getPath("TitleTest.png"));
+	textures["TitleTest"].loadFromFile(this->getPath("TitleTest.png"));
 }
 
 std::string Assets::getPath(const std::string& path) const
 {
-  return this->path+"/"+path;
+	return this->path+"/"+path;
 }

@@ -36,7 +36,7 @@ ENABLE_CPP11()
 find_package(SFML REQUIRED COMPONENTS System Window Graphics)
 
 include_directories(${SFML_INCLUDE_DIR})
-add_executable(grg Assets.cpp Game.cpp main.cpp Game.cpp ${INCS})
+add_executable(grg GameData.cpp Assets.cpp Game.cpp main.cpp Game.cpp ${INCS})
 target_link_libraries(grg ${SFML_LIBRARIES})
 
 install(TARGETS grg RUNTIME DESTINATION bin)
