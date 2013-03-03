@@ -23,9 +23,9 @@ if(MSVC)
   set(CMAKE_C_FLAGS_RELEASE "/Zi")
   set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
   set(CMAKE_CXX_FLAGS_RELEASE "/MT")
-	set(CMAKE_TARGET_DEFINITIONS "SFML_STATIC" "WIN32")
-	add_definitions("/Zi /D \"SFML_STATIC\" /D \"_CRT_SECURE_NO_DEPRECATE\" ")
-	file(GLOB_RECURSE INCS "*.h") # Forgive me but without MSVC won't list the headers :(
+  set(CMAKE_TARGET_DEFINITIONS "SFML_STATIC" "WIN32")
+  add_definitions("/Zi /D \"SFML_STATIC\" /D \"_CRT_SECURE_NO_DEPRECATE\" ")
+  file(GLOB_RECURSE INCS "*.h") # Forgive me but without MSVC won't list the headers :(
 ENDIF(MSVC)
 
 configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
