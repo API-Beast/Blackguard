@@ -1,5 +1,6 @@
 /*
- *   Copyright (C) 2013 Manuel Riecke <m.riecke@mrbeast.org>
+ *   Copyright 2013 Manuel Riecke <m.riecke@mrbeast.org>
+ *   Copyright 2013 Raffael Zica <raffael@trollgames.de>
  *
  *   This software is provided 'as-is', without any express or implied
  *   warranty.  In no event will the authors be held liable for any damages
@@ -18,54 +19,22 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_GAME_H
-#define GRG_GAME_H
+#ifndef GRG_BURGLARYSTATE_H
+#define GRG_BURGLARYSTATE_H
 
-#include <SFML/System/Clock.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <string>
-
-#include "Assets.h"
-#include "GameData.h"
-#include "BurglaryState/BurglaryState.h"
-#include "WorldmapState/WorldmapState.h"
-
-namespace sf
-{
-class RenderWindow;
-}
+#include "../AbstractGameState.h"
 
 namespace GRG
 {
-	
-class AbstractGameState;
 
-class Game
+class BurglaryState : public GRG::AbstractGameState
 {
 public:
-	Game(int argc, char** argv);
-	virtual ~Game();
-	int run();
-	float getDeltaTime() const;
-	void draw();
-	void update();
-	void processEvents();
-public:
-	static Game* instance;
-	Assets assets;
-	GameData data;
-	
-	AbstractGameState* currentGameState;
-	struct // States
-	{
-		BurglaryState burglary;
-		WorldmapState worldmap;
-	} State;
-private:
-	sf::RenderWindow* window;
-	sf::Clock clock;
-	float deltaTime;
+	virtual bool processEvent(sf::Event&);
+	virtual void update();
+	virtual void draw(sf::RenderTarget*);
+
 };
 }
 
-#endif // GRG_GAME_H
+#endif // GRG_BURGLARYSTATE_H

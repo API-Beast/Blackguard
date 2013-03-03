@@ -21,24 +21,33 @@
 #include "Game.h"
 #include "config.h"
 
+#include "Utils/SwitchParser.h"
+
 #include <SFML/Graphics.hpp>
 
 using namespace GRG;
 
 Game* Game::instance=NULL;
 
-Game::Game()
+Game::Game(int argc, char** argv)
 {
 	Game::instance = this;
+	
+	SwitchParser parser;
+	BooleanSwitch testWorldmap;
+	
+	parser.registerSwitch(testWorldmap, "test-world");
+	parser.parseArgv(argc, argv);
+	
 	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
 	window->setVerticalSyncEnabled(true);
 
 	assets.load();
-
-	const sf::Texture& texture = assets.textures["TitleTest"];
-	titleScreen.setTexture(texture);
-	titleScreen.setOrigin(sf::Vector2f(texture.getSize()) / 2.f);
-	titleScreen.setPosition(window->getView().getCenter());
+	
+	if(testWorldmap.isSet)
+		currentGameState = &(State.worldmap);
+	else
+		currentGameState = &(State.burglary);
 }
 
 Game::~Game()
@@ -68,9 +77,7 @@ int Game::run()
 void Game::draw()
 {
 	window->clear();
-
-	window->draw(titleScreen);
-
+	currentGameState->draw(window);
 	window->display();
 }
 
@@ -80,8 +87,10 @@ void Game::processEvents()
 
 	while(window->pollEvent(event))
 	{
-		if(event.type == sf::Event::Closed) window->close();
-
+		if(event.type == sf::Event::Closed)
+			window->close();
+		if(currentGameState->processEvent(event))
+			continue;
 		if(event.type == sf::Event::KeyPressed)
 		{
 			if(event.key.code == sf::Keyboard::Escape)
@@ -89,10 +98,11 @@ void Game::processEvents()
 				window->close();
 			}
 		}
+		
 	}
 }
 
 void Game::update()
 {
-	// TODO
+	currentGameState->update();
 }

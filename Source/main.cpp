@@ -19,8 +19,8 @@
  */
 #include "Game.h"
 
-int main()
+int main(int argc, char** argv)
 {
-	GRG::Game game;
+	GRG::Game game(argc, argv);
 	return game.run();
 }
