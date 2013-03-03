@@ -41,7 +41,7 @@ namespace
 Assets::Assets()
 {
 #ifdef GRG_PREFER_INSTALLED_VERSION
-  mDataPath = GRG_INSTALL_PREFIX"/usr/share/grg";  
+  mDataPath = GRG_INSTALL_PREFIX"/share/grg";  
 #else
   std::string paths[]={"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
   for(const std::string& path : paths)
