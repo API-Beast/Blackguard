@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(grg)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules")
-include(EnableCPP11Flag.cmake)
+include(EnableCPP11Flag)
 
 # Which system? CMake should know best.
 if(WIN32)
