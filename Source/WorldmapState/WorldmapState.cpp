@@ -21,7 +21,7 @@
 
 #include "WorldmapState.h"
 
-using namespace GRG::WorldmapState;
+using namespace Blackguard::WorldmapState;
 
 bool WorldmapState::processEvent(sf::Event&)
 {

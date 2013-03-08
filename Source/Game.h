@@ -35,7 +35,7 @@ namespace sf
 	class RenderWindow;
 }
 
-namespace GRG
+namespace Blackguard
 {
 	class GameState;
 

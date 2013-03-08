@@ -24,7 +24,7 @@
 #include <map>
 #include <string>
 
-namespace GRG
+namespace Blackguard
 {
 	namespace Utility
 	{

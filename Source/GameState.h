@@ -25,7 +25,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
 
-namespace GRG
+namespace Blackguard
 {
 	class GameState
 	{

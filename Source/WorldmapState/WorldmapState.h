@@ -24,7 +24,7 @@
 
 #include "../GameState.h"
 
-namespace GRG
+namespace Blackguard
 {
 	namespace WorldmapState
 	{

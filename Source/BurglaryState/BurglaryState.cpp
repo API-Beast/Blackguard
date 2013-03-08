@@ -21,7 +21,7 @@
 
 #include "BurglaryState.h"
 
-using namespace GRG::BurglaryState;
+using namespace Blackguard::BurglaryState;
 
 bool BurglaryState::processEvent(sf::Event&)
 {

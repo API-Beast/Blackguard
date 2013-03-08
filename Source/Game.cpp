@@ -25,8 +25,8 @@
 
 #include <SFML/Graphics.hpp>
 
-using namespace GRG;
-using namespace GRG::Utility;
+using namespace Blackguard;
+using namespace Blackguard::Utility;
 
 Game* Game::instance=NULL;
 

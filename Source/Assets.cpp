@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-using namespace GRG;
+using namespace Blackguard;
 
 namespace
 {

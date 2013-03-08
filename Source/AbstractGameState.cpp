@@ -21,4 +21,4 @@
 
 #include "GameState.h"
 
-using namespace GRG;
+using namespace Blackguard;

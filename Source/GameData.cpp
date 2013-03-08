@@ -21,4 +21,4 @@
 
 #include "GameData.h"
 
-using namespace GRG;
+using namespace Blackguard;

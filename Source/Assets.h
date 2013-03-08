@@ -25,7 +25,7 @@
 #include <map>
 #include "config.h"
 
-namespace GRG
+namespace Blackguard
 {
 	class Assets
 	{

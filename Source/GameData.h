@@ -22,7 +22,7 @@
 #ifndef GRG_GAMEDATA_H
 #define GRG_GAMEDATA_H
 
-namespace GRG
+namespace Blackguard
 {
 	/** Persistent data across multiple game states. This is the data that would be saved in Savegames. */
 	struct GameData

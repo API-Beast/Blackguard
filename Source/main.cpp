@@ -21,6 +21,6 @@
 
 int main(int argc, char** argv)
 {
-	GRG::Game game(argc, argv);
+	Blackguard::Game game(argc, argv);
 	return game.run();
 }

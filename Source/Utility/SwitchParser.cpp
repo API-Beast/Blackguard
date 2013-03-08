@@ -20,7 +20,7 @@
 
 #include "SwitchParser.h"
 
-namespace GRG
+namespace Blackguard
 {
 	namespace Utility
 	{
