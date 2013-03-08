@@ -40,7 +40,7 @@ Game::Game(int argc, char** argv)
 	parser.registerSwitch(testWorldmap, "test-world");
 	parser.parseArgv(argc, argv);
 	
-	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Generic Rogue Game");
+	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Blackguard");
 	window->setVerticalSyncEnabled(true);
 
 	assets.load();
