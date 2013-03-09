@@ -19,16 +19,22 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_ENTITYTYPES_H
-#define GRG_ENTITYTYPES_H
+#ifndef GRG_STRING_UTILITIES_IMPL_H
+#define GRG_STRING_UTILITIES_IMPL_H
 
-#include <memory>
+#include <sstream>
 
 namespace Blackguard
 {
-	class Entity;
-
-	typedef std::shared_ptr<Entity> EntityPtr;
+	namespace Utility
+	{
+		template <typename T> std::string ToString(T value)
+		{
+		   std::stringstream ss;
+		   ss << value;
+		   return ss.str();
+		}
+	}
 }
 
-#endif //GRG_ENTITYTYPES_H
+#endif //GRG_STRING_UTILITIES_IMPL_H

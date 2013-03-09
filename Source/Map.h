@@ -24,14 +24,29 @@
 
 #include <map>
 #include <string>
+#include <stack>
 #include "EntityTypes.h"
+#include "SFML/Window.hpp"
 
-class Map
+namespace Blackguard
 {
-public:
-	Map();
-private:
-	std::map<std::string,EntityPtr> objects;
-};
+	class Map
+	{
+	public:
+		Map();
+		std::string generateID();
+		void add(std::string id, EntityPtr entity);
+		void remove(std::string id);
+		void update(float deltaTime);
+		void draw();
+		void processEvent(sf::Event& evt);
+	private:
+		void cleanup();
+	private:
+		std::map<std::string,EntityPtr> objects;
+		std::stack<std::string> disposedObjects;
+		int idCounter;
+	};
+}
 
 #endif //GRG_MAP_H

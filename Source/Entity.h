@@ -25,23 +25,26 @@
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
 
-class Entity
+namespace Blackguard
 {
-public:
-	virtual void update(float deltaTime) = 0;
-	virtual void draw() = 0;
-	virtual bool processEvent(sf::Event& evt) = 0;
+	class Entity
+	{
+	public:
+		virtual void update(float deltaTime) = 0;
+		virtual void draw() = 0;
+		virtual bool processEvent(sf::Event& evt) = 0;
 
-	// Setter:
-	virtual void move(sf::Vector2f pos) { position += pos; }
-	virtual void setPosition(sf::Vector2f pos) { position = pos; }
+		// Setter:
+		virtual void move(sf::Vector2f pos) { position += pos; }
+		virtual void setPosition(sf::Vector2f pos) { position = pos; }
 
-	// Getter:
-	virtual sf::Vector2f getPosition() const { return position; }
-	virtual sf::Vector2i getSize() const { return size; }
-protected:
-	sf::Vector2f position;
-	sf::Vector2i size;
-};
+		// Getter:
+		virtual sf::Vector2f getPosition() const { return position; }
+		virtual sf::Vector2i getSize() const { return size; }
+	protected:
+		sf::Vector2f position;
+		sf::Vector2i size;
+	};
+}
 
 #endif //GRG_ENTITY_H

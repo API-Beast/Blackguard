@@ -19,16 +19,23 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_ENTITYTYPES_H
-#define GRG_ENTITYTYPES_H
+#ifndef GRG_STRING_UTILITIES_H
+#define GRG_STRING_UTILITIES_H
 
-#include <memory>
+#include <string>
 
 namespace Blackguard
 {
-	class Entity;
-
-	typedef std::shared_ptr<Entity> EntityPtr;
+	namespace Utility
+	{
+		inline bool Contains(std::string input, std::string search);
+		inline bool HasFileExtension(std::string input, std::string ext);
+		inline bool StringStartsWith(std::string input, std::string search);
+		inline bool StringEndsWith(std::string input, std::string search);
+		inline std::string StringDeleteLastCharacter(std::string input);
+	}
 }
 
-#endif //GRG_ENTITYTYPES_H
+#include "StringUtilities.impl.h"
+
+#endif //GRG_STRING_UTILITIES_H
