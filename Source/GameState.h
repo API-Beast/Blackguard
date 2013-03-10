@@ -31,7 +31,7 @@ namespace Blackguard
 	{
 	public:
 		virtual void draw(sf::RenderTarget*)=0;
-		virtual void update()=0;
+		virtual void update(float deltaTime)=0;
 		virtual bool processEvent(sf::Event&)=0;
 	};
 }

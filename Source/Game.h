@@ -27,8 +27,6 @@
 
 #include "Assets.h"
 #include "GameData.h"
-#include "BurglaryState/BurglaryState.h"
-#include "WorldmapState/WorldmapState.h"
 
 namespace sf
 {
@@ -38,6 +36,8 @@ namespace sf
 namespace Blackguard
 {
 	class GameState;
+	namespace BurglaryState { class BurglaryState; }
+	namespace WorldmapState { class WorldmapState; }
 
 	class Game
 	{
@@ -57,8 +57,8 @@ namespace Blackguard
 
 		struct // States
 		{
-			BurglaryState::BurglaryState burglary;
-			WorldmapState::WorldmapState worldmap;
+			BurglaryState::BurglaryState* burglary;
+			WorldmapState::WorldmapState* worldmap;
 		} State;
 	private:
 		sf::RenderWindow* window;

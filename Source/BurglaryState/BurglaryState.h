@@ -23,6 +23,7 @@
 #define GRG_BURGLARYSTATE_H
 
 #include "../GameState.h"
+#include "../Map.h"
 
 namespace Blackguard
 {
@@ -31,9 +32,13 @@ namespace Blackguard
 		class BurglaryState : public GameState
 		{
 		public:
-			virtual bool processEvent(sf::Event&);
-			virtual void update();
-			virtual void draw(sf::RenderTarget*);
+			BurglaryState();
+			~BurglaryState();
+			virtual bool processEvent(sf::Event& evt);
+			virtual void update(float deltaTime);
+			virtual void draw(sf::RenderTarget* target);
+		private:
+			Map* map;
 		};
 	}
 }

@@ -28,7 +28,7 @@ bool WorldmapState::processEvent(sf::Event&)
 	return false; // Not processed
 }
 
-void WorldmapState::update()
+void WorldmapState::update(float deltaTime)
 {
 
 }

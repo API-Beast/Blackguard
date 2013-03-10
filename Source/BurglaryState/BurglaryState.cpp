@@ -20,20 +20,35 @@
  */
 
 #include "BurglaryState.h"
+#include "../EntityTypes.h"
+#include "../Player.h"
+#include "../Game.h"
 
 using namespace Blackguard::BurglaryState;
 
-bool BurglaryState::processEvent(sf::Event&)
+BurglaryState::BurglaryState()
 {
-	return false; // Not processed
+	map = new Map();
+	map->add("playerEnt",EntityPtr(new Player(Game::instance->assets.textures["Player"])));
 }
 
-void BurglaryState::update()
+BurglaryState::~BurglaryState()
 {
-
+	delete map;
 }
 
-void BurglaryState::draw(sf::RenderTarget*)
+bool BurglaryState::processEvent(sf::Event& evt)
 {
+	map->processEvent(evt);
+	return true;
+}
 
+void BurglaryState::update(float deltaTime)
+{
+	map->update(deltaTime);
+}
+
+void BurglaryState::draw(sf::RenderTarget* target)
+{
+	map->draw(target);
 }

@@ -19,61 +19,41 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "Map.h"
-#include "Utility/StringUtilities.h"
+#ifndef GRG_PLAYER_H
+#define GRG_PLAYER_H
+
 #include "Entity.h"
 
-using namespace Blackguard;
-using namespace Blackguard::Utility;
-
-Map::Map()
+namespace sf
 {
-	idCounter = 0;
+	class Sprite;
 }
 
-std::string Map::generateID()
+namespace Blackguard
 {
-	idCounter++;
-	return "obj_" + ToString<int>(idCounter) + ToString<int>(rand());
-}
+	struct GameData;
 
-void Map::add(std::string id, EntityPtr entity)
-{
-	objects[id] = entity;
-}
-
-void Map::remove(std::string id)
-{
-	disposedObjects.push(id);
-}
-
-void Map::cleanup()
-{
-	while(disposedObjects.size() > 0)
+	class Player : public Entity
 	{
-		objects.erase(disposedObjects.top());
-		disposedObjects.pop();
-	}
+	public:
+		Player(sf::Texture& texture);
+		~Player();
+
+		virtual void update(float deltaTime);
+		virtual void draw(sf::RenderTarget* target);
+		virtual bool processEvent(sf::Event& evt);
+		virtual void move(sf::Vector2f pos);
+		virtual void setPosition(sf::Vector2f pos);
+		void addEXP(int value);
+		void addGold(int value);
+		int getEXP() const;
+		int getGold() const;
+		int getLevel() const;
+	private:
+		sf::Sprite graphics;
+		GameData& gameData;
+		float speedModifier;
+	};
 }
 
-void Map::update(float deltaTime)
-{
-	for (auto obj : objects) {
-		obj.second->update(deltaTime);
-	}
-	this->cleanup();
-}
-
-void Map::draw(sf::RenderTarget* target)
-{
-	for (auto obj : objects) {
-		obj.second->draw(target);
-	}
-}
-
-void Map::processEvent(sf::Event& evt)
-{
-	for (auto obj : objects) {
-		obj.second->processEvent(evt);
-	}
-}
+#endif //GRG_PLAYER_H

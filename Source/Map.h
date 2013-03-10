@@ -27,6 +27,7 @@
 #include <stack>
 #include "EntityTypes.h"
 #include "SFML/Window.hpp"
+#include "SFML/Graphics.hpp"
 
 namespace Blackguard
 {
@@ -38,7 +39,7 @@ namespace Blackguard
 		void add(std::string id, EntityPtr entity);
 		void remove(std::string id);
 		void update(float deltaTime);
-		void draw();
+		void draw(sf::RenderTarget* target);
 		void processEvent(sf::Event& evt);
 	private:
 		void cleanup();

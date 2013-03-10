@@ -24,6 +24,7 @@
 
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
+#include "SFML/Graphics.hpp"
 
 namespace Blackguard
 {
@@ -31,7 +32,7 @@ namespace Blackguard
 	{
 	public:
 		virtual void update(float deltaTime) = 0;
-		virtual void draw() = 0;
+		virtual void draw(sf::RenderTarget* target) = 0;
 		virtual bool processEvent(sf::Event& evt) = 0;
 
 		// Setter:

@@ -22,6 +22,8 @@
 #include "config.h"
 
 #include "Utility/SwitchParser.h"
+#include "BurglaryState/BurglaryState.h"
+#include "WorldmapState/WorldmapState.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -44,15 +46,20 @@ Game::Game(int argc, char** argv)
 	window->setVerticalSyncEnabled(true);
 
 	assets.load();
+
+	State.worldmap = new WorldmapState::WorldmapState();
+	State.burglary = new BurglaryState::BurglaryState();
 	
 	if(testWorldmap.isSet)
-		currentGameState = &(State.worldmap);
+		currentGameState = State.worldmap;
 	else
-		currentGameState = &(State.burglary);
+		currentGameState = State.burglary;
 }
 
 Game::~Game()
 {
+	delete State.burglary;
+	delete State.worldmap;
 	delete window;
 }
 
@@ -105,5 +112,5 @@ void Game::processEvents()
 
 void Game::update()
 {
-	currentGameState->update();
+	currentGameState->update(deltaTime);
 }

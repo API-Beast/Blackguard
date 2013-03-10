@@ -30,7 +30,6 @@ namespace Blackguard
 		struct // Player
 		{
 			int experience;
-			int level;
 			int gold;
 			// TODO Skills
 			// TODO Equipment
