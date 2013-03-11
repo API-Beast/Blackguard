@@ -24,6 +24,7 @@
 
 #include "../GameState.h"
 #include "../Map.h"
+#include "../TileMap.h"
 
 namespace Blackguard
 {
@@ -39,6 +40,7 @@ namespace Blackguard
 			virtual void draw(sf::RenderTarget* target);
 		private:
 			Map* map;
+			TileMap tileMap;
 		};
 	}
 }

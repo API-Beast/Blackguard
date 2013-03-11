@@ -30,6 +30,7 @@ BurglaryState::BurglaryState()
 {
 	map = new Map();
 	map->add("playerEnt",EntityPtr(new Player(Game::instance->assets.textures["Player"])));
+	tileMap.loadFromFile("test.tmx");
 }
 
 BurglaryState::~BurglaryState()
@@ -50,5 +51,6 @@ void BurglaryState::update(float deltaTime)
 
 void BurglaryState::draw(sf::RenderTarget* target)
 {
+	target->draw(tileMap);
 	map->draw(target);
 }

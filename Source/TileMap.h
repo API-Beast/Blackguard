@@ -22,8 +22,10 @@
 #ifndef GRG_TILEMAP_H
 #define GRG_TILEMAP_H
 
+#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <vector>
 #include <map>
 #include <exception>
 
@@ -32,16 +34,24 @@ namespace Blackguard
 
 struct TileLayer
 {
+	TileLayer(){};
+	int getTile(int x, int y) const;
 	std::vector<int> data;
 	int width, height;
 };
 
 struct TileSet
 {
+	TileSet(){};
 	int firstGID;
+	int lastGID;
 	int tileWidth, tileHeight;
 	int spacing;
 	sf::Texture texture;
+	
+	int amountTilesPerRow;
+	float normalizedTileWidth, normalizedTileHeight;
+	sf::Vector2f texCoordsForTile(int tileID) const;
 // struct TileProperties
 // {
 // };
@@ -54,8 +64,9 @@ public:
 	class FormatNotSupported : public std::exception{};
 public:
 	void loadFromFile(const std::string& fileName);
+	bool isBlocked(sf::Vector2i pos);
 protected:
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states);
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
 	std::vector<TileLayer> backgroundLayers;
 	std::vector<TileLayer> foregroundLayers;

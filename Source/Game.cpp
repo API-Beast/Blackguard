@@ -43,6 +43,7 @@ Game::Game(int argc, char** argv)
 	parser.parseArgv(argc, argv);
 	
 	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Blackguard");
+	window->setView(sf::View(sf::Vector2f(576.f, 300.f), sf::Vector2f(800.f, 600.f)));
 	window->setVerticalSyncEnabled(true);
 
 	assets.load();
