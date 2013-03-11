@@ -40,10 +40,10 @@ namespace
 
 Assets::Assets()
 {
-#ifdef GRG_PREFER_INSTALLED_VERSION
-	mDataPath = GRG_INSTALL_PREFIX"/share/grg";
+#ifdef BLACKGUARD_PREFER_INSTALLED_VERSION
+	mDataPath = BLACKGUARD_INSTALL_PREFIX"/share/grg";
 #else
-	std::string paths[]= {"./Assets", GRG_SOURCE_DIR"/Assets", GRG_INSTALL_PREFIX"/share/grg"};
+	std::string paths[]= {"./Assets", BLACKGUARD_SOURCE_DIR"/Assets", BLACKGUARD_INSTALL_PREFIX"/share/grg"};
 
 	for(const std::string& path : paths)
 	{
