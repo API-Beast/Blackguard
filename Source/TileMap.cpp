@@ -26,7 +26,6 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <climits>
-#include "OpenGL.h"
 #include <sys/stat.h>
 
 using namespace Blackguard;
@@ -104,8 +103,8 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 				yCoords = y*this->gridHeight;
 				
 				sf::Vector2f tilePos = tileset->texCoordsForTile(tileGID);
-				GlRect<GLfloat> vertices((float)xCoords, (float)yCoords, (float)tileset->tileWidth, (float)tileset->tileHeight);
-				GlRect<GLfloat> texCoords((float)tilePos.x, (float)tilePos.y, (float)tileset->normalizedTileWidth, (float)tileset->normalizedTileHeight);
+				GlRect<float> vertices((float)xCoords, (float)yCoords, (float)tileset->tileWidth, (float)tileset->tileHeight);
+				GlRect<float> texCoords((float)tilePos.x, (float)tilePos.y, (float)tileset->normalizedTileWidth, (float)tileset->normalizedTileHeight);
 				
 				sf::Vertex interleavedData[4];
 				for(int i=0; i < 4; i++)
