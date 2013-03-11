@@ -44,6 +44,7 @@ namespace Blackguard
 		virtual bool processEvent(sf::Event& evt);
 		virtual void move(sf::Vector2f pos);
 		virtual void setPosition(sf::Vector2f pos);
+		virtual bool isCollideEnabled();
 		void addEXP(int value);
 		void addGold(int value);
 		int getEXP() const;

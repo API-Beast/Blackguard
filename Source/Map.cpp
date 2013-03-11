@@ -56,11 +56,25 @@ void Map::cleanup()
 	}
 }
 
+void Map::checkCollisions()
+{
+	for (auto objA : objects) {
+		for (auto objB : objects) {
+			if(objA.first != objB.first && objA.second->isCollideEnabled() && objB.second->isCollideEnabled()) {
+				if(objA.second->getAABB().intersects(objB.second->getAABB())) {
+					objA.second->onCollide(objB.second);
+				}
+			}
+		}
+	}
+}
+
 void Map::update(float deltaTime)
 {
 	for (auto obj : objects) {
 		obj.second->update(deltaTime);
 	}
+	this->checkCollisions();
 	this->cleanup();
 }
 

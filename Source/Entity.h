@@ -25,6 +25,8 @@
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+#include "EntityTypes.h"
+#include "AABB.h"
 
 namespace Blackguard
 {
@@ -34,17 +36,19 @@ namespace Blackguard
 		virtual void update(float deltaTime) = 0;
 		virtual void draw(sf::RenderTarget* target) = 0;
 		virtual bool processEvent(sf::Event& evt) = 0;
+		virtual void onCollide(EntityPtr other) {}
+		virtual bool isCollideEnabled() { return false; }
 
 		// Setter:
-		virtual void move(sf::Vector2f pos) { position += pos; }
-		virtual void setPosition(sf::Vector2f pos) { position = pos; }
+		virtual void move(sf::Vector2f pos) { position += pos; aabb.position = position; }
+		virtual void setPosition(sf::Vector2f pos) { position = pos; aabb.position = position; }
 
 		// Getter:
 		virtual sf::Vector2f getPosition() const { return position; }
-		virtual sf::Vector2i getSize() const { return size; }
+		virtual AABB getAABB() const { return aabb; }
 	protected:
 		sf::Vector2f position;
-		sf::Vector2i size;
+		AABB aabb;
 	};
 }
 

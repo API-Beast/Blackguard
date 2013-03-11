@@ -29,6 +29,7 @@ using namespace Blackguard;
 Player::Player(sf::Texture& texture) : gameData(Game::instance->data)
 {
 	graphics = sf::Sprite(texture);
+	aabb.size = graphics.getTexture()->getSize();
 	speedModifier = 1;
 }
 
@@ -55,6 +56,11 @@ void Player::update(float deltaTime)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
 		// Here will be activation stuff when a collision system kinda works
 	}
+}
+
+bool Player::isCollideEnabled()
+{
+	return true;
 }
 
 void Player::draw(sf::RenderTarget* target)

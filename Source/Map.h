@@ -43,6 +43,7 @@ namespace Blackguard
 		void processEvent(sf::Event& evt);
 	private:
 		void cleanup();
+		void checkCollisions();
 	private:
 		std::map<std::string,EntityPtr> objects;
 		std::stack<std::string> disposedObjects;
