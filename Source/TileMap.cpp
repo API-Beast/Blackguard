@@ -26,7 +26,7 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <climits>
-#include <GL/gl.h>
+#include "OpenGL.h"
 #include <sys/stat.h>
 
 using namespace Blackguard;
@@ -73,10 +73,10 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	sf::Vector2f leftTopCoordinate     = target.mapPixelToCoords(sf::Vector2i(0, 0));
 	sf::Vector2f rightBottomCoordinate = target.mapPixelToCoords(sf::Vector2i(viewportSize));
 	
-	int minX = leftTopCoordinate.x / this->gridWidth;
-	int minY = leftTopCoordinate.y / this->gridHeight;
-	int maxX = rightBottomCoordinate.x / this->gridWidth;
-	int maxY = rightBottomCoordinate.y / this->gridHeight;
+	int minX = (int)leftTopCoordinate.x / this->gridWidth;
+	int minY = (int)leftTopCoordinate.y / this->gridHeight;
+	int maxX = (int)rightBottomCoordinate.x / this->gridWidth;
+	int maxY = (int)rightBottomCoordinate.y / this->gridHeight;
 	
 	for(const TileLayer& layer : backgroundLayers)
 	{
@@ -104,8 +104,8 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 				yCoords = y*this->gridHeight;
 				
 				sf::Vector2f tilePos = tileset->texCoordsForTile(tileGID);
-				GlRect<GLfloat> vertices(xCoords, yCoords, tileset->tileWidth, tileset->tileHeight);
-				GlRect<GLfloat> texCoords(tilePos.x, tilePos.y, tileset->normalizedTileWidth, tileset->normalizedTileHeight);
+				GlRect<GLfloat> vertices((float)xCoords, (float)yCoords, (float)tileset->tileWidth, (float)tileset->tileHeight);
+				GlRect<GLfloat> texCoords((float)tilePos.x, (float)tilePos.y, (float)tileset->normalizedTileWidth, (float)tileset->normalizedTileHeight);
 				
 				sf::Vertex interleavedData[4];
 				for(int i=0; i < 4; i++)
@@ -161,8 +161,8 @@ void TileMap::loadFromFile(const std::string& fileName)
 			//tileset.normalizedTileWidth  = tileset.tileWidth  / float(tileset.texture.getSize().x);
 			//tileset.normalizedTileHeight = tileset.tileHeight / float(tileset.texture.getSize().y);
 			// Geeeeeeez. SFML is using Rectangular Textures with unnormalized texture coordinates.
-			tileset.normalizedTileWidth  = tileset.tileWidth;
-			tileset.normalizedTileHeight = tileset.tileHeight;
+			tileset.normalizedTileWidth  = (float)tileset.tileWidth;
+			tileset.normalizedTileHeight = (float)tileset.tileHeight;
 			
 			if(!tilesets.empty())
 				tilesets.back().lastGID = tileset.firstGID - 1;
@@ -186,7 +186,7 @@ void TileMap::loadFromFile(const std::string& fileName)
 			std::string data = base64_decode(encodedData);
 			layer.data.reserve(data.length() / 4);
 			// Every ID is 4 bytes.
-			for(int i=0; i < data.size(); i+=4)
+			for(unsigned int i=0; i < data.size(); i+=4)
 				layer.data.push_back(
 				            data[i + 0]       |
 				            data[i + 1] << 8  |
@@ -224,6 +224,6 @@ void TileMap::loadFromFile(const std::string& fileName)
 
 bool TileMap::isBlocked(sf::Vector2i pos)
 {
-	return blockingLayer.getTile(pos.x / gridWidth, pos.y / gridHeight);
+	return blockingLayer.getTile(pos.x / gridWidth, pos.y / gridHeight) == 1;
 }
 

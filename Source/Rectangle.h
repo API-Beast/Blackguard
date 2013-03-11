@@ -6,9 +6,9 @@
 
 namespace Blackguard
 {
-	struct AABB
+	struct Rectangle
 	{
-		inline bool intersects(const AABB& other) const;
+		bool intersects(const Rectangle& other) const;
 		sf::Vector2u size;
 		sf::Vector2f position;
 	};

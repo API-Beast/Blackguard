@@ -26,7 +26,7 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 #include "EntityTypes.h"
-#include "AABB.h"
+#include "Rectangle.h"
 
 namespace Blackguard
 {
@@ -45,10 +45,10 @@ namespace Blackguard
 
 		// Getter:
 		virtual sf::Vector2f getPosition() const { return position; }
-		virtual AABB getAABB() const { return aabb; }
+		virtual Rectangle& getAABB() { return aabb; }
 	protected:
 		sf::Vector2f position;
-		AABB aabb;
+		Rectangle aabb;
 	};
 }
 
