@@ -31,10 +31,19 @@ Player::Player(sf::Texture& texture) : gameData(Game::instance->data)
 	graphics = sf::Sprite(texture);
 	aabb.size = graphics.getTexture()->getSize();
 	speedModifier = 1;
+	type = EntityType::Player;
 }
 
 Player::~Player()
 {
+}
+
+void Player::onCollide(EntityPtr other)
+{
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+		other->activate(shared_from_this());
+		printf("Now I have %d Gold!\n",this->getGold());
+	}
 }
 
 void Player::update(float deltaTime)
@@ -53,9 +62,7 @@ void Player::update(float deltaTime)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		this->move(sf::Vector2f(1 * speedModifier,0));
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-		// Here will be activation stuff when a collision system kinda works
-	}
+
 }
 
 bool Player::isCollideEnabled()

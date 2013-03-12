@@ -30,14 +30,17 @@
 
 namespace Blackguard
 {
-	class Entity
+	class Entity : protected std::enable_shared_from_this<Entity>
 	{
 	public:
-		virtual void update(float deltaTime) = 0;
-		virtual void draw(sf::RenderTarget* target) = 0;
-		virtual bool processEvent(sf::Event& evt) = 0;
+		Entity() { type = EntityType::Generic; }
+		virtual void update(float deltaTime) {}
+		virtual void draw(sf::RenderTarget* target) {}
+		virtual bool processEvent(sf::Event& evt) { return false; }
 		virtual void onCollide(EntityPtr other) {}
 		virtual bool isCollideEnabled() { return false; }
+		virtual void activate(EntityPtr activator) { }
+		void setOwnID(std::string id) { ownID = id; } // This is bad I know.
 
 		// Setter:
 		virtual void move(sf::Vector2f pos) { position += pos; aabb.position = position; }
@@ -46,9 +49,12 @@ namespace Blackguard
 		// Getter:
 		virtual sf::Vector2f getPosition() const { return position; }
 		virtual Rectangle& getAABB() { return aabb; }
+		virtual int getType() const { return type; }
 	protected:
 		sf::Vector2f position;
 		Rectangle aabb;
+		int type;
+		std::string ownID;
 	};
 }
 

@@ -44,6 +44,7 @@ namespace Blackguard
 		virtual bool processEvent(sf::Event& evt);
 		virtual void move(sf::Vector2f pos);
 		virtual void setPosition(sf::Vector2f pos);
+		virtual void onCollide(EntityPtr other);
 		virtual bool isCollideEnabled();
 		void addEXP(int value);
 		void addGold(int value);
@@ -54,6 +55,7 @@ namespace Blackguard
 		sf::Sprite graphics;
 		GameData& gameData;
 		float speedModifier;
+		int randomness;
 	};
 }
 

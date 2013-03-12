@@ -23,13 +23,21 @@
 #include "../EntityTypes.h"
 #include "../Player.h"
 #include "../Game.h"
+#include "../Loot.h"
 
 using namespace Blackguard::BurglaryState;
 
 BurglaryState::BurglaryState()
 {
+	//TODO: When loading a game this should not happen...
+	Game::instance->data.Player.gold = 0;
+	Game::instance->data.Player.experience = 0;
+
 	map = new Map();
 	map->add("playerEnt",EntityPtr(new Player(Game::instance->assets.textures["Player"])));
+	EntityPtr lootEnt = EntityPtr(new Loot(Game::instance->assets.textures["Loot"],map));
+	lootEnt->setPosition(sf::Vector2f(100,100));
+	map->add(map->generateID(),lootEnt);
 	tileMap.loadFromFile("test.tmx");
 }
 

@@ -40,6 +40,7 @@ std::string Map::generateID()
 void Map::add(std::string id, EntityPtr entity)
 {
 	objects[id] = entity;
+	objects[id]->setOwnID(id);
 }
 
 void Map::remove(std::string id)

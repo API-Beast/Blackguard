@@ -27,8 +27,20 @@
 namespace Blackguard
 {
 	class Entity;
+	class Player;
+
+	namespace EntityType
+	{
+		enum : int
+		{
+			Generic = 0,
+			Player = 1,
+			Loot = 2
+		};
+	}
 
 	typedef std::shared_ptr<Entity> EntityPtr;
+	typedef std::shared_ptr<Player> PlayerPtr;
 }
 
 #endif //GRG_ENTITYTYPES_H
