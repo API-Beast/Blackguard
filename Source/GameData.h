@@ -27,6 +27,8 @@ namespace Blackguard
 	/** Persistent data across multiple game states. This is the data that would be saved in Savegames. */
 	struct GameData
 	{
+		GameData();
+		
 		struct // Player
 		{
 			int experience;

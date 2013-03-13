@@ -1,6 +1,6 @@
 /*
  *   Copyright 2013 Manuel Riecke <m.riecke@mrbeast.org>
- *   Copyright 2013 Raffael Zica <raffael@trollgames.de>
+ *   Copyright 2013 Raffael Zica <sirjson133@gmail.com>
  *
  *   This software is provided 'as-is', without any express or implied
  *   warranty.  In no event will the authors be held liable for any damages
@@ -19,32 +19,31 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_BURGLARYSTATE_H
-#define GRG_BURGLARYSTATE_H
-
-#include "../GameState.h"
-#include "../TileMap.h"
-#include "EntityManager.h"
+#ifndef BLACKGUARD_UTILITY_DIRECTION_H
+#define BLACKGUARD_UTILITY_DIRECTION_H
+#include <SFML/System/Vector2.hpp>
 
 namespace Blackguard
 {
-	namespace BurglaryState
-	{
-		class BurglaryState : public GameState
-		{
-		public:
-			BurglaryState();
-			~BurglaryState();
-			virtual bool processEvent(sf::Event& event);
-			virtual void update(float deltaTime);
-			virtual void draw(sf::RenderTarget* target);
-			EntityManager* getEntityManager();
-		private:
-			std::shared_ptr<Player> player;
-			EntityManager* entities;
-			TileMap tileMap;
-		};
-	}
+namespace Utility
+{
+
+enum Direction
+{
+  Stop  = 0,
+  North = 1,
+  South = 2,
+  West  = 4,
+  East  = 8,
+  NorthWest = North | West,
+  NorthEast = North | East,
+  SouthWest = South | West,
+  SouthEast = South | East
+};
+
+Direction BoolSetToDir(bool north, bool south, bool west, bool east);
+sf::Vector2f DirToVector(Direction dir);
+}
 }
 
-#endif // GRG_BURGLARYSTATE_H
+#endif // BLACKGUARD_UTILITY_DIRECTION_H

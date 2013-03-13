@@ -19,36 +19,54 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_MAP_H
-#define GRG_MAP_H
+#ifndef GRG_PLAYER_H
+#define GRG_PLAYER_H
 
-#include <map>
-#include <string>
-#include <stack>
-#include "EntityTypes.h"
-#include "SFML/Window.hpp"
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics/Sprite.hpp>
+#include "Entity.h"
+#include "../Utility/Direction.h"
+
+namespace sf
+{
+	class Event;
+}
 
 namespace Blackguard
 {
-	class Map
+	using Utility::Direction;
+	namespace BurglaryState
 	{
-	public:
-		Map();
-		std::string generateID();
-		void add(std::string id, EntityPtr entity);
-		void remove(std::string id);
-		void update(float deltaTime);
-		void draw(sf::RenderTarget* target);
-		void processEvent(sf::Event& evt);
-	private:
-		void cleanup();
-		void checkCollisions();
-	private:
-		std::map<std::string,EntityPtr> objects;
-		std::stack<std::string> disposedObjects;
-		int idCounter;
-	};
+		class Player : public Entity
+		{
+		public:
+			Player();
+			virtual ~Player();
+
+			// Entity stuff
+			virtual void update(float deltaTime);
+			virtual void draw(sf::RenderTarget* target) const;
+			virtual void move(const sf::Vector2f& pos);
+			virtual void setPosition(const sf::Vector2f& pos);
+			
+			// Controls
+			bool activate();
+			void setRunning(bool running);
+			void setMoving(bool moving);
+			void setMovingDirection(Direction dir);
+			
+			// State
+			void addEXP(int value);
+			void addGold(int value);
+			int getEXP() const;
+			int getGold() const;
+			int getLevel() const;
+		private:
+			sf::Sprite graphics;
+			bool isRunning;
+			bool isMoving;
+			Direction movingDir;
+		};
+	}
 }
 
-#endif //GRG_MAP_H
+#endif //GRG_PLAYER_H

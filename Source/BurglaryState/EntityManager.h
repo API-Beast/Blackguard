@@ -19,44 +19,39 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_PLAYER_H
-#define GRG_PLAYER_H
+#ifndef GRG_MAP_H
+#define GRG_MAP_H
+
+#include <map>
+#include <string>
+#include <stack>
+
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "Entity.h"
 
-namespace sf
-{
-	class Sprite;
-}
-
 namespace Blackguard
 {
-	struct GameData;
-
-	class Player : public Entity
+	namespace BurglaryState
 	{
-	public:
-		Player(sf::Texture& texture);
-		~Player();
-
-		virtual void update(float deltaTime);
-		virtual void draw(sf::RenderTarget* target);
-		virtual bool processEvent(sf::Event& evt);
-		virtual void move(sf::Vector2f pos);
-		virtual void setPosition(sf::Vector2f pos);
-		virtual void onCollide(EntityPtr other);
-		virtual bool isCollideEnabled();
-		void addEXP(int value);
-		void addGold(int value);
-		int getEXP() const;
-		int getGold() const;
-		int getLevel() const;
-	private:
-		sf::Sprite graphics;
-		GameData& gameData;
-		float speedModifier;
-		int randomness;
-	};
+	class EntityManager
+	{
+		public:
+			EntityManager();
+			void add(EntityPtr ptr);
+			void addNamed(std::string id, EntityPtr entity);
+			void update(float deltaTime);
+			void draw(sf::RenderTarget* target);
+			std::vector<EntityPtr> findEntitiesInside(const Blackguard::BurglaryState::BoundingBox& area);
+		private:
+			void cleanup();
+		private:
+			std::vector<EntityPtr> objects;
+			std::map<std::string,EntityPtr> namedObjects;
+			int idCounter;
+		};
+	}
 }
 
-#endif //GRG_PLAYER_H
+#endif //GRG_MAP_H

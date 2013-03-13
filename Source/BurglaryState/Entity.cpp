@@ -19,28 +19,56 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_ENTITYTYPES_H
-#define GRG_ENTITYTYPES_H
-
-#include <memory>
+#include "Entity.h"
 
 namespace Blackguard
 {
-	class Entity;
-	class Player;
+namespace BurglaryState
+{
+	
 
-	namespace EntityType
-	{
-		enum : int
-		{
-			Generic = 0,
-			Player = 1,
-			Loot = 2
-		};
-	}
+BoundingBox BoundingBox::translated(const sf::Vector2f& by) const
+{
+	BoundingBox retVal;
+	retVal.position = this->position + by;
+	retVal.size = this->size;
+	return std::move(retVal);
+}	
 
-	typedef std::shared_ptr<Entity> EntityPtr;
-	typedef std::shared_ptr<Player> PlayerPtr;
+bool BoundingBox::intersects(const BoundingBox& other) const
+{
+	return position.x < other.position.x + other.size.y  &&
+	       other.position.x < position.x + size.x  &&
+	       position.y < other.position.y + other.size.y &&
+	       other.position.y < position.y + size.y;
 }
 
-#endif //GRG_ENTITYTYPES_H
+void Entity::move(const sf::Vector2f& pos)
+{
+	position += pos;
+	bounds.position = position;
+}
+
+void Entity::setPosition(const sf::Vector2f& pos)
+{
+	position = pos;
+	bounds.position = position;
+}
+
+Entity::Entity()
+{
+	toBeRemoved = false;
+}
+
+void Entity::remove()
+{
+	toBeRemoved = true;
+}
+
+Entity::~Entity()
+{
+
+}
+
+}
+}
