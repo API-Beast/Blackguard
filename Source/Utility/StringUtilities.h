@@ -28,11 +28,12 @@ namespace Blackguard
 {
 	namespace Utility
 	{
-		inline bool Contains(std::string input, std::string search);
-		inline bool HasFileExtension(std::string input, std::string ext);
-		inline bool StringStartsWith(std::string input, std::string search);
-		inline bool StringEndsWith(std::string input, std::string search);
-		inline std::string StringDeleteLastCharacter(std::string input);
+		bool Contains(const std::string& input, const std::string& search);
+		bool HasFileExtension(const std::string& input, const std::string& ext);
+		bool StringStartsWith(const std::string& input, const std::string& search);
+		bool StringEndsWith(const std::string& input, const std::string& search);
+		std::string StringDeleteLastCharacter(const std::string& input);
+		template <typename T> std::string ToString(const T& value);
 	}
 }
 
