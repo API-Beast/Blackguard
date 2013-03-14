@@ -23,7 +23,6 @@
 
 #include "Utility/SwitchParser.h"
 #include "BurglaryState/BurglaryState.h"
-#include "WorldmapState/WorldmapState.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -36,31 +35,23 @@ Game::Game(int argc, char** argv)
 {
 	Game::instance = this;
 	
-	SwitchParser parser;
-	BooleanSwitch testWorldmap;
-	
-	parser.registerSwitch(testWorldmap, "test-world");
-	parser.parseArgv(argc, argv);
+	// Might want to add a few switches later
+	//SwitchParser parser;
+	//parser.parseArgv(argc, argv);
 	
 	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Blackguard");
-	//window->setView(sf::View(sf::Vector2f(576.f, 300.f), sf::Vector2f(800.f, 600.f)));
 	window->setVerticalSyncEnabled(true);
 
 	assets.load();
 
-	State.worldmap = new WorldmapState::WorldmapState();
 	State.burglary = new BurglaryState::BurglaryState();
 	
-	if(testWorldmap.isSet)
-		currentGameState = State.worldmap;
-	else
-		currentGameState = State.burglary;
+	currentGameState = State.burglary;
 }
 
 Game::~Game()
 {
 	delete State.burglary;
-	delete State.worldmap;
 	delete window;
 }
 
