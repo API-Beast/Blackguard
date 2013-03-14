@@ -52,7 +52,7 @@ namespace Blackguard
 			virtual ~Entity();
 			virtual void update(float deltaTime) {}
 			virtual void draw(sf::RenderTarget* target) const = 0;
-			virtual bool activate(Player& activator) {}
+			virtual bool activate(Player& activator) { return false; }
 			virtual void remove();
 			virtual bool canBeRemoved() { return toBeRemoved; }
 			// Setter:
