@@ -19,22 +19,14 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_STRING_UTILITIES_IMPL_H
-#define GRG_STRING_UTILITIES_IMPL_H
-
+#include "StringUtilities.h"
 #include <sstream>
 
-namespace Blackguard
-{
-	namespace Utility
-	{
-		template <typename T> std::string ToString(T value)
-		{
-		   std::stringstream ss;
-		   ss << value;
-		   return ss.str();
-		}
-	}
-}
+using namespace Blackguard::Utility;
 
-#endif //GRG_STRING_UTILITIES_IMPL_H
+template <typename T> std::string ToString(const T& value)
+{
+   std::stringstream ss;
+   ss << value;
+   return ss.str();
+}

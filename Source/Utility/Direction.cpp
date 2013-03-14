@@ -19,24 +19,70 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_STRING_UTILITIES_H
-#define GRG_STRING_UTILITIES_H
-
-#include <string>
+#include "Direction.h"
 
 namespace Blackguard
 {
-	namespace Utility
-	{
-		bool Contains(const std::string& input, const std::string& search);
-		bool HasFileExtension(const std::string& input, const std::string& ext);
-		bool StringStartsWith(const std::string& input, const std::string& search);
-		bool StringEndsWith(const std::string& input, const std::string& search);
-		std::string StringDeleteLastCharacter(const std::string& input);
-		template <typename T> std::string ToString(const T& value);
-	}
+namespace Utility
+{
+
+Direction BoolSetToDir(bool north, bool south, bool west, bool east)
+{
+	int vertical   = Stop;
+	int horizontal = Stop;
+
+	if(north)
+		vertical = North;
+	else if(south)
+		vertical = South;
+
+	if(west)
+		horizontal = West;
+	else if(east)
+		horizontal = East;
+
+	return Direction(vertical | horizontal);
 }
 
-#include "StringUtilities.impl.h"
+sf::Vector2f DirToVector(Direction dir)
+{
+	switch(dir)
+	{
+	case Stop:
+		return sf::Vector2f(0.0f,  0.0f);
 
-#endif //GRG_STRING_UTILITIES_H
+	case North:
+		return sf::Vector2f(0.0f, -1.0f);
+
+	case South:
+		return sf::Vector2f(0.0f, +1.0f);
+
+	case West:
+		return sf::Vector2f(-1.0f,  0.0f);
+
+	case East:
+		return sf::Vector2f(+1.0f,  0.0f);
+
+	case NorthWest:
+		return sf::Vector2f(-0.7f, -0.7f);
+
+	case NorthEast:
+		return sf::Vector2f(+0.7f, -0.7f);
+
+	case SouthWest:
+		return sf::Vector2f(-0.7f, +0.7f);
+
+	case SouthEast:
+		return sf::Vector2f(+0.7f, +0.7f);
+	}
+
+	return sf::Vector2f(0.0f,  0.0f);
+}
+
+}
+}
+
+sf::Vector2f operator*(const sf::Vector2f& a, const sf::Vector2f& b)
+{
+	return sf::Vector2f(a.x * b.x, a.y * b.y);
+}

@@ -19,36 +19,56 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_MAP_H
-#define GRG_MAP_H
-
-#include <map>
-#include <string>
-#include <stack>
-#include "EntityTypes.h"
-#include "SFML/Window.hpp"
-#include "SFML/Graphics.hpp"
+#include "Entity.h"
 
 namespace Blackguard
 {
-	class Map
-	{
-	public:
-		Map();
-		std::string generateID();
-		void add(std::string id, EntityPtr entity);
-		void remove(std::string id);
-		void update(float deltaTime);
-		void draw(sf::RenderTarget* target);
-		void processEvent(sf::Event& evt);
-	private:
-		void cleanup();
-		void checkCollisions();
-	private:
-		std::map<std::string,EntityPtr> objects;
-		std::stack<std::string> disposedObjects;
-		int idCounter;
-	};
+namespace BurglaryState
+{
+	
+
+BoundingBox BoundingBox::translated(const sf::Vector2f& by) const
+{
+	BoundingBox retVal;
+	retVal.position = this->position + by;
+	retVal.size = this->size;
+	return std::move(retVal);
+}	
+
+bool BoundingBox::intersects(const BoundingBox& other) const
+{
+	return position.x < other.position.x + other.size.y  &&
+	       other.position.x < position.x + size.x  &&
+	       position.y < other.position.y + other.size.y &&
+	       other.position.y < position.y + size.y;
 }
 
-#endif //GRG_MAP_H
+void Entity::move(const sf::Vector2f& pos)
+{
+	position += pos;
+	bounds.position = position;
+}
+
+void Entity::setPosition(const sf::Vector2f& pos)
+{
+	position = pos;
+	bounds.position = position;
+}
+
+Entity::Entity()
+{
+	toBeRemoved = false;
+}
+
+void Entity::remove()
+{
+	toBeRemoved = true;
+}
+
+Entity::~Entity()
+{
+
+}
+
+}
+}

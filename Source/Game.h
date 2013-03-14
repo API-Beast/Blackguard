@@ -58,7 +58,6 @@ namespace Blackguard
 		struct // States
 		{
 			BurglaryState::BurglaryState* burglary;
-			WorldmapState::WorldmapState* worldmap;
 		} State;
 	private:
 		sf::RenderWindow* window;

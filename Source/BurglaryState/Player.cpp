@@ -20,73 +20,50 @@
  */
 
 #include "Player.h"
+#include "BurglaryState.h"
 #include "SFML/Graphics.hpp"
-#include "GameData.h"
-#include "Game.h"
+#include "../GameData.h"
+#include "../Game.h"
 
 using namespace Blackguard;
+using namespace Blackguard::BurglaryState;
+using namespace Blackguard::Utility;
 
-Player::Player(sf::Texture& texture) : gameData(Game::instance->data)
+Player::Player() : Entity()
 {
-	graphics = sf::Sprite(texture);
-	aabb.size = graphics.getTexture()->getSize();
-	speedModifier = 1;
-	type = EntityType::Player;
+	this->graphics.setTexture(Game::instance->assets.textures["Player"]);
+	this->bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
+	this->isMoving = false;
+	this->isRunning = false;
+	this->movingDir = South;
 }
 
 Player::~Player()
 {
 }
 
-void Player::onCollide(EntityPtr other)
-{
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-		other->activate(shared_from_this());
-		printf("Now I have %d Gold!\n",this->getGold());
-	}
-}
-
 void Player::update(float deltaTime)
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		speedModifier = 3;
-	else
-		speedModifier = 1;
+	float speed = 64.f;
+	if(this->isRunning)
+		speed = 128.f;
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		this->move(sf::Vector2f(0,-1 * speedModifier));
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		this->move(sf::Vector2f(0,1 * speedModifier));
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		this->move(sf::Vector2f(-1 * speedModifier,0));
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		this->move(sf::Vector2f(1 * speedModifier,0));
-
-
+	if(this->isMoving)
+		this->move(DirToVector(movingDir) * speed * deltaTime);
 }
 
-bool Player::isCollideEnabled()
-{
-	return true;
-}
-
-void Player::draw(sf::RenderTarget* target)
+void Player::draw(sf::RenderTarget* target) const
 {
 	target->draw(graphics);
 }
 
-bool Player::processEvent(sf::Event& evt)
-{
-	return false;
-}
-
-void Player::move(sf::Vector2f pos)
+void Player::move(const sf::Vector2f& pos)
 {
 	Entity::move(pos);
 	graphics.setPosition(position);
 }
 
-void Player::setPosition(sf::Vector2f pos)
+void Player::setPosition(const sf::Vector2f& pos)
 {
 	Entity::setPosition(pos);
 	graphics.setPosition(position);
@@ -94,26 +71,57 @@ void Player::setPosition(sf::Vector2f pos)
 
 void Player::addEXP(int value)
 {
-	gameData.Player.experience += value;
+	Game::instance->data.Player.experience += value;
 }
 
 void Player::addGold(int value)
 {
-	gameData.Player.gold += value;
+	Game::instance->data.Player.gold += value;
 }
 
 int Player::getEXP() const
 {
-	return gameData.Player.experience;
+	return Game::instance->data.Player.experience;
 }
 
 int Player::getGold() const
 {
-	return gameData.Player.gold;
+	return Game::instance->data.Player.gold;
 }
 
 int Player::getLevel() const
 {
 	// TODO: Better Level formula. Replace placeholder.
-	return gameData.Player.experience / 100;
+	return Game::instance->data.Player.experience / 100;
+}
+
+bool Player::activate()
+{
+	auto entityManager = Game::instance->State.burglary->getEntityManager();
+	BoundingBox activationRectangle = bounds.translated(DirToVector(movingDir) * 48.f);
+	std::vector<EntityPtr> objects = entityManager->findEntitiesInside(activationRectangle);
+	for(EntityPtr& obj : objects)
+	{
+		if(obj->activate(*this))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void Player::setMoving(bool moving)
+{
+	this->isMoving = moving;
+}
+
+void Player::setMovingDirection(Direction dir)
+{
+	if(dir != Stop)
+		this->movingDir = dir;
+}
+
+void Player::setRunning(bool running)
+{
+	this->isRunning = running;
 }

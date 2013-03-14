@@ -22,40 +22,53 @@
 #ifndef GRG_ENTITY_H
 #define GRG_ENTITY_H
 
-#include "SFML/System.hpp"
-#include "SFML/Window.hpp"
-#include "SFML/Graphics.hpp"
-#include "EntityTypes.h"
-#include "Rectangle.h"
+#include <SFML/System/Vector2.hpp>
+#include <memory>
+
+namespace sf
+{
+	class RenderTarget;
+};
 
 namespace Blackguard
 {
-	class Entity : protected std::enable_shared_from_this<Entity>
+	namespace BurglaryState
 	{
-	public:
-		Entity() { type = EntityType::Generic; }
-		virtual void update(float deltaTime) {}
-		virtual void draw(sf::RenderTarget* target) {}
-		virtual bool processEvent(sf::Event& evt) { return false; }
-		virtual void onCollide(EntityPtr other) {}
-		virtual bool isCollideEnabled() { return false; }
-		virtual void activate(EntityPtr activator) { }
-		void setOwnID(std::string id) { ownID = id; } // This is bad I know.
-
-		// Setter:
-		virtual void move(sf::Vector2f pos) { position += pos; aabb.position = position; }
-		virtual void setPosition(sf::Vector2f pos) { position = pos; aabb.position = position; }
-
-		// Getter:
-		virtual sf::Vector2f getPosition() const { return position; }
-		virtual Rectangle& getAABB() { return aabb; }
-		virtual int getType() const { return type; }
-	protected:
-		sf::Vector2f position;
-		Rectangle aabb;
-		int type;
-		std::string ownID;
-	};
+		struct BoundingBox;
+		class Player;
+		
+		struct BoundingBox
+		{
+			bool intersects(const BoundingBox& other) const;
+			BoundingBox translated(const sf::Vector2f& by) const;
+			sf::Vector2f size;
+			sf::Vector2f position;
+		};
+		
+		class Entity : public std::enable_shared_from_this<Entity>
+		{
+		public:
+			Entity();
+			virtual ~Entity();
+			virtual void update(float deltaTime) {}
+			virtual void draw(sf::RenderTarget* target) const = 0;
+			virtual bool activate(Player& activator) { return false; }
+			virtual void remove();
+			virtual bool canBeRemoved() { return toBeRemoved; }
+			// Setter:
+			virtual void move(const sf::Vector2f& pos);
+			virtual void setPosition(const sf::Vector2f& pos);
+			// Getter:
+			virtual sf::Vector2f getPosition() const { return position; }
+			virtual BoundingBox& getBounds() { return bounds; }
+		protected:
+			sf::Vector2f position;
+			BoundingBox bounds;
+			bool toBeRemoved;
+		};
+		
+		typedef std::shared_ptr<Entity> EntityPtr;
+	}
 }
 
 #endif //GRG_ENTITY_H

@@ -19,44 +19,31 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_PLAYER_H
-#define GRG_PLAYER_H
-
-#include "Entity.h"
-
-namespace sf
-{
-	class Sprite;
-}
+#ifndef BLACKGUARD_UTILITY_DIRECTION_H
+#define BLACKGUARD_UTILITY_DIRECTION_H
+#include <SFML/System/Vector2.hpp>
 
 namespace Blackguard
 {
-	struct GameData;
+namespace Utility
+{
 
-	class Player : public Entity
-	{
-	public:
-		Player(sf::Texture& texture);
-		~Player();
+enum Direction
+{
+  Stop  = 0,
+  North = 1,
+  South = 2,
+  West  = 4,
+  East  = 8,
+  NorthWest = North | West,
+  NorthEast = North | East,
+  SouthWest = South | West,
+  SouthEast = South | East
+};
 
-		virtual void update(float deltaTime);
-		virtual void draw(sf::RenderTarget* target);
-		virtual bool processEvent(sf::Event& evt);
-		virtual void move(sf::Vector2f pos);
-		virtual void setPosition(sf::Vector2f pos);
-		virtual void onCollide(EntityPtr other);
-		virtual bool isCollideEnabled();
-		void addEXP(int value);
-		void addGold(int value);
-		int getEXP() const;
-		int getGold() const;
-		int getLevel() const;
-	private:
-		sf::Sprite graphics;
-		GameData& gameData;
-		float speedModifier;
-		int randomness;
-	};
+Direction BoolSetToDir(bool north, bool south, bool west, bool east);
+sf::Vector2f DirToVector(Direction dir);
+}
 }
 
-#endif //GRG_PLAYER_H
+#endif // BLACKGUARD_UTILITY_DIRECTION_H

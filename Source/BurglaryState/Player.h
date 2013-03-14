@@ -1,6 +1,6 @@
 /*
  *   Copyright 2013 Manuel Riecke <m.riecke@mrbeast.org>
- *   Copyright 2013 Raffael Zica <raffael@trollgames.de>
+ *   Copyright 2013 Raffael Zica <sirjson133@gmail.com>
  *
  *   This software is provided 'as-is', without any express or implied
  *   warranty.  In no event will the authors be held liable for any damages
@@ -19,23 +19,54 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_WORLDMAPSTATE_H
-#define GRG_WORLDMAPSTATE_H
+#ifndef GRG_PLAYER_H
+#define GRG_PLAYER_H
 
-#include "../GameState.h"
+#include <SFML/Graphics/Sprite.hpp>
+#include "Entity.h"
+#include "../Utility/Direction.h"
+
+namespace sf
+{
+	class Event;
+}
 
 namespace Blackguard
 {
-	namespace WorldmapState
+	using Utility::Direction;
+	namespace BurglaryState
 	{
-		class WorldmapState : public GameState
+		class Player : public Entity
 		{
 		public:
-			virtual bool processEvent(sf::Event&);
+			Player();
+			virtual ~Player();
+
+			// Entity stuff
 			virtual void update(float deltaTime);
-			virtual void draw(sf::RenderTarget*);
+			virtual void draw(sf::RenderTarget* target) const;
+			virtual void move(const sf::Vector2f& pos);
+			virtual void setPosition(const sf::Vector2f& pos);
+			
+			// Controls
+			bool activate();
+			void setRunning(bool running);
+			void setMoving(bool moving);
+			void setMovingDirection(Direction dir);
+			
+			// State
+			void addEXP(int value);
+			void addGold(int value);
+			int getEXP() const;
+			int getGold() const;
+			int getLevel() const;
+		private:
+			sf::Sprite graphics;
+			bool isRunning;
+			bool isMoving;
+			Direction movingDir;
 		};
 	}
 }
 
-#endif // GRG_WORLDMAPSTATE_H
+#endif //GRG_PLAYER_H

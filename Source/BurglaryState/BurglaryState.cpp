@@ -20,45 +20,67 @@
  */
 
 #include "BurglaryState.h"
-#include "../EntityTypes.h"
-#include "../Player.h"
+#include "Player.h"
+#include "Loot.h"
+
+#include "../Utility/Direction.h"
+
 #include "../Game.h"
-#include "../Loot.h"
 
 using namespace Blackguard::BurglaryState;
+using namespace Blackguard::Utility;
 
 BurglaryState::BurglaryState()
 {
-	//TODO: When loading a game this should not happen...
-	Game::instance->data.Player.gold = 0;
-	Game::instance->data.Player.experience = 0;
-
-	map = new Map();
-	map->add("playerEnt",EntityPtr(new Player(Game::instance->assets.textures["Player"])));
-	EntityPtr lootEnt = EntityPtr(new Loot(Game::instance->assets.textures["Loot"],map));
+	player = std::shared_ptr<Player>(new Player());
+	entities = new EntityManager();
+	entities->addNamed("playerEnt", player);
+	EntityPtr lootEnt = EntityPtr(new Loot());
 	lootEnt->setPosition(sf::Vector2f(100,100));
-	map->add(map->generateID(),lootEnt);
+	entities->add(lootEnt);
 	tileMap.loadFromFile("test.tmx");
 }
 
 BurglaryState::~BurglaryState()
 {
-	delete map;
+	delete entities;
 }
 
-bool BurglaryState::processEvent(sf::Event& evt)
+bool BurglaryState::processEvent(sf::Event& event)
 {
-	map->processEvent(evt);
-	return true;
+	if(event.type == sf::Event::KeyPressed)
+	{
+		if(event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::E)
+		{
+			player->activate();
+			return true;
+		}
+	}
+	return false;
 }
 
 void BurglaryState::update(float deltaTime)
 {
-	map->update(deltaTime);
+	bool w, s, a, d;
+	w = sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+	s = sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+	a = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+	d = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+	Direction dir=BoolSetToDir(w, s, a, d);
+	bool running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+	player->setMoving(w || s || a || d);
+	player->setMovingDirection(dir);
+	player->setRunning(running);
+	entities->update(deltaTime);
 }
 
 void BurglaryState::draw(sf::RenderTarget* target)
 {
 	target->draw(tileMap);
-	map->draw(target);
+	entities->draw(target);
+}
+
+EntityManager* BurglaryState::getEntityManager()
+{
+	return entities;
 }

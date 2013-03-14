@@ -19,28 +19,39 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_ENTITYTYPES_H
-#define GRG_ENTITYTYPES_H
+#ifndef GRG_MAP_H
+#define GRG_MAP_H
 
-#include <memory>
+#include <map>
+#include <string>
+#include <stack>
+
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+
+#include "Entity.h"
 
 namespace Blackguard
 {
-	class Entity;
-	class Player;
-
-	namespace EntityType
+	namespace BurglaryState
 	{
-		enum : int
-		{
-			Generic = 0,
-			Player = 1,
-			Loot = 2
+	class EntityManager
+	{
+		public:
+			EntityManager();
+			void add(EntityPtr ptr);
+			void addNamed(std::string id, EntityPtr entity);
+			void update(float deltaTime);
+			void draw(sf::RenderTarget* target);
+			std::vector<EntityPtr> findEntitiesInside(const Blackguard::BurglaryState::BoundingBox& area);
+		private:
+			void cleanup();
+		private:
+			std::vector<EntityPtr> objects;
+			std::map<std::string,EntityPtr> namedObjects;
+			int idCounter;
 		};
 	}
-
-	typedef std::shared_ptr<Entity> EntityPtr;
-	typedef std::shared_ptr<Player> PlayerPtr;
 }
 
-#endif //GRG_ENTITYTYPES_H
+#endif //GRG_MAP_H

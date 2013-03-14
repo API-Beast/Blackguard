@@ -19,76 +19,61 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "Map.h"
-#include "Utility/StringUtilities.h"
+#include "../Utility/StringUtilities.h"
+
+#include "EntityManager.h"
 #include "Entity.h"
+
+#include <algorithm>
 
 using namespace Blackguard;
 using namespace Blackguard::Utility;
+using namespace Blackguard::BurglaryState;
 
-Map::Map()
+EntityManager::EntityManager()
 {
 	idCounter = 0;
 }
 
-std::string Map::generateID()
+void EntityManager::addNamed(std::string id, EntityPtr entity)
 {
-	idCounter++;
-	return "obj_" + ToString<int>(idCounter) + ToString<int>(rand());
+	namedObjects[id] = entity;
+	objects.push_back(entity);
 }
 
-void Map::add(std::string id, EntityPtr entity)
+void EntityManager::add(EntityPtr ptr)
 {
-	objects[id] = entity;
-	objects[id]->setOwnID(id);
+	objects.push_back(ptr);
 }
 
-void Map::remove(std::string id)
+void EntityManager::cleanup()
 {
-	disposedObjects.push(id);
+	auto it = std::remove_if(objects.begin(), objects.end(), [](EntityPtr& obj){ return obj->canBeRemoved(); });
+	objects.erase(it, objects.end());
 }
 
-void Map::cleanup()
+void EntityManager::update(float deltaTime)
 {
-	while(disposedObjects.size() > 0)
+	for(auto obj : objects)
 	{
-		objects.erase(disposedObjects.top());
-		disposedObjects.pop();
+		obj->update(deltaTime);
 	}
-}
-
-void Map::checkCollisions()
-{
-	for (auto objA : objects) {
-		for (auto objB : objects) {
-			if(objA.first != objB.first && objA.second->isCollideEnabled() && objB.second->isCollideEnabled()) {
-				if(objA.second->getAABB().intersects(objB.second->getAABB())) {
-					objA.second->onCollide(objB.second);
-				}
-			}
-		}
-	}
-}
-
-void Map::update(float deltaTime)
-{
-	for (auto obj : objects) {
-		obj.second->update(deltaTime);
-	}
-	this->checkCollisions();
 	this->cleanup();
 }
 
-void Map::draw(sf::RenderTarget* target)
+void EntityManager::draw(sf::RenderTarget* target)
 {
-	for (auto obj : objects) {
-		obj.second->draw(target);
+	for(auto obj : objects)
+	{
+		obj->draw(target);
 	}
 }
 
-void Map::processEvent(sf::Event& evt)
+std::vector< EntityPtr > EntityManager::findEntitiesInside(const BoundingBox& area)
 {
-	for (auto obj : objects) {
-		obj.second->processEvent(evt);
-	}
+	std::vector<EntityPtr> retValue;
+	for(auto obj : objects)
+		if(area.intersects(obj->getBounds()))
+			retValue.push_back(obj);
+	return std::move(retValue);
 }

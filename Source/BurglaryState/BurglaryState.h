@@ -23,8 +23,8 @@
 #define GRG_BURGLARYSTATE_H
 
 #include "../GameState.h"
-#include "../Map.h"
 #include "../TileMap.h"
+#include "EntityManager.h"
 
 namespace Blackguard
 {
@@ -35,11 +35,13 @@ namespace Blackguard
 		public:
 			BurglaryState();
 			~BurglaryState();
-			virtual bool processEvent(sf::Event& evt);
+			virtual bool processEvent(sf::Event& event);
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target);
+			EntityManager* getEntityManager();
 		private:
-			Map* map;
+			std::shared_ptr<Player> player;
+			EntityManager* entities;
 			TileMap tileMap;
 		};
 	}
