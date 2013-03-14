@@ -39,4 +39,5 @@ bool Loot::activate(Player& activator)
 	// TODO: Well this should not give 300 gold everytime...
 	activator.addGold(300);
 	this->remove();
+	return true;
 }
