@@ -5,6 +5,14 @@
 #include "SFML/System/Vector2.hpp"
 #include <cmath>
 
+namespace Blackguard
+{
+	namespace Utility
+	{
+		template <typename T> sf::Vector2<T> VectorNormalize(const sf::Vector2<T>& source);
+	}
+}
+
 #include "GameMath.impl.h"
 
 #endif
