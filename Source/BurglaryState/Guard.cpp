@@ -38,9 +38,9 @@ void Guard::update(float deltaTime)
 
 void Guard::chasePlayer()
 {
-	sf::Vector2f direction = Utility::VectorNormalize(playerEnt->getPosition() - this->position);
-	if(!tileMap.isBlocked(sf::Vector2i(position + direction))) {
-		this->move(direction);
+	sf::Vector2f moveVector = Utility::VectorNormalize(playerEnt->getPosition() - this->position);
+	if(!tileMap.isBlocked(sf::Vector2i(position + moveVector))) {
+		this->move(moveVector);
 	}
 }
 
