@@ -22,6 +22,7 @@
 #include "BurglaryState.h"
 #include "Player.h"
 #include "Loot.h"
+#include "Guard.h"
 
 #include "../Utility/Direction.h"
 
@@ -32,12 +33,15 @@ using namespace Blackguard::Utility;
 
 BurglaryState::BurglaryState()
 {
-	player = std::shared_ptr<Player>(new Player());
+	player = PlayerPtr(new Player());
 	entities = new EntityManager();
-	entities->addNamed("playerEnt", player);
 	EntityPtr lootEnt = EntityPtr(new Loot());
+	GuardPtr guardEnt = GuardPtr(new Guard(player,tileMap));
 	lootEnt->setPosition(sf::Vector2f(100,100));
+	guardEnt->setPosition(sf::Vector2f(300,200));
 	entities->add(lootEnt);
+	entities->add(guardEnt);
+	entities->addNamed("playerEnt", player);
 	tileMap.loadFromFile("test.tmx");
 }
 

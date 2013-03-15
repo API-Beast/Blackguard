@@ -66,6 +66,8 @@ namespace Blackguard
 			bool isMoving;
 			Direction movingDir;
 		};
+
+		typedef std::shared_ptr<Player> PlayerPtr;
 	}
 }
 

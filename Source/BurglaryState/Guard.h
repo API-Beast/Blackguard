@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "SFML/Graphics.hpp"
+#include "Player.h"
 
 namespace sf
 {
@@ -13,24 +14,32 @@ namespace sf
 namespace Blackguard
 {
 	struct GameData;
+	class TileMap;
 
 	namespace BurglaryState
 	{
 		class Guard : public Entity
 		{
 		public:
-			Guard(sf::Texture& texture);
+			Guard(PlayerPtr player, TileMap& map);
 			~Guard();
 
 			virtual void update(float deltaTime);
-			virtual void draw(sf::RenderTarget* target);
+			virtual void draw(sf::RenderTarget* target) const;
 			virtual void move(sf::Vector2f pos);
 			virtual void setPosition(sf::Vector2f pos);
 			virtual void onCollide(EntityPtr other);
 			virtual bool isCollideEnabled();
 		private:
+			void chasePlayer();
+		private:
 			sf::Sprite graphics;
+			BoundingBox detectionArea;
+			PlayerPtr playerEnt;
+			TileMap& tileMap;
 		};
+
+		typedef std::shared_ptr<Guard> GuardPtr;
 	}
 }
 
