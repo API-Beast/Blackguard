@@ -2,16 +2,15 @@
 #include "Guard.h"
 
 #include "SFML/Graphics.hpp"
-#include "GameData.h"
-#include "Game.h"
+#include "../GameData.h"
+#include "../Game.h"
 
-using namespace Blackguard;
+using namespace Blackguard::BurglaryState;
 
 Guard::Guard(sf::Texture& texture)
 {
 	graphics = sf::Sprite(texture);
-	aabb.size = graphics.getTexture()->getSize();
-	type = EntityType::Player;
+	bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
 }
 
 Guard::~Guard()
