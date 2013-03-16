@@ -44,12 +44,29 @@ bool BoundingBox::intersects(const BoundingBox& other) const
 	       other.position.y < position.y + size.y;
 }
 
+void BoundingBox::updatePosition(const sf::Vector2f& entityPosition)
+{
+	this->position = entityPosition+offset;
+}
+
 void Entity::move(const sf::Vector2f& movement)
 {
+	auto horizontalMovement = sf::Vector2f(movement.x, 0.f       );
+	auto verticalMovement   = sf::Vector2f(0.f       , movement.y);
 	if(world->isMovementPossible(bounds, movement))
 	{
 		position += movement;
-		bounds.position = position;
+		bounds.updatePosition(position);
+	}
+	else if(world->isMovementPossible(bounds, horizontalMovement) && horizontalMovement.x > 0)
+	{
+		position += horizontalMovement;
+		bounds.updatePosition(position);
+	}
+	else if(world->isMovementPossible(bounds, verticalMovement) && verticalMovement.y > 0)
+	{
+		position += verticalMovement;
+		bounds.updatePosition(position);
 	}
 	else
 		this->onHitWall();
@@ -58,7 +75,7 @@ void Entity::move(const sf::Vector2f& movement)
 void Entity::setPosition(const sf::Vector2f& pos)
 {
 	position = pos;
-	bounds.position = position;
+	bounds.updatePosition(position);
 }
 
 Entity::Entity()

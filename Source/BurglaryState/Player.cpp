@@ -32,7 +32,9 @@ using namespace Blackguard::Utility;
 Player::Player() : Entity()
 {
 	this->graphics.setTexture(Game::instance->assets.textures["Player"]);
-	this->bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
+	auto size = graphics.getTexture()->getSize();
+	this->bounds.offset = sf::Vector2f(size.x/4, size.y*(2/3.f));
+	this->bounds.size = sf::Vector2f(size.x/2, size.y/3);
 	this->isMoving = false;
 	this->isRunning = false;
 	this->movingDir = South;

@@ -43,8 +43,10 @@ namespace Blackguard
 		{
 			bool intersects(const BoundingBox& other) const;
 			BoundingBox translated(const sf::Vector2f& by) const;
+			void updatePosition(const sf::Vector2f& entityPosition);
 			sf::Vector2f size;
 			sf::Vector2f position;
+			sf::Vector2f offset;
 		};
 		
 		class Entity : public std::enable_shared_from_this<Entity>
