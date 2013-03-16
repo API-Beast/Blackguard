@@ -20,6 +20,7 @@
  */
 
 #include "Entity.h"
+#include "EntityWorldInterface.h"
 
 namespace Blackguard
 {
@@ -43,10 +44,15 @@ bool BoundingBox::intersects(const BoundingBox& other) const
 	       other.position.y < position.y + size.y;
 }
 
-void Entity::move(const sf::Vector2f& pos)
+void Entity::move(const sf::Vector2f& movement)
 {
-	position += pos;
-	bounds.position = position;
+	if(world->isMovementPossible(bounds, movement))
+	{
+		position += movement;
+		bounds.position = position;
+	}
+	else
+		this->onHitWall();
 }
 
 void Entity::setPosition(const sf::Vector2f& pos)

@@ -45,7 +45,7 @@ namespace Blackguard
 			virtual EntityPtr getNamedEntity(const std::string& name);
 			virtual std::vector<EntityPtr> getEntitiesByType(const std::string& type);
 			virtual std::vector<EntityPtr> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area);
-			virtual bool isMovementPossible(const sf::Vector2f& pos, const sf::Vector2f& movement) const;
+			virtual bool isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const;
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const;
 		private:
 			std::shared_ptr<Player> player;

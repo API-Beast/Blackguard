@@ -50,7 +50,9 @@ void Player::update(float deltaTime)
 
 	auto movementVector = DirToVector(movingDir) * speed * deltaTime;
 	if(this->isMoving)
-		this->move(DirToVector(movingDir) * speed * deltaTime);
+	{
+		this->move(movementVector);
+	}
 }
 
 void Player::draw(sf::RenderTarget* target) const

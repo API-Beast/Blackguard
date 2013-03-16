@@ -112,12 +112,16 @@ EntityPtr BurglaryState::getNamedEntity(const std::string& name)
 	return entities->getNamed(name);
 }
 
-bool BurglaryState::isMovementPossible(const sf::Vector2f& pos, const sf::Vector2f& movement) const
+bool BurglaryState::isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const
 {
-	return tileMap.isBlocked(sf::Vector2i(pos+movement)) == false;
+	bool a=tileMap.isBlocked(sf::Vector2i(bounds.position+movement));
+	bool b=tileMap.isBlocked(sf::Vector2i(bounds.position+bounds.size+movement));
+	bool c=tileMap.isBlocked(sf::Vector2i(bounds.position+sf::Vector2f(bounds.size.x, 0)+movement));
+	bool d=tileMap.isBlocked(sf::Vector2i(bounds.position+sf::Vector2f(0, bounds.size.y)+movement));
+	return (a || b || c || d) == false;
 }
 
 RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision) const
 {
-	
+	// TODO
 }

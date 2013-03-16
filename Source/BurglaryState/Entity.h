@@ -58,6 +58,8 @@ namespace Blackguard
 			virtual void remove();
 			virtual bool canBeRemoved() { return toBeRemoved; }
 			virtual std::string getType(){ return "unknown"; };
+			// 
+			virtual void onHitWall(){};
 			// Setter:
 			virtual void move(const sf::Vector2f& pos);
 			virtual void setPosition(const sf::Vector2f& pos);
