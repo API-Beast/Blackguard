@@ -39,16 +39,20 @@ namespace Blackguard
 	{
 		public:
 			EntityManager();
-			void add(EntityPtr ptr);
-			void addNamed(std::string id, EntityPtr entity);
+			void add(Blackguard::BurglaryState::Entity* ptr);
+			void addNamed(std::string id, Blackguard::BurglaryState::Entity* entity);
 			void update(float deltaTime);
 			void draw(sf::RenderTarget* target);
-			std::vector<EntityPtr> findEntitiesInside(const Blackguard::BurglaryState::BoundingBox& area);
+			std::vector<EntityPtr> getByType(const std::string& type);
+			std::vector<EntityPtr> getInRect(const Blackguard::BurglaryState::BoundingBox& area);
+			EntityPtr getNamed(const std::string& name);
 		private:
 			void cleanup();
 		private:
-			std::vector<EntityPtr> objects;
-			std::map<std::string,EntityPtr> namedObjects;
+			typedef std::vector<EntityPtr> EntityList;
+			EntityList objects;
+			std::map<std::string, EntityPtr>  namedObjects;
+			std::map<std::string, EntityList> objectsByType;
 			int idCounter;
 		};
 	}

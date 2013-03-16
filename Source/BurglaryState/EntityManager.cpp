@@ -35,21 +35,30 @@ EntityManager::EntityManager()
 	idCounter = 0;
 }
 
-void EntityManager::addNamed(std::string id, EntityPtr entity)
+void EntityManager::addNamed(std::string id, Entity* entity)
 {
-	namedObjects[id] = entity;
-	objects.push_back(entity);
+	namedObjects[id] = EntityPtr(entity);
+	this->add(entity);
 }
 
-void EntityManager::add(EntityPtr ptr)
+void EntityManager::add(Entity* ptr)
 {
-	objects.push_back(ptr);
+	objects.push_back(EntityPtr(ptr));
+	objectsByType[ptr->getType()].push_back(EntityPtr(ptr));
 }
 
 void EntityManager::cleanup()
 {
+	// Remove from normal list
 	auto it = std::remove_if(objects.begin(), objects.end(), [](EntityPtr& obj){ return obj->canBeRemoved(); });
 	objects.erase(it, objects.end());
+	// Remove from mapped list
+	for(auto pair : objectsByType)
+	{
+		auto list = pair.second;
+		auto it = std::remove_if(list.begin(), list.end(), [](EntityPtr& obj){ return obj->canBeRemoved(); });
+		objects.erase(it, list.end());
+	}
 }
 
 void EntityManager::update(float deltaTime)
@@ -69,11 +78,21 @@ void EntityManager::draw(sf::RenderTarget* target)
 	}
 }
 
-std::vector< EntityPtr > EntityManager::findEntitiesInside(const BoundingBox& area)
+std::vector< EntityPtr > EntityManager::getInRect(const BoundingBox& area)
 {
 	std::vector<EntityPtr> retValue;
 	for(auto obj : objects)
 		if(area.intersects(obj->getBounds()))
 			retValue.push_back(obj);
 	return std::move(retValue);
+}
+
+std::vector< EntityPtr > EntityManager::getByType(const std::string& type)
+{
+	return objectsByType[type];
+}
+
+EntityPtr EntityManager::getNamed(const std::string& name)
+{
+	return namedObjects[name];
 }

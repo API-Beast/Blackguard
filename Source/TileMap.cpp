@@ -221,7 +221,7 @@ void TileMap::loadFromFile(const std::string& fileName)
 }
 
 
-bool TileMap::isBlocked(sf::Vector2i pos)
+bool TileMap::isBlocked(sf::Vector2i pos) const
 {
 	return blockingLayer.getTile(pos.x / gridWidth, pos.y / gridHeight);
 }

@@ -24,6 +24,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <memory>
+#include <string>
 
 namespace sf
 {
@@ -36,6 +37,7 @@ namespace Blackguard
 	{
 		struct BoundingBox;
 		class Player;
+		class EntityWorldInterface;
 		
 		struct BoundingBox
 		{
@@ -55,9 +57,11 @@ namespace Blackguard
 			virtual bool activate(Player& activator) { return false; }
 			virtual void remove();
 			virtual bool canBeRemoved() { return toBeRemoved; }
+			virtual std::string getType(){ return "unknown"; };
 			// Setter:
 			virtual void move(const sf::Vector2f& pos);
 			virtual void setPosition(const sf::Vector2f& pos);
+			virtual void setWorldInterface(EntityWorldInterface* interface);
 			// Getter:
 			virtual sf::Vector2f getPosition() const { return position; }
 			virtual BoundingBox& getBounds() { return bounds; }
@@ -65,6 +69,7 @@ namespace Blackguard
 			sf::Vector2f position;
 			BoundingBox bounds;
 			bool toBeRemoved;
+			EntityWorldInterface* world;
 		};
 		
 		typedef std::shared_ptr<Entity> EntityPtr;

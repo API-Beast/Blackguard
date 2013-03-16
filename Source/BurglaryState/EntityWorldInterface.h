@@ -19,61 +19,35 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
+#ifndef ENTITYWORLDINTERFACE_H
+#define ENTITYWORLDINTERFACE_H
+
 #include "Entity.h"
+#include <vector>
 
 namespace Blackguard
 {
-namespace BurglaryState
-{
-	
-
-BoundingBox BoundingBox::translated(const sf::Vector2f& by) const
-{
-	BoundingBox retVal;
-	retVal.position = this->position + by;
-	retVal.size = this->size;
-	return std::move(retVal);
-}	
-
-bool BoundingBox::intersects(const BoundingBox& other) const
-{
-	return position.x < other.position.x + other.size.y  &&
-	       other.position.x < position.x + size.x  &&
-	       position.y < other.position.y + other.size.y &&
-	       other.position.y < position.y + size.y;
+	namespace BurglaryState
+	{
+		struct RaycastResult
+		{
+			sf::Vector2f startPoint;
+			sf::Vector2f endPoint;
+			sf::Vector2f ray;
+		};
+		
+		class Player;
+		class EntityWorldInterface
+		{
+		public:
+			virtual void addEntity(Entity* toAdd)=0;
+			virtual EntityPtr getNamedEntity(const std::string& name)=0;
+			virtual std::vector<EntityPtr> getEntitiesByType(const std::string& type)=0;
+			virtual std::vector<EntityPtr> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area)=0;
+			virtual bool isMovementPossible(const sf::Vector2f& pos, const sf::Vector2f& movement) const=0;
+			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const=0;
+		};
+	}
 }
 
-void Entity::move(const sf::Vector2f& pos)
-{
-	position += pos;
-	bounds.position = position;
-}
-
-void Entity::setPosition(const sf::Vector2f& pos)
-{
-	position = pos;
-	bounds.position = position;
-}
-
-Entity::Entity()
-{
-	toBeRemoved = false;
-}
-
-void Entity::remove()
-{
-	toBeRemoved = true;
-}
-
-void Entity::setWorldInterface(EntityWorldInterface* interface)
-{
-	this->world = interface;
-}
-
-Entity::~Entity()
-{
-
-}
-
-}
-}
+#endif

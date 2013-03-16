@@ -47,6 +47,7 @@ namespace Blackguard
 			virtual void draw(sf::RenderTarget* target) const;
 			virtual void move(const sf::Vector2f& pos);
 			virtual void setPosition(const sf::Vector2f& pos);
+			virtual std::string getType(){ return "Player"; };
 			
 			// Controls
 			bool activate();
@@ -59,15 +60,12 @@ namespace Blackguard
 			void addGold(int value);
 			int getEXP() const;
 			int getGold() const;
-			int getLevel() const;
 		private:
 			sf::Sprite graphics;
 			bool isRunning;
 			bool isMoving;
 			Direction movingDir;
 		};
-
-		typedef std::shared_ptr<Player> PlayerPtr;
 	}
 }
 

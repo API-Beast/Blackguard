@@ -20,6 +20,7 @@ namespace Blackguard
 			virtual void move(const sf::Vector2f& pos);
 			virtual void setPosition(const sf::Vector2f& pos);
 			virtual bool activate(Player& activator);
+			virtual std::string getType(){ return "Loot"; };
 		private:
 			sf::Sprite graphics;
 		};

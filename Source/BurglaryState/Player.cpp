@@ -48,6 +48,7 @@ void Player::update(float deltaTime)
 	if(this->isRunning)
 		speed = 128.f;
 
+	auto movementVector = DirToVector(movingDir) * speed * deltaTime;
 	if(this->isMoving)
 		this->move(DirToVector(movingDir) * speed * deltaTime);
 }
@@ -89,17 +90,10 @@ int Player::getGold() const
 	return Game::instance->data.Player.gold;
 }
 
-int Player::getLevel() const
-{
-	// TODO: Better Level formula. Replace placeholder.
-	return Game::instance->data.Player.experience / 100;
-}
-
 bool Player::activate()
 {
-	auto entityManager = Game::instance->State.burglary->getEntityManager();
 	BoundingBox activationRectangle = bounds.translated(DirToVector(movingDir) * 48.f);
-	std::vector<EntityPtr> objects = entityManager->findEntitiesInside(activationRectangle);
+	std::vector<EntityPtr> objects = world->getEntitiesInsideRect(activationRectangle);
 	for(EntityPtr& obj : objects)
 	{
 		if(obj->activate(*this))

@@ -33,15 +33,23 @@ using namespace Blackguard::Utility;
 
 BurglaryState::BurglaryState()
 {
-	player = PlayerPtr(new Player());
+	player = std::make_shared<Player>();
 	entities = new EntityManager();
-	EntityPtr lootEnt = EntityPtr(new Loot());
-	GuardPtr guardEnt = GuardPtr(new Guard(player,tileMap));
-	lootEnt->setPosition(sf::Vector2f(100,100));
-	guardEnt->setPosition(sf::Vector2f(300,200));
+	Loot* lootEnt = new Loot();
+	Guard* guardEnt = new Guard();
+	
+	player->setWorldInterface(this);
+	lootEnt->setWorldInterface(this);
+	guardEnt->setWorldInterface(this);
+	
+	player->setPosition(sf::Vector2f(576, 96));
+	lootEnt->setPosition(sf::Vector2f(832, 576));
+	guardEnt->setPosition(sf::Vector2f(864, 448));
+	
 	entities->add(lootEnt);
 	entities->add(guardEnt);
-	entities->addNamed("playerEnt", player);
+	entities->addNamed("player", player.get());
+	
 	tileMap.loadFromFile("test.tmx");
 }
 
@@ -84,7 +92,32 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	entities->draw(target);
 }
 
-EntityManager* BurglaryState::getEntityManager()
+void BurglaryState::addEntity(Entity* toAdd)
 {
-	return entities;
+	entities->add(toAdd);
+}
+
+std::vector< EntityPtr > BurglaryState::getEntitiesByType(const std::string& type)
+{
+	return entities->getByType(type);
+}
+
+std::vector< EntityPtr > BurglaryState::getEntitiesInsideRect(const BoundingBox& area)
+{
+	return entities->getInRect(area);
+}
+
+EntityPtr BurglaryState::getNamedEntity(const std::string& name)
+{
+	return entities->getNamed(name);
+}
+
+bool BurglaryState::isMovementPossible(const sf::Vector2f& pos, const sf::Vector2f& movement) const
+{
+	return tileMap.isBlocked(sf::Vector2i(pos+movement)) == false;
+}
+
+RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision) const
+{
+	
 }

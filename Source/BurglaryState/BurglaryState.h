@@ -1,6 +1,6 @@
 /*
  *   Copyright 2013 Manuel Riecke <m.riecke@mrbeast.org>
- *   Copyright 2013 Raffael Zica <raffael@trollgames.de>
+ *   Copyright 2013 Raffael Zica <sirjson133@gmail.com>
  *
  *   This software is provided 'as-is', without any express or implied
  *   warranty.  In no event will the authors be held liable for any damages
@@ -25,20 +25,28 @@
 #include "../GameState.h"
 #include "../TileMap.h"
 #include "EntityManager.h"
+#include "EntityWorldInterface.h"
 
 namespace Blackguard
 {
 	namespace BurglaryState
 	{
-		class BurglaryState : public GameState
+		class BurglaryState : public GameState, public EntityWorldInterface
 		{
 		public:
 			BurglaryState();
 			~BurglaryState();
+			// GameState
 			virtual bool processEvent(sf::Event& event);
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target);
-			EntityManager* getEntityManager();
+			// EntityWorldInterface
+			virtual void addEntity(Entity* toAdd);
+			virtual EntityPtr getNamedEntity(const std::string& name);
+			virtual std::vector<EntityPtr> getEntitiesByType(const std::string& type);
+			virtual std::vector<EntityPtr> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area);
+			virtual bool isMovementPossible(const sf::Vector2f& pos, const sf::Vector2f& movement) const;
+			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const;
 		private:
 			std::shared_ptr<Player> player;
 			EntityManager* entities;

@@ -21,25 +21,20 @@ namespace Blackguard
 		class Guard : public Entity
 		{
 		public:
-			Guard(PlayerPtr player, TileMap& map);
+			Guard();
 			~Guard();
 
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const;
 			virtual void move(sf::Vector2f pos);
 			virtual void setPosition(sf::Vector2f pos);
-			virtual void onCollide(EntityPtr other);
-			virtual bool isCollideEnabled();
+			virtual std::string getType(){ return "Guard"; };
 		private:
 			void chasePlayer();
 		private:
 			sf::Sprite graphics;
 			BoundingBox detectionArea;
-			PlayerPtr playerEnt;
-			TileMap& tileMap;
 		};
-
-		typedef std::shared_ptr<Guard> GuardPtr;
 	}
 }
 

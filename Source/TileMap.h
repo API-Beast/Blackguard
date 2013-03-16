@@ -64,7 +64,7 @@ public:
 	class FormatNotSupported : public std::exception{};
 public:
 	void loadFromFile(const std::string& fileName);
-	bool isBlocked(sf::Vector2i pos);
+	bool isBlocked(sf::Vector2i pos) const;
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
