@@ -57,7 +57,7 @@ void EntityManager::cleanup()
 	{
 		auto list = pair.second;
 		auto it = std::remove_if(list.begin(), list.end(), [](EntityPtr& obj){ return obj->canBeRemoved(); });
-		objects.erase(it, list.end());
+		list.erase(it, list.end());
 	}
 }
 
