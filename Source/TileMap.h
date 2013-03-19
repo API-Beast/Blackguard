@@ -35,16 +35,17 @@ namespace Blackguard
 struct TileLayer
 {
 	TileLayer(){};
-	int getTile(int x, int y) const;
-	std::vector<int> data;
+	unsigned int getTile(int x, int y) const;
+	unsigned int& getTileRef(int x, int y);
+	std::vector<unsigned int> data;
 	int width, height;
 };
 
 struct TileSet
 {
 	TileSet(){};
-	int firstGID;
-	int lastGID;
+	unsigned int firstGID;
+	unsigned int lastGID;
 	int tileWidth, tileHeight;
 	int spacing;
 	sf::Texture texture;
@@ -65,6 +66,11 @@ public:
 public:
 	void loadFromFile(const std::string& fileName);
 	bool isBlocked(sf::Vector2i pos) const;
+	bool isBlockedByTile(int x, int y) const;
+	void markAsBlocked(sf::Vector2i pos);
+	void markAsBlockedByTile(int x, int y);
+	void unblock(sf::Vector2i pos);
+	void unblockByTile(int x, int y);
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:

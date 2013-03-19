@@ -27,6 +27,8 @@
 #include <cmath>
 #include <climits>
 #include <sys/stat.h>
+#include <stdexcept>
+#include <iostream>
 
 using namespace Blackguard;
 using namespace std;
@@ -52,11 +54,24 @@ namespace
 	};
 }
 
-int TileLayer::getTile(int x, int y) const
+unsigned int TileLayer::getTile(int x, int y) const
 {
-	if(x < 0 || y < 0 || x > width || y > height) return 0;
+	if(x < 0 || y < 0 || x > width || y > height)
+	{
+		return 0;
+	}
 	return data[y*width + x];
 }
+
+unsigned int& TileLayer::getTileRef(int x, int y)
+{
+	if(x < 0 || y < 0 || x > width || y > height)
+	{
+		throw out_of_range("");
+	}
+	return data[y*width + x];
+}
+
 
 sf::Vector2f TileSet::texCoordsForTile(int tileID) const
 {
@@ -182,15 +197,17 @@ void TileMap::loadFromFile(const std::string& fileName)
 				
 			// The Data is stored as bytes in base64.
 			std::string encodedData = dataElement->GetText();
-			std::string data = base64_decode(encodedData);
-			layer.data.reserve(data.length() / 4);
+			std::vector<unsigned char> data = base64_decode(encodedData);
+			layer.data.reserve(data.size() / 4);
 			// Every ID is 4 bytes.
 			for(unsigned int i=0; i < data.size(); i+=4)
+			{
 				layer.data.push_back(
 				            data[i + 0]       |
 				            data[i + 1] << 8  |
 				            data[i + 2] << 16 |
 				            data[i + 3] << 24 );
+			}
 			
 			// There are a few layer names with special functionality.
 			std::string name = curElement->Attribute("name");
@@ -223,6 +240,46 @@ void TileMap::loadFromFile(const std::string& fileName)
 
 bool TileMap::isBlocked(sf::Vector2i pos) const
 {
-	return blockingLayer.getTile(pos.x / gridWidth, pos.y / gridHeight);
+	return isBlockedByTile(pos.x / gridWidth, pos.y / gridHeight); 
+}
+
+bool TileMap::isBlockedByTile(int x, int y) const
+{
+	return blockingLayer.getTile(x, y) > 0;
+}
+
+void TileMap::markAsBlocked(sf::Vector2i pos)
+{
+	markAsBlockedByTile(pos.x / gridWidth, pos.y / gridHeight);
+}
+
+void TileMap::markAsBlockedByTile(int x, int y)
+{
+	try
+	{
+		blockingLayer.getTileRef(x, y)++;
+	}
+	catch(std::out_of_range)
+	{
+		// Ignore
+	}
+}
+
+void TileMap::unblock(sf::Vector2i pos)
+{
+	unblockByTile(pos.x / gridWidth, pos.y / gridHeight);
+}
+
+void TileMap::unblockByTile(int x, int y)
+{
+	try
+	{
+		unsigned int& tile=blockingLayer.getTileRef(x, y);
+		if(tile > 0) tile--;
+	}
+	catch(std::out_of_range)
+	{
+		// Ignore
+	}
 }
 

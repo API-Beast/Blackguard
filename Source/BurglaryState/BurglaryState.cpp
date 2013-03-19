@@ -33,8 +33,10 @@ using namespace Blackguard::Utility;
 
 BurglaryState::BurglaryState()
 {
-	player = std::make_shared<Player>();
+	tileMap.loadFromFile("test.tmx");
 	entities = new EntityManager();
+	
+	player = std::make_shared<Player>();
 	Loot* lootEnt = new Loot();
 	Guard* guardEnt = new Guard();
 	
@@ -49,8 +51,6 @@ BurglaryState::BurglaryState()
 	entities->add(lootEnt);
 	entities->add(guardEnt);
 	entities->addNamed("player", player.get());
-	
-	tileMap.loadFromFile("test.tmx");
 }
 
 BurglaryState::~BurglaryState()
@@ -124,4 +124,14 @@ bool BurglaryState::isMovementPossible(const BoundingBox& bounds, const sf::Vect
 RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision) const
 {
 	// TODO
+}
+
+void BurglaryState::blockTileAt(const sf::Vector2f& pos)
+{
+	tileMap.markAsBlocked(sf::Vector2i(pos));
+}
+
+void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
+{
+	tileMap.unblock(sf::Vector2i(pos));
 }

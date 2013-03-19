@@ -21,6 +21,7 @@
 
 #include "Entity.h"
 #include "EntityWorldInterface.h"
+#include <cmath>
 
 namespace Blackguard
 {
@@ -58,12 +59,12 @@ void Entity::move(const sf::Vector2f& movement)
 		position += movement;
 		bounds.updatePosition(position);
 	}
-	else if(world->isMovementPossible(bounds, horizontalMovement) && horizontalMovement.x > 0)
+	else if(world->isMovementPossible(bounds, horizontalMovement) && std::abs(horizontalMovement.x) > 0)
 	{
 		position += horizontalMovement;
 		bounds.updatePosition(position);
 	}
-	else if(world->isMovementPossible(bounds, verticalMovement) && verticalMovement.y > 0)
+	else if(world->isMovementPossible(bounds, verticalMovement) && std::abs(verticalMovement.y) > 0)
 	{
 		position += verticalMovement;
 		bounds.updatePosition(position);

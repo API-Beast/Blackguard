@@ -25,6 +25,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <memory>
 #include <string>
+#include <map>
 
 namespace sf
 {
@@ -60,6 +61,7 @@ namespace Blackguard
 			virtual void remove();
 			virtual bool canBeRemoved() { return toBeRemoved; }
 			virtual std::string getType(){ return "unknown"; };
+			virtual void initializeProperties(std::map<std::string, std::string> properties){};
 			// 
 			virtual void onHitWall(){};
 			// Setter:
