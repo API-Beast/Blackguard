@@ -99,7 +99,7 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			for(int y=minY-1; y <= maxY; y++)
 			{
 				// Global ID
-				int tileGID = layer.getTile(x, y);
+				unsigned int tileGID = layer.getTile(x, y);
 				if(tileGID == 0) continue; // Tile number 0 is "no-tile"
 				
 				// What tileset is that tile ID in?
