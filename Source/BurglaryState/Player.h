@@ -65,6 +65,7 @@ namespace Blackguard
 			bool isMoving;
 			Direction movingDir;
 			int gold;
+			BoundingBox activationArea;
 		};
 	}
 }

@@ -37,6 +37,7 @@ Player::Player() : Entity()
 	this->isMoving = false;
 	this->isRunning = false;
 	this->movingDir = South;
+	this->activationArea.size = sf::Vector2f(25, 25);
 }
 
 Player::~Player()
@@ -85,7 +86,8 @@ int Player::getGold() const
 
 bool Player::activate()
 {
-	BoundingBox activationRectangle = bounds.translated(DirToVector(movingDir) * 48.f);
+	BoundingBox activationRectangle = activationArea.translated(DirToVector(movingDir) * 32.f);
+	activationRectangle.position = this->position;
 	std::vector<Entity*> objects = world->getEntitiesInsideRect(activationRectangle);
 	for(Entity* obj : objects)
 	{
