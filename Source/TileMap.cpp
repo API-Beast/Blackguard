@@ -231,12 +231,38 @@ void TileMap::loadFromFile(const std::string& fileName)
 		}
 		else if(section == "objectgroup")
 		{
-			// TODO
+			XMLElement* curObject=curElement->FirstChildElement("object");
+			do
+			{
+				TileObject objectDef;
+				objectDef.width  = 0;
+				objectDef.height = 0;
+				
+				if(curObject->Attribute("name")) objectDef.name = curObject->Attribute("name");
+				if(curObject->Attribute("type")) objectDef.type = curObject->Attribute("type");
+				objectDef.x = curObject->IntAttribute("x");
+				objectDef.y = curObject->IntAttribute("y");
+				curObject->QueryIntAttribute("width" , &objectDef.width);
+				curObject->QueryIntAttribute("height", &objectDef.height);
+				
+				XMLElement* objectProperties=curObject->FirstChildElement("properties");
+				if(objectProperties)
+				{
+					XMLElement* curProperty = objectProperties->FirstChildElement("property");
+					do
+					{
+						objectDef.properties[curProperty->Attribute("name")] = curProperty->Attribute("value");
+					}
+					while(curProperty = objectProperties->NextSiblingElement("property"));
+				}
+				
+				objects.push_back(std::move(objectDef));
+			}
+			while(curObject=curObject->NextSiblingElement("object"));
 		}
 	}
 	while(curElement=curElement->NextSiblingElement());
 }
-
 
 bool TileMap::isBlocked(sf::Vector2i pos) const
 {
@@ -283,3 +309,7 @@ void TileMap::unblockByTile(int x, int y)
 	}
 }
 
+const vector< TileObject >& TileMap::getObjects() const
+{
+	return objects;
+}

@@ -41,6 +41,26 @@ struct TileLayer
 	int width, height;
 };
 
+struct TileObject
+{
+	enum Shape
+	{
+		Rectangle,
+		Ellipse,
+		Polygon,
+		Polyline
+	};
+	
+	std::string name;
+	std::string type;
+	int x, y;
+	int width, height;
+	std::map<std::string, std::string> properties;
+	Shape shape;
+	// For the case of type == Polygon or Polyline
+	std::vector<sf::Vector2i> points;
+};
+
 struct TileSet
 {
 	TileSet(){};
@@ -53,10 +73,6 @@ struct TileSet
 	int amountTilesPerRow;
 	float normalizedTileWidth, normalizedTileHeight;
 	sf::Vector2f texCoordsForTile(int tileID) const;
-// struct TileProperties
-// {
-// };
-// std::map<int, TileProperties> tileProperties;
 };
 
 class TileMap : public sf::Drawable
@@ -71,6 +87,7 @@ public:
 	void markAsBlockedByTile(int x, int y);
 	void unblock(sf::Vector2i pos);
 	void unblockByTile(int x, int y);
+	const std::vector<TileObject>& getObjects() const;
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
@@ -78,6 +95,7 @@ private:
 	std::vector<TileLayer> foregroundLayers;
 	TileLayer blockingLayer;
 	std::vector<TileSet> tilesets;
+	std::vector<TileObject> objects;
 	int width, height;
 	int gridWidth, gridHeight;
 };
