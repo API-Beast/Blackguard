@@ -41,9 +41,9 @@ namespace Blackguard
 		{
 		public:
 			virtual void addEntity(Entity* toAdd)=0;
-			virtual EntityPtr getNamedEntity(const std::string& name)=0;
-			virtual std::vector<EntityPtr> getEntitiesByType(const std::string& type)=0;
-			virtual std::vector<EntityPtr> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area)=0;
+			virtual Entity* getNamedEntity(const std::string& name)=0;
+			virtual std::vector<Entity*> getEntitiesByType(const std::string& type)=0;
+			virtual std::vector<Entity*> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area)=0;
 			virtual bool isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const=0;
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const=0;
 			virtual void blockTileAt(const sf::Vector2f& pos)=0;

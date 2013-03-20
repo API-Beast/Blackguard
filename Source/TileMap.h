@@ -88,6 +88,7 @@ public:
 	void unblock(sf::Vector2i pos);
 	void unblockByTile(int x, int y);
 	const std::vector<TileObject>& getObjects() const;
+	sf::Vector2i getGridSize() const;
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:

@@ -25,6 +25,8 @@
 #include "Entity.h"
 
 #include <algorithm>
+#include <set>
+#include <iostream>
 
 using namespace Blackguard;
 using namespace Blackguard::Utility;
@@ -37,27 +39,52 @@ EntityManager::EntityManager()
 
 void EntityManager::addNamed(std::string id, Entity* entity)
 {
-	namedObjects[id] = EntityPtr(entity);
+	namedObjects[id] = entity;
 	this->add(entity);
 }
 
 void EntityManager::add(Entity* ptr)
 {
-	objects.push_back(EntityPtr(ptr));
-	objectsByType[ptr->getType()].push_back(EntityPtr(ptr));
+	objects.push_back(ptr);
+	objectsByType[ptr->getType()].push_back(ptr);
 }
 
 void EntityManager::cleanup()
 {
+	std::set<Entity*> toBeDeleted;		
 	// Remove from normal list
-	auto it = std::remove_if(objects.begin(), objects.end(), [](EntityPtr& obj){ return obj->canBeRemoved(); });
-	objects.erase(it, objects.end());
-	// Remove from mapped list
-	for(auto pair : objectsByType)
+	for(auto it = objects.begin(); it != objects.end();)
 	{
-		auto list = pair.second;
-		auto it = std::remove_if(list.begin(), list.end(), [](EntityPtr& obj){ return obj->canBeRemoved(); });
-		list.erase(it, list.end());
+		auto value = *it;
+		if(value->canBeRemoved())
+		{
+			toBeDeleted.insert(value);
+			it = objects.erase(it);
+		}
+		else
+			++it;
+	}
+	
+	// Remove from mapped list
+	for(auto& pair : objectsByType)
+	{
+		auto& list = pair.second;
+		for(auto it = list.begin(); it != list.end();)
+		{
+			auto value = *it;
+			if(value->canBeRemoved())
+			{
+				toBeDeleted.insert(value);
+				it = list.erase(it);
+			}
+			else
+				++it;
+		}
+	}
+	for(Entity* entity : toBeDeleted)
+	{
+		std::cout << "Removed: " << entity << std::endl;
+		delete entity;
 	}
 }
 
@@ -78,21 +105,21 @@ void EntityManager::draw(sf::RenderTarget* target)
 	}
 }
 
-std::vector< EntityPtr > EntityManager::getInRect(const BoundingBox& area)
+std::vector< Entity* > EntityManager::getInRect(const BoundingBox& area)
 {
-	std::vector<EntityPtr> retValue;
+	std::vector<Entity*> retValue;
 	for(auto obj : objects)
 		if(area.intersects(obj->getBounds()))
 			retValue.push_back(obj);
 	return std::move(retValue);
 }
 
-std::vector< EntityPtr > EntityManager::getByType(const std::string& type)
+std::vector< Entity* > EntityManager::getByType(const std::string& type)
 {
 	return objectsByType[type];
 }
 
-EntityPtr EntityManager::getNamed(const std::string& name)
+Entity* EntityManager::getNamed(const std::string& name)
 {
 	return namedObjects[name];
 }

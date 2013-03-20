@@ -86,8 +86,8 @@ int Player::getGold() const
 bool Player::activate()
 {
 	BoundingBox activationRectangle = bounds.translated(DirToVector(movingDir) * 48.f);
-	std::vector<EntityPtr> objects = world->getEntitiesInsideRect(activationRectangle);
-	for(EntityPtr& obj : objects)
+	std::vector<Entity*> objects = world->getEntitiesInsideRect(activationRectangle);
+	for(Entity* obj : objects)
 	{
 		if(obj->activate(*this))
 		{

@@ -61,7 +61,7 @@ BurglaryState::BurglaryState()
 				entities->addNamed(object.name, newEntity);
 		}
 	}
-	player = dynamic_cast<Player*>(entities->getNamed("player").get());
+	player = dynamic_cast<Player*>(entities->getNamed("player"));
 	player->setGold(Game::instance->data.Player.gold);
 }
 
@@ -110,17 +110,17 @@ void BurglaryState::addEntity(Entity* toAdd)
 	entities->add(toAdd);
 }
 
-std::vector< EntityPtr > BurglaryState::getEntitiesByType(const std::string& type)
+std::vector< Entity* > BurglaryState::getEntitiesByType(const std::string& type)
 {
 	return entities->getByType(type);
 }
 
-std::vector< EntityPtr > BurglaryState::getEntitiesInsideRect(const BoundingBox& area)
+std::vector< Entity* > BurglaryState::getEntitiesInsideRect(const BoundingBox& area)
 {
 	return entities->getInRect(area);
 }
 
-EntityPtr BurglaryState::getNamedEntity(const std::string& name)
+Entity* BurglaryState::getNamedEntity(const std::string& name)
 {
 	return entities->getNamed(name);
 }

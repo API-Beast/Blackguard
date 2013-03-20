@@ -77,8 +77,6 @@ namespace Blackguard
 			bool toBeRemoved;
 			EntityWorldInterface* world;
 		};
-		
-		typedef std::shared_ptr<Entity> EntityPtr;
 	}
 }
 

@@ -313,3 +313,8 @@ const vector< TileObject >& TileMap::getObjects() const
 {
 	return objects;
 }
+
+sf::Vector2i TileMap::getGridSize() const
+{
+	return sf::Vector2i(gridWidth, gridHeight);
+}
