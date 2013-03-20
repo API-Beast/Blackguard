@@ -25,6 +25,5 @@ using namespace Blackguard;
 
 GameData::GameData()
 {
-	Player.experience = 0;
 	Player.gold = 0;
 }

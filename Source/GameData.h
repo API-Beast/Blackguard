@@ -31,17 +31,12 @@ namespace Blackguard
 		
 		struct // Player
 		{
-			int experience;
 			int gold;
-			// TODO Skills
-			// TODO Equipment
-			// TODO Inventory
 		} Player;
 
-		struct // World
-		{
-			// TODO
-		} World;
+		//struct // World
+		//{
+		//} World;
 	};
 }
 

@@ -56,9 +56,7 @@ namespace Blackguard
 			void setMovingDirection(Direction dir);
 			
 			// State
-			void addEXP(int value);
 			void addGold(int value);
-			int getEXP() const;
 			int getGold() const;
 		private:
 			sf::Sprite graphics;

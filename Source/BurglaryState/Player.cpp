@@ -74,19 +74,9 @@ void Player::setPosition(const sf::Vector2f& pos)
 	graphics.setPosition(position);
 }
 
-void Player::addEXP(int value)
-{
-	Game::instance->data.Player.experience += value;
-}
-
 void Player::addGold(int value)
 {
 	Game::instance->data.Player.gold += value;
-}
-
-int Player::getEXP() const
-{
-	return Game::instance->data.Player.experience;
 }
 
 int Player::getGold() const
