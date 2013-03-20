@@ -53,7 +53,7 @@ BurglaryState::BurglaryState()
 		{
 			newEntity = factories[object.type]();
 			newEntity->setWorldInterface(this);
-			newEntity->setPosition(sf::Vector2f(object.x, object.y));
+			newEntity->setPosition(sf::Vector2f(object.x, object.y - tileMap.getGridSize().y));
 			newEntity->initializeProperties(object.properties);
 			if(object.name.empty())
 				entities->add(newEntity);
