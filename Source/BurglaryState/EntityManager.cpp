@@ -83,7 +83,7 @@ void EntityManager::cleanup()
 	}
 	for(Entity* entity : toBeDeleted)
 	{
-		std::cout << "Removed: " << entity << std::endl;
+		//std::cout << "Removed: " << entity << std::endl;
 		delete entity;
 	}
 }
