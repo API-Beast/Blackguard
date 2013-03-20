@@ -137,6 +137,7 @@ bool BurglaryState::isMovementPossible(const BoundingBox& bounds, const sf::Vect
 RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision) const
 {
 	// TODO
+	return RaycastResult();
 }
 
 void BurglaryState::blockTileAt(const sf::Vector2f& pos)
