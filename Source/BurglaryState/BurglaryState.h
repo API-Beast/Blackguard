@@ -50,8 +50,8 @@ namespace Blackguard
 			virtual void blockTileAt(const sf::Vector2f& pos);
 			virtual void unblockTileAt(const sf::Vector2f& pos);
 		private:
-			std::shared_ptr<Player> player;
 			EntityManager* entities;
+			Player* player;
 			TileMap tileMap;
 		};
 	}

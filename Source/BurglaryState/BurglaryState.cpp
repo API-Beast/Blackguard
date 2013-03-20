@@ -28,29 +28,36 @@
 
 #include "../Game.h"
 
+#include <functional>
+
 using namespace Blackguard::BurglaryState;
 using namespace Blackguard::Utility;
 
 BurglaryState::BurglaryState()
 {
-	tileMap.loadFromFile("test.tmx");
+	tileMap.loadFromFile("newTest.tmx");
 	entities = new EntityManager();
 	
-	player = std::make_shared<Player>();
-	Loot* lootEnt = new Loot();
-	Guard* guardEnt = new Guard();
-	
-	player->setWorldInterface(this);
-	lootEnt->setWorldInterface(this);
-	guardEnt->setWorldInterface(this);
-	
-	player->setPosition(sf::Vector2f(576, 96));
-	lootEnt->setPosition(sf::Vector2f(832, 576));
-	guardEnt->setPosition(sf::Vector2f(864, 448));
-	
-	entities->add(lootEnt);
-	entities->add(guardEnt);
-	entities->addNamed("player", player.get());
+	std::map<std::string, std::function<Entity*()> > factories;
+	factories["Player"] = []() -> Entity* { return new Player(); };
+	factories["Loot"]   = []() -> Entity* { return new Loot();   };
+	factories["Guard"]  = []() -> Entity* { return new Guard();  };
+	for(Blackguard::TileObject object : tileMap.getObjects())
+	{
+		Entity* newEntity;
+		if(!object.type.empty())
+		{
+			newEntity = factories[object.type]();
+			newEntity->setWorldInterface(this);
+			newEntity->setPosition(sf::Vector2f(object.x, object.y));
+			newEntity->initializeProperties(object.properties);
+			if(object.name.empty())
+				entities->add(newEntity);
+			else
+				entities->addNamed(object.name, newEntity);
+		}
+	}
+	player = dynamic_cast<Player*>(entities->getNamed("player").get());
 }
 
 BurglaryState::~BurglaryState()
