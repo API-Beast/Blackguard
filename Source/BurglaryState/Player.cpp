@@ -22,7 +22,6 @@
 #include "Player.h"
 #include "BurglaryState.h"
 #include "SFML/Graphics.hpp"
-#include "../GameData.h"
 #include "../Game.h"
 
 using namespace Blackguard;
@@ -76,12 +75,12 @@ void Player::setPosition(const sf::Vector2f& pos)
 
 void Player::addGold(int value)
 {
-	Game::instance->data.Player.gold += value;
+	this->gold += value;
 }
 
 int Player::getGold() const
 {
-	return Game::instance->data.Player.gold;
+	return this->gold;
 }
 
 bool Player::activate()
@@ -112,4 +111,9 @@ void Player::setMovingDirection(Direction dir)
 void Player::setRunning(bool running)
 {
 	this->isRunning = running;
+}
+
+void Player::setGold(int gold)
+{
+	this->gold=gold;
 }

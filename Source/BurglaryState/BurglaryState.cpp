@@ -30,8 +30,12 @@
 
 #include <functional>
 
-using namespace Blackguard::BurglaryState;
-using namespace Blackguard::Utility;
+using namespace Blackguard;
+using namespace Utility;
+namespace Blackguard
+{
+namespace BurglaryState
+{
 
 BurglaryState::BurglaryState()
 {
@@ -58,10 +62,12 @@ BurglaryState::BurglaryState()
 		}
 	}
 	player = dynamic_cast<Player*>(entities->getNamed("player").get());
+	player->setGold(Game::instance->data.Player.gold);
 }
 
 BurglaryState::~BurglaryState()
 {
+	Game::instance->data.Player.gold = player->getGold();
 	delete entities;
 }
 
@@ -141,4 +147,7 @@ void BurglaryState::blockTileAt(const sf::Vector2f& pos)
 void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
 {
 	tileMap.unblock(sf::Vector2i(pos));
+}
+
+}
 }

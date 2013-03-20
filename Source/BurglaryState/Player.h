@@ -57,12 +57,14 @@ namespace Blackguard
 			
 			// State
 			void addGold(int value);
+			void setGold(int gold);
 			int getGold() const;
 		private:
 			sf::Sprite graphics;
 			bool isRunning;
 			bool isMoving;
 			Direction movingDir;
+			int gold;
 		};
 	}
 }
