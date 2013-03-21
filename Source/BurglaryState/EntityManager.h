@@ -45,6 +45,7 @@ namespace Blackguard
 			void draw(sf::RenderTarget* target);
 			std::vector<Entity*> getByType(const std::string& type);
 			std::vector<Entity*> getInRect(const Blackguard::BurglaryState::BoundingBox& area);
+			std::vector<Entity*> getInCircle(const BoundingCircle& area);
 			Entity* getNamed(const std::string& name);
 		private:
 			void cleanup();

@@ -50,6 +50,12 @@ void BoundingBox::updatePosition(const sf::Vector2f& entityPosition)
 	this->position = entityPosition+offset;
 }
 
+bool BoundingCircle::contains(const sf::Vector2f& point) const
+{
+	float length = std::sqrt(((point.x - position.x) * (point.x - position.x)) + ((point.y - position.y) * (point.y - position.y)));
+	return length <= radius;
+}
+
 void Entity::move(const sf::Vector2f& movement)
 {
 	auto horizontalMovement = sf::Vector2f(movement.x, 0.f       );

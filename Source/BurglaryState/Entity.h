@@ -49,6 +49,13 @@ namespace Blackguard
 			sf::Vector2f position;
 			sf::Vector2f offset;
 		};
+
+		struct BoundingCircle
+		{
+			bool contains(const sf::Vector2f& point) const;
+			sf::Vector2f position;
+			float radius;
+		};
 		
 		class Entity : public std::enable_shared_from_this<Entity>
 		{

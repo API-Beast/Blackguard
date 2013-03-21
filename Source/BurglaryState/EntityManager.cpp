@@ -114,6 +114,15 @@ std::vector< Entity* > EntityManager::getInRect(const BoundingBox& area)
 	return std::move(retValue);
 }
 
+std::vector<Entity*> EntityManager::getInCircle(const BoundingCircle& area)
+{
+	std::vector<Entity*> retValue;
+	for(auto obj : objects)
+		if(area.contains(obj->getPosition()))
+			retValue.push_back(obj);
+	return std::move(retValue);
+}
+
 std::vector< Entity* > EntityManager::getByType(const std::string& type)
 {
 	return objectsByType[type];
