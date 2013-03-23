@@ -23,6 +23,7 @@
 #include "Player.h"
 #include "Loot.h"
 #include "Guard.h"
+#include "Camera.h"
 
 #include "../Utility/Direction.h"
 
@@ -41,6 +42,8 @@ BurglaryState::BurglaryState()
 {
 	tileMap.loadFromFile("newTest.tmx");
 	entities = new EntityManager();
+
+	entities->addNamed("camera", new Camera(Game::instance->getWindow()));
 	
 	std::map<std::string, std::function<Entity*()> > factories;
 	factories["Player"] = []() -> Entity* { return new Player(); };

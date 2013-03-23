@@ -106,3 +106,8 @@ void Game::update()
 {
 	currentGameState->update(deltaTime);
 }
+
+sf::RenderWindow* Game::getWindow() const
+{
+	return window;
+}

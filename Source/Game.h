@@ -49,6 +49,7 @@ namespace Blackguard
 		void draw();
 		void update();
 		void processEvents();
+		sf::RenderWindow* getWindow() const;
 	public:
 		static Game* instance;
 		Assets assets;

@@ -36,6 +36,8 @@ namespace Blackguard
 	using Utility::Direction;
 	namespace BurglaryState
 	{
+		class Camera;
+
 		class Player : public Entity
 		{
 		public:

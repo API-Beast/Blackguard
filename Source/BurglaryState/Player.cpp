@@ -23,6 +23,7 @@
 #include "BurglaryState.h"
 #include "SFML/Graphics.hpp"
 #include "../Game.h"
+#include "Camera.h"
 
 using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
@@ -54,11 +55,14 @@ void Player::update(float deltaTime)
 	if(this->isMoving)
 	{
 		this->move(movementVector);
+		this->world->getNamedEntity("camera")->setPosition(position);
 	}
+	
 }
 
 void Player::draw(sf::RenderTarget* target) const
 {
+	((Camera*)this->world->getNamedEntity("camera"))->use();
 	target->draw(graphics);
 }
 
