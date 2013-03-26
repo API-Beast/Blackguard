@@ -70,9 +70,9 @@ struct TileSet
 	int spacing;
 	sf::Texture texture;
 	
-	int amountTilesPerRow;
+	unsigned int amountTilesPerRow;
 	float normalizedTileWidth, normalizedTileHeight;
-	sf::Vector2f texCoordsForTile(int tileID) const;
+	sf::Vector2f texCoordsForTile(unsigned int tileID) const;
 };
 
 class TileMap : public sf::Drawable
