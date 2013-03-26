@@ -33,9 +33,6 @@ namespace Blackguard
 		{
 			position = sf::Vector2f((int)pos.x, (int)pos.y);
 			viewport->setCenter(position);
-			/*
-			position = pos;
-			viewport->setCenter(pos);*/
 		}
 	}
 }
