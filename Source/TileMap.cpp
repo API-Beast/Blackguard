@@ -73,9 +73,9 @@ unsigned int& TileLayer::getTileRef(int x, int y)
 }
 
 
-sf::Vector2f TileSet::texCoordsForTile(int tileID) const
+sf::Vector2f TileSet::texCoordsForTile(unsigned int tileID) const
 {
-	int localID = tileID - this->firstGID;
+	unsigned int localID = tileID - this->firstGID;
 	int x = localID % amountTilesPerRow;
 	int y = localID / amountTilesPerRow;
 	return sf::Vector2f(x*normalizedTileWidth, y*normalizedTileHeight);
@@ -103,15 +103,17 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 				if(tileGID == 0) continue; // Tile number 0 is "no-tile"
 				
 				// What tileset is that tile ID in?
-				const TileSet* tileset;
+				const TileSet* tileset=nullptr;
 				for(const TileSet& set : this->tilesets)
 				{
-					if(tileGID > set.firstGID && tileGID < set.lastGID)
+					if(tileGID >= set.firstGID && tileGID <= set.lastGID)
 					{
 						tileset = &set;
 						break;
 					}
 				}
+				// No Tileset? No drawing.
+				if(tileset == nullptr) continue;
 				
 				int xCoords, yCoords;
 				xCoords = x*this->gridWidth;
