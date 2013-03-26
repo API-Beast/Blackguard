@@ -56,7 +56,7 @@ namespace
 
 unsigned int TileLayer::getTile(int x, int y) const
 {
-	if(x <= 0 || y <= 0 || x >= width || y >= height)
+	if(x < 0 || y < 0 || x >= width || y >= height)
 	{
 		return 0;
 	}
@@ -65,7 +65,7 @@ unsigned int TileLayer::getTile(int x, int y) const
 
 unsigned int& TileLayer::getTileRef(int x, int y)
 {
-	if(x < 0 || y < 0 || x > width || y > height)
+	if(x < 0 || y < 0 || x >= width || y >= height)
 	{
 		throw out_of_range("");
 	}
