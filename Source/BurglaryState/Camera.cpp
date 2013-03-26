@@ -24,13 +24,14 @@ namespace Blackguard
 
 		void Camera::move(const sf::Vector2f& pos)
 		{
-			position += pos;
-			viewport->move(pos);
+			sf::Vector2f offset = sf::Vector2f((int)pos.x, (int)pos.y);
+			position += offset;
+			viewport->move(offset);
 		}
 
 		void Camera::setPosition(const sf::Vector2f& pos)
 		{
-			position = pos;
+			position = sf::Vector2f((int)pos.x, (int)pos.y);
 			viewport->setCenter(position);
 			/*
 			position = pos;
