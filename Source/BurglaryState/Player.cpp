@@ -55,7 +55,7 @@ void Player::update(float deltaTime)
 	if(this->isMoving)
 	{
 		this->move(movementVector);
-		this->world->getNamedEntity("camera")->setPosition(position);
+		((Camera*)this->world->getNamedEntity("camera"))->setPosition(position);
 	}
 	
 }
