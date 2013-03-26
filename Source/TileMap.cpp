@@ -106,7 +106,7 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 				const TileSet* tileset=nullptr;
 				for(const TileSet& set : this->tilesets)
 				{
-					if(tileGID > set.firstGID && tileGID < set.lastGID)
+					if(tileGID >= set.firstGID && tileGID <= set.lastGID)
 					{
 						tileset = &set;
 						break;
