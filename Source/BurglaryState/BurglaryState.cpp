@@ -24,6 +24,7 @@
 #include "Loot.h"
 #include "Guard.h"
 #include "Camera.h"
+#include "../PathFinder.h"
 
 #include "../Utility/Direction.h"
 
@@ -56,6 +57,10 @@ BurglaryState::BurglaryState()
 		{
 			newEntity = factories[object.type]();
 			newEntity->setWorldInterface(this);
+			if(object.type == "Guard")
+				printf("Guard Position %d | %d\n",object.x, object.y - tileMap.getGridSize().y);
+			if(object.type == "Player")
+				printf("Player Position %d | %d\n",object.x, object.y - tileMap.getGridSize().y);
 			newEntity->setPosition(sf::Vector2f(object.x, object.y - tileMap.getGridSize().y));
 			newEntity->initializeProperties(object.properties);
 			if(object.name.empty())
@@ -81,6 +86,12 @@ bool BurglaryState::processEvent(sf::Event& event)
 		if(event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::E)
 		{
 			player->activate();
+			return true;
+		}
+		if(event.key.code == sf::Keyboard::K)
+		{
+			PathFinder finder = PathFinder(&tileMap);
+			finder.calculatePath(sf::Vector2f(274,225),sf::Vector2f(160,544));
 			return true;
 		}
 	}
