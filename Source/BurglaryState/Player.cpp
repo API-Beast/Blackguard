@@ -57,12 +57,11 @@ void Player::update(float deltaTime)
 		this->move(movementVector);
 		((Camera*)this->world->getNamedEntity("camera"))->setPosition(position);
 	}
-	
+	((Camera*)this->world->getNamedEntity("camera"))->use();
 }
 
 void Player::draw(sf::RenderTarget* target) const
 {
-	((Camera*)this->world->getNamedEntity("camera"))->use();
 	target->draw(graphics);
 }
 
