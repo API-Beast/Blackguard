@@ -75,7 +75,7 @@ struct TileSet
 	sf::Vector2f texCoordsForTile(unsigned int tileID) const;
 };
 
-class TileMap : public sf::Drawable
+class TileMap
 {
 public:
 	class FormatNotSupported : public std::exception{};
@@ -89,8 +89,10 @@ public:
 	void unblockByTile(int x, int y);
 	const std::vector<TileObject>& getObjects() const;
 	sf::Vector2i getGridSize() const;
+	void drawBackground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
+	void drawForeground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 protected:
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void drawLayer(const Blackguard::TileLayer& layer, sf::RenderTarget* target, sf::RenderStates states, int minX, int minY, int maxX, int maxY) const;
 private:
 	std::vector<TileLayer> backgroundLayers;
 	std::vector<TileLayer> foregroundLayers;

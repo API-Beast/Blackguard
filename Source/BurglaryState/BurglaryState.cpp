@@ -104,8 +104,9 @@ void BurglaryState::update(float deltaTime)
 
 void BurglaryState::draw(sf::RenderTarget* target)
 {
-	target->draw(tileMap);
+	tileMap.drawBackground(target);
 	entities->draw(target);
+	tileMap.drawForeground(target);
 }
 
 void BurglaryState::addEntity(Entity* toAdd)
