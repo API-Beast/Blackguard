@@ -11,6 +11,7 @@ Loot::Loot()
 {
 	this->graphics.setTexture(Game::instance->assets.textures["Loot"]);
 	this->bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
+	lastPosition = sf::Vector2f(0.f, 0.f);
 }
 
 Loot::~Loot()
@@ -24,17 +25,14 @@ void Loot::draw(sf::RenderTarget* target) const
 	target->draw(graphics);
 }
 
-void Loot::move(const sf::Vector2f& pos)
+void Loot::updatePosition()
 {
-	Entity::move(pos);
+	Blackguard::BurglaryState::Entity::updatePosition();
 	graphics.setPosition(position);
-}
-
-void Loot::setPosition(const sf::Vector2f& pos)
-{
-	Entity::setPosition(pos);
-	graphics.setPosition(position);
+	if(lastPosition != sf::Vector2f(0.f, 0.f))
+		world->unblockTileAt(lastPosition);
 	world->blockTileAt(position);
+	lastPosition = position;
 }
 
 bool Loot::activate(Player& activator)

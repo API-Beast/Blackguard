@@ -61,9 +61,12 @@ Assets::Assets()
 void Assets::load()
 {
 	textures["TitleTest"].loadFromFile(this->getPath("TitleTest.png"));
-	textures["Player"   ].loadFromFile(this->getPath("player.png"   ));
-	textures["Loot"     ].loadFromFile(this->getPath("loot.png"     ));
-	textures["Guard"    ].loadFromFile(this->getPath("guard.png"    ));
+	textures["Player"].loadFromFile(this->getPath("player.png"));
+	textures["Loot"].loadFromFile(this->getPath("loot.png"));
+	textures["Guard"].loadFromFile(this->getPath("guard.png"));
+	textures["Light"].loadFromFile(this->getPath("light.png"));
+	textures["Light/Ambient"].loadFromFile(this->getPath("lightAmbient.png"));
+	textures["Light/Sun"    ].loadFromFile(this->getPath("lightSun.png"    ));
 }
 
 std::string Assets::getPath(const std::string& path) const

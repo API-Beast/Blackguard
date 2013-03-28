@@ -24,6 +24,7 @@
 #include "Loot.h"
 #include "Guard.h"
 #include "Camera.h"
+#include "Light.h"
 
 #include "../Utility/Direction.h"
 
@@ -42,22 +43,27 @@ BurglaryState::BurglaryState()
 {
 	tileMap.loadFromFile("newTest.tmx");
 	entities = new EntityManager();
+	
+	sf::RenderWindow* window = Game::instance->getWindow();
 
 	entities->addNamed("camera", new Camera(Game::instance->getWindow()));
+	targetLight.create(window->getSize().x, window->getSize().y);
 	
 	std::map<std::string, std::function<Entity*()> > factories;
 	factories["Player"] = []() -> Entity* { return new Player(); };
 	factories["Loot"]   = []() -> Entity* { return new Loot();   };
 	factories["Guard"]  = []() -> Entity* { return new Guard();  };
+	factories["Light"]  = []() -> Entity* { return new Light();  };
 	for(Blackguard::TileObject object : tileMap.getObjects())
 	{
+		// Entities
 		Entity* newEntity;
 		if(!object.type.empty())
 		{
 			newEntity = factories[object.type]();
 			newEntity->setWorldInterface(this);
 			newEntity->setPosition(sf::Vector2f(object.x, object.y - tileMap.getGridSize().y));
-			newEntity->initializeProperties(object.properties);
+			newEntity->initializeFromTileObject(object);
 			if(object.name.empty())
 				entities->add(newEntity);
 			else
@@ -107,6 +113,17 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	tileMap.drawBackground(target);
 	entities->draw(target);
 	tileMap.drawForeground(target);
+	
+	targetLight.setView(Game::instance->getWindow()->getView());
+	targetLight.clear(sf::Color(19, 33, 55));
+	entities->drawLight(&targetLight);
+	tileMap.drawShadows(&targetLight, sf::BlendAlpha);
+	targetLight.display();
+	
+	sf::Sprite toDraw;
+	toDraw.setTexture(targetLight.getTexture());
+	toDraw.setPosition(Game::instance->getWindow()->mapPixelToCoords(sf::Vector2i(0, 0)));
+	target->draw(toDraw, sf::RenderStates(sf::BlendMultiply));
 }
 
 void BurglaryState::addEntity(Entity* toAdd)

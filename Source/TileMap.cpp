@@ -83,20 +83,20 @@ sf::Vector2f TileSet::texCoordsForTile(unsigned int tileID) const
 
 void TileMap::drawBackground(sf::RenderTarget* target, sf::RenderStates states) const
 {
-	sf::Vector2u viewportSize = target->getSize();
-	sf::Vector2f leftTopCoordinate     = target->mapPixelToCoords(sf::Vector2i(0, 0));
-	sf::Vector2f rightBottomCoordinate = target->mapPixelToCoords(sf::Vector2i(viewportSize));
-	
-	int minX = (int)leftTopCoordinate.x / this->gridWidth;
-	int minY = (int)leftTopCoordinate.y / this->gridHeight;
-	int maxX = (int)rightBottomCoordinate.x / this->gridWidth;
-	int maxY = (int)rightBottomCoordinate.y / this->gridHeight;
-	
-	for(const TileLayer& layer : backgroundLayers)
-		drawLayer(layer, target, states, minX, minY, maxX, maxY);
+	drawLayers(backgroundLayers, target, states);
 }
 
 void TileMap::drawForeground(sf::RenderTarget* target, sf::RenderStates states) const
+{
+	drawLayers(foregroundLayers, target, states);
+}
+
+void TileMap::drawShadows(sf::RenderTarget* target, sf::RenderStates states) const
+{
+	drawLayers(shadowLayers, target, states);
+}
+
+void TileMap::drawLayers(const vector< TileLayer >& layers, sf::RenderTarget* target, sf::RenderStates states) const
 {
 	sf::Vector2u viewportSize = target->getSize();
 	sf::Vector2f leftTopCoordinate     = target->mapPixelToCoords(sf::Vector2i(0, 0));
@@ -107,7 +107,7 @@ void TileMap::drawForeground(sf::RenderTarget* target, sf::RenderStates states) 
 	int maxX = (int)rightBottomCoordinate.x / this->gridWidth;
 	int maxY = (int)rightBottomCoordinate.y / this->gridHeight;
 	
-	for(const TileLayer& layer : foregroundLayers)
+	for(const TileLayer& layer : layers)
 		drawLayer(layer, target, states, minX, minY, maxX, maxY);
 }
 
@@ -179,7 +179,7 @@ void TileMap::loadFromFile(const std::string& fileName)
   
   // Parse them all!
   XMLElement* curElement = root->FirstChildElement();
-	bool nextLayersAreForeground = false;
+	std::vector<TileLayer>* currentLayerGroup=&backgroundLayers;
   do
   {
 		std::string section = curElement->Value();
@@ -242,16 +242,17 @@ void TileMap::loadFromFile(const std::string& fileName)
 			else
 			{
 				if(name == "Foreground")
-					nextLayersAreForeground = true;
-				
-				if(nextLayersAreForeground)
 				{
-					foregroundLayers.push_back(std::move(layer));
+					cout << "Now foreground" << endl;
+					currentLayerGroup = &foregroundLayers;
 				}
-				else
+				else if(name == "Shadows")
 				{
-					backgroundLayers.push_back(std::move(layer));
+					cout << "Now shadows" << endl;
+					currentLayerGroup = &shadowLayers;
 				}
+				cout << "Add layer " << name << " to " << &currentLayerGroup << endl;
+				currentLayerGroup->push_back(std::move(layer));
 			}
 		}
 		else if(section == "objectgroup")
@@ -260,15 +261,18 @@ void TileMap::loadFromFile(const std::string& fileName)
 			do
 			{
 				TileObject objectDef;
-				objectDef.width  = 0;
-				objectDef.height = 0;
 				
 				if(curObject->Attribute("name")) objectDef.name = curObject->Attribute("name");
 				if(curObject->Attribute("type")) objectDef.type = curObject->Attribute("type");
 				objectDef.x = curObject->IntAttribute("x");
 				objectDef.y = curObject->IntAttribute("y");
-				curObject->QueryIntAttribute("width" , &objectDef.width);
-				curObject->QueryIntAttribute("height", &objectDef.height);
+				
+				objectDef.width  = 0;
+				objectDef.height = 0;
+				objectDef.rotation = 0.0f;
+				curObject->QueryIntAttribute("width" , &(objectDef.width));
+				curObject->QueryIntAttribute("height", &(objectDef.height));
+				curObject->QueryFloatAttribute("rotation", &(objectDef.rotation));
 				
 				XMLElement* objectProperties=curObject->FirstChildElement("properties");
 				if(objectProperties)
@@ -280,7 +284,10 @@ void TileMap::loadFromFile(const std::string& fileName)
 					}
 					while(curProperty = objectProperties->NextSiblingElement("property"));
 				}
-				
+				objectDef.shape = TileObject::Rectangle;
+				if(curObject->FirstChildElement("ellipse"))
+					objectDef.shape = TileObject::Ellipse;
+
 				objects.push_back(std::move(objectDef));
 			}
 			while(curObject=curObject->NextSiblingElement("object"));

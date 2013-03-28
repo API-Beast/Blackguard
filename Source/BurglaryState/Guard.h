@@ -26,9 +26,9 @@ namespace Blackguard
 
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const;
-			virtual void move(const sf::Vector2f& pos);
-			virtual void setPosition(const sf::Vector2f& pos);
 			virtual std::string getType(){ return "Guard"; };
+		protected:
+			virtual void updatePosition();
 		private:
 			void chasePlayer();
 		private:
