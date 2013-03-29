@@ -23,6 +23,7 @@
 #define GRG_ENTITY_H
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 #include <memory>
 #include <string>
 #include <map>
@@ -34,6 +35,7 @@ namespace sf
 
 namespace Blackguard
 {
+	struct TileObject;
 	namespace BurglaryState
 	{
 		struct BoundingBox;
@@ -64,11 +66,12 @@ namespace Blackguard
 			virtual ~Entity();
 			virtual void update(float deltaTime) {}
 			virtual void draw(sf::RenderTarget* target) const {}
+			virtual void drawLight(sf::RenderTarget* target, sf::RenderStates renderStates=sf::RenderStates(sf::BlendAdd)) const {}
 			virtual bool activate(Player& activator) { return false; }
 			virtual void remove();
 			virtual bool canBeRemoved() { return toBeRemoved; }
 			virtual std::string getType(){ return "unknown"; };
-			virtual void initializeProperties(std::map<std::string, std::string> properties){};
+			virtual void initializeFromTileObject(const TileObject&){};
 			// 
 			virtual void onHitWall(){};
 			// Setter:
@@ -79,6 +82,7 @@ namespace Blackguard
 			virtual sf::Vector2f getPosition() const { return position; }
 			virtual BoundingBox& getBounds() { return bounds; }
 		protected:
+			virtual void updatePosition();
 			sf::Vector2f position;
 			BoundingBox bounds;
 			bool toBeRemoved;

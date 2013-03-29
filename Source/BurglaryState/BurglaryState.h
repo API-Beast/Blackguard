@@ -53,6 +53,7 @@ namespace Blackguard
 			EntityManager* entities;
 			Player* player;
 			TileMap tileMap;
+			sf::RenderTexture targetLight;
 		};
 	}
 }

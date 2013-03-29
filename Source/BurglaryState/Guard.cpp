@@ -37,16 +37,8 @@ void Guard::draw(sf::RenderTarget* target) const
 	target->draw(graphics);
 }
 
-void Guard::move(const sf::Vector2f& pos)
+void Guard::updatePosition()
 {
-	Entity::move(pos);
+	Blackguard::BurglaryState::Entity::updatePosition();
 	graphics.setPosition(position);
-	detectionArea.position = position - sf::Vector2f(GUARD_DETECT_AREA_SIZE / 2,GUARD_DETECT_AREA_SIZE / 2);
-}
-
-void Guard::setPosition(const sf::Vector2f& pos)
-{
-	Entity::setPosition(pos);
-	graphics.setPosition(position);
-	detectionArea.position = position - sf::Vector2f(GUARD_DETECT_AREA_SIZE / 2,GUARD_DETECT_AREA_SIZE / 2);
 }

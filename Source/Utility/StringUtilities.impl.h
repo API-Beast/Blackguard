@@ -22,11 +22,17 @@
 #include "StringUtilities.h"
 #include <sstream>
 
-using namespace Blackguard::Utility;
-
-template <typename T> std::string ToString(const T& value)
+template <typename T> std::string Blackguard::Utility::ToString(const T& value)
 {
    std::stringstream ss;
    ss << value;
    return ss.str();
+}
+
+template <typename T> T Blackguard::Utility::FromString(const std::string& input)
+{
+	std::istringstream stream(input);
+	T value;
+	stream >> value;
+	return std::move(value);
 }

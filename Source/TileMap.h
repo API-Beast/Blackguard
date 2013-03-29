@@ -55,6 +55,7 @@ struct TileObject
 	std::string type;
 	int x, y;
 	int width, height;
+	float rotation;
 	std::map<std::string, std::string> properties;
 	Shape shape;
 	// For the case of type == Polygon or Polyline
@@ -91,11 +92,14 @@ public:
 	sf::Vector2i getGridSize() const;
 	void drawBackground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawForeground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
+	void drawShadows(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 protected:
+	void drawLayers(const std::vector<TileLayer>& layers, sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawLayer(const Blackguard::TileLayer& layer, sf::RenderTarget* target, sf::RenderStates states, int minX, int minY, int maxX, int maxY) const;
 private:
 	std::vector<TileLayer> backgroundLayers;
 	std::vector<TileLayer> foregroundLayers;
+	std::vector<TileLayer> shadowLayers;
 	TileLayer blockingLayer;
 	std::vector<TileSet> tilesets;
 	std::vector<TileObject> objects;

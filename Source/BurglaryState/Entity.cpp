@@ -63,26 +63,32 @@ void Entity::move(const sf::Vector2f& movement)
 	if(world->isMovementPossible(bounds, movement))
 	{
 		position += movement;
-		bounds.updatePosition(position);
+		this->updatePosition();
 	}
 	else if(world->isMovementPossible(bounds, horizontalMovement) && std::abs(horizontalMovement.x) > 0)
 	{
 		position += horizontalMovement;
-		bounds.updatePosition(position);
+		this->updatePosition();
 	}
 	else if(world->isMovementPossible(bounds, verticalMovement) && std::abs(verticalMovement.y) > 0)
 	{
 		position += verticalMovement;
-		bounds.updatePosition(position);
+		this->updatePosition();
 	}
 	else
 		this->onHitWall();
 }
 
+void Entity::updatePosition()
+{
+	bounds.updatePosition(position);
+}
+
+
 void Entity::setPosition(const sf::Vector2f& pos)
 {
 	position = pos;
-	bounds.updatePosition(position);
+	this->updatePosition();
 }
 
 Entity::Entity()

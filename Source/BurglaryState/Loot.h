@@ -17,12 +17,13 @@ namespace Blackguard
 			Loot();
 			virtual ~Loot();
 			virtual void draw(sf::RenderTarget* target) const;
-			virtual void move(const sf::Vector2f& pos);
-			virtual void setPosition(const sf::Vector2f& pos);
 			virtual bool activate(Player& activator);
 			virtual std::string getType(){ return "Loot"; };
+		protected:
+			virtual void updatePosition();
 		private:
 			sf::Sprite graphics;
+			sf::Vector2f lastPosition;
 		};
 	}
 }

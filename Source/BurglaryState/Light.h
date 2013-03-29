@@ -19,25 +19,30 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef GRG_STRING_UTILITIES_H
-#define GRG_STRING_UTILITIES_H
+#ifndef BLACKGUARD_BURGLARYSTATE_LIGHT_H
+#define BLACKGUARD_BURGLARYSTATE_LIGHT_H
 
-#include <string>
+#include "Entity.h"
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace Blackguard
 {
-	namespace Utility
-	{
-		bool Contains(const std::string& input, const std::string& search);
-		bool HasFileExtension(const std::string& input, const std::string& ext);
-		bool StringStartsWith(const std::string& input, const std::string& search);
-		bool StringEndsWith(const std::string& input, const std::string& search);
-		std::string StringDeleteLastCharacter(const std::string& input);
-		template <typename T> std::string ToString(const T& value);
-		template <typename T> T FromString(const std::string& input);
-	}
+namespace BurglaryState
+{
+
+class Light : public Blackguard::BurglaryState::Entity
+{
+public:
+	Light();
+	virtual void drawLight(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates(sf::BlendAdd)) const;
+	virtual std::string getType(){ return "Light"; };
+	virtual void initializeFromTileObject(const Blackguard::TileObject& obj);
+protected:
+	virtual void updatePosition();
+private:
+	sf::Sprite graphics;
+};
+}
 }
 
-#include "StringUtilities.impl.h"
-
-#endif //GRG_STRING_UTILITIES_H
+#endif // BLACKGUARD_BURGLARYSTATE_LIGHT_H
