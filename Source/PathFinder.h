@@ -2,6 +2,9 @@
 #define BLACKGUARD_PATHFINDER_H
 
 #include "TileMap.h"
+#include <set>
+#include <unordered_set>
+#include <cstdint>
 
 namespace Blackguard
 {
@@ -11,9 +14,19 @@ namespace Blackguard
 		{
 			x = xTile;
 			y = yTile;
+			movementCost = -1;
+			manhattanValue = -1;
+			predecessor = nullptr;
 		}
 
-		PathNode() {}
+		PathNode() 
+		{
+			x = 0;
+			y = 0;
+			movementCost = -1;
+			manhattanValue = -1;
+			predecessor = nullptr;
+		}
 
 		bool operator ==(const PathNode& other) const
 		{
@@ -38,6 +51,14 @@ namespace Blackguard
 		int x, y;
 		int movementCost;
 		int manhattanValue;
+		PathNode* predecessor;
+	};
+
+	struct PathNodeHash {
+		int64_t operator()(const PathNode &k) const
+		{
+			return uint64_t(k.y) << 8 + k.x;
+		}
 	};
 
 	class PathFinder
@@ -52,8 +73,8 @@ namespace Blackguard
 		int calculateMoveCosts(const PathNode& current, const PathNode& successor);
 	private:
 		TileMap* map;
-		std::priority_queue<PathNode, std::vector<PathNode>, std::greater<PathNode>> openList;
-		std::set<PathNode> closedList;
+		std::set<PathNode> openList;
+		std::unordered_set<PathNode,PathNodeHash> closedList;
 		sf::Vector2i gridSize;
 	};
 }
