@@ -31,6 +31,7 @@
 #include "../Utility/Direction.h"
 
 #include "../Game.h"
+#include "SFML/System/Vector2.hpp"
 
 #include <functional>
 #include <iostream>
@@ -69,7 +70,12 @@ bool BurglaryState::processEvent(sf::Event& event)
 		if(event.key.code == sf::Keyboard::K)
 		{
 			PathFinder finder(&tileMap);
-			finder.calculatePath(sf::Vector2f(544,352), sf::Vector2f(160,576));
+			auto output = finder.calculatePath(sf::Vector2f(544,352), sf::Vector2f(160,576));
+			while(output.size() > 0)
+			{
+				printf("{%d | %d}",output.top().x,output.top().y);
+				output.pop();
+			}
 			return true;
 		}
 	}
@@ -159,12 +165,12 @@ void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
 	tileMap.unblock(sf::Vector2i(pos));
 }
 
-void BurglaryState::BurglaryState::addGoal()
+void BurglaryState::addGoal()
 {
 	numberOfGoals++;
 }
 
-void BurglaryState::BurglaryState::markGoalAsReached()
+void BurglaryState::markGoalAsReached()
 {
 	reachedGoals++;
 	if(reachedGoals >= numberOfGoals)
@@ -215,7 +221,7 @@ void BurglaryState::loadLevel(const std::string& level)
 	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
 }
 
-void BurglaryState::BurglaryState::onReachedExit()
+void BurglaryState::onReachedExit()
 {
 	curLevel++;
 	if(curLevel < levels.size())

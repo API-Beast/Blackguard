@@ -22,7 +22,7 @@
 #ifndef BLACKGUARD_BURGLARYSTATE_EXIT_H
 #define BLACKGUARD_BURGLARYSTATE_EXIT_H
 
-#include <../../data/Projects/Blackguard/Source/BurglaryState/Entity.h>
+#include "Entity.h"
 #include <SFML/Graphics/Sprite.hpp>
 
 namespace Blackguard
