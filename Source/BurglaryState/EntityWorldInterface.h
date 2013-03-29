@@ -50,6 +50,7 @@ namespace Blackguard
 			virtual void unblockTileAt(const sf::Vector2f& pos)=0;
 			virtual void addGoal()=0;
 			virtual void markGoalAsReached()=0;
+			virtual void onReachedExit()=0;
 		};
 	}
 }

@@ -44,6 +44,7 @@ namespace Blackguard
 			void update(float deltaTime);
 			void draw(sf::RenderTarget* target);
 			void drawLight(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates(sf::BlendAdd));
+			void drawGUI(sf::RenderTarget* target);
 			std::vector<Entity*> getByType(const std::string& type);
 			std::vector<Entity*> getInRect(const Blackguard::BurglaryState::BoundingBox& area);
 			std::vector<Entity*> getInCircle(const BoundingCircle& area);

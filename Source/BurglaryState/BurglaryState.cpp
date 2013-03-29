@@ -25,6 +25,7 @@
 #include "Guard.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Exit.h"
 
 #include "../Utility/Direction.h"
 
@@ -44,6 +45,8 @@ namespace BurglaryState
 BurglaryState::BurglaryState()
 {
 	entities = nullptr;
+	numberOfGoals = 0;
+	reachedGoals = 0;
 }
 
 BurglaryState::~BurglaryState()
@@ -99,6 +102,8 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	toDraw.setTexture(targetLight.getTexture());
 	toDraw.setPosition(Game::instance->getWindow()->mapPixelToCoords(sf::Vector2i(0, 0)));
 	target->draw(toDraw, sf::RenderStates(sf::BlendMultiply));
+	
+	entities->drawGUI(target);
 }
 
 void BurglaryState::addEntity(Entity* toAdd)
@@ -155,7 +160,11 @@ void BurglaryState::BurglaryState::markGoalAsReached()
 {
 	reachedGoals++;
 	if(reachedGoals >= numberOfGoals)
+	{
 		std::cout << "Reached all " << numberOfGoals << " goals." << std::endl;
+		for(Entity* exit : entities->getByType("Exit"))
+			dynamic_cast<Exit*>(exit)->enable();
+	}
 }
 
 void BurglaryState::loadLevel(const std::string& level)
@@ -174,6 +183,7 @@ void BurglaryState::loadLevel(const std::string& level)
 	factories["Loot"]   = []() -> Entity* { return new Loot();   };
 	factories["Guard"]  = []() -> Entity* { return new Guard();  };
 	factories["Light"]  = []() -> Entity* { return new Light();  };
+	factories["Exit"]   = []() -> Entity* { return new Exit();   };
 	for(Blackguard::TileObject object : tileMap.getObjects())
 	{
 		// Entities
@@ -193,6 +203,12 @@ void BurglaryState::loadLevel(const std::string& level)
 	player = dynamic_cast<Player*>(entities->getNamed("player"));
 	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
 }
+
+void BurglaryState::BurglaryState::onReachedExit()
+{
+
+}
+
 
 }
 }

@@ -52,6 +52,7 @@ namespace Blackguard
 			virtual void unblockTileAt(const sf::Vector2f& pos);
 			virtual void addGoal();
 			virtual void markGoalAsReached();
+			virtual void onReachedExit();
 		private:
 			EntityManager* entities;
 			Player* player;

@@ -67,6 +67,7 @@ namespace Blackguard
 			virtual void update(float deltaTime) {}
 			virtual void draw(sf::RenderTarget* target) const {}
 			virtual void drawLight(sf::RenderTarget* target, sf::RenderStates renderStates=sf::RenderStates(sf::BlendAdd)) const {}
+			virtual void drawGUI(sf::RenderTarget* target) const {}
 			virtual bool activate(Player& activator) { return false; }
 			virtual void remove();
 			virtual bool canBeRemoved() { return toBeRemoved; }

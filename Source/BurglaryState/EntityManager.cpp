@@ -105,6 +105,14 @@ void EntityManager::draw(sf::RenderTarget* target)
 	}
 }
 
+void EntityManager::drawGUI(sf::RenderTarget* target)
+{
+	for(auto obj : objects)
+	{
+		obj->drawGUI(target);
+	}
+}
+
 void EntityManager::drawLight(sf::RenderTarget* target, sf::RenderStates states)
 {
 	for(auto obj : objects)
