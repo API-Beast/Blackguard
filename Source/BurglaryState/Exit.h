@@ -1,6 +1,6 @@
 /*
  *   Copyright 2013 Manuel Riecke <m.riecke@mrbeast.org>
- *   Copyright 2013 Raffael Zica <raffael@trollgames.de>
+ *   Copyright 2013 Raffael Zica <sirjson133@gmail.com>
  *
  *   This software is provided 'as-is', without any express or implied
  *   warranty.  In no event will the authors be held liable for any damages
@@ -19,10 +19,34 @@
  *   3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "GameData.h"
+#ifndef BLACKGUARD_BURGLARYSTATE_EXIT_H
+#define BLACKGUARD_BURGLARYSTATE_EXIT_H
 
-using namespace Blackguard;
+#include <../../data/Projects/Blackguard/Source/BurglaryState/Entity.h>
+#include <SFML/Graphics/Sprite.hpp>
 
-GameData::GameData()
+namespace Blackguard
 {
+namespace BurglaryState
+{
+
+class Exit : public Blackguard::BurglaryState::Entity
+{
+public:
+	Exit();
+	virtual void update(float deltaTime);
+	virtual void drawGUI(sf::RenderTarget* target) const;
+	virtual void initializeFromTileObject(const Blackguard::TileObject& obj);
+	virtual std::string getType(){ return "Exit"; };
+	void enable();
+	void disable();
+protected:
+	virtual void updatePosition();
+private:
+	sf::Sprite graphics;
+	bool enabled;
+};
 }
+}
+
+#endif // BLACKGUARD_BURGLARYSTATE_EXIT_H

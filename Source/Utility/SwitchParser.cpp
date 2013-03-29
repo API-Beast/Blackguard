@@ -98,7 +98,10 @@ namespace Blackguard
 					if(lastSwitch && lastSwitch->acceptsMoreArguments())
 						lastSwitch->giveArgument(arg);
 					else if(mAnonymousSwitch->acceptsMoreArguments())
+					{
+						mAnonymousSwitch->set(true);
 						mAnonymousSwitch->giveArgument(arg);
+					}
 					else
 						; // TODO Bad syntax
 				}

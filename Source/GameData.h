@@ -31,7 +31,6 @@ namespace Blackguard
 		
 		struct // Player
 		{
-			int gold;
 		} Player;
 
 		//struct // World

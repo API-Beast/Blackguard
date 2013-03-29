@@ -26,12 +26,15 @@
 #include "Camera.h"
 #include "Light.h"
 #include "../PathFinder.h"
+#include "Exit.h"
 
 #include "../Utility/Direction.h"
 
 #include "../Game.h"
 
 #include <functional>
+#include <iostream>
+using namespace std;
 
 using namespace Blackguard;
 using namespace Utility;
@@ -42,43 +45,14 @@ namespace BurglaryState
 
 BurglaryState::BurglaryState()
 {
-	tileMap.loadFromFile("newTest.tmx");
-	entities = new EntityManager();
-	
-	sf::RenderWindow* window = Game::instance->getWindow();
-
-	entities->addNamed("camera", new Camera(Game::instance->getWindow()));
-	targetLight.create(window->getSize().x, window->getSize().y);
-	
-	std::map<std::string, std::function<Entity*()> > factories;
-	factories["Player"] = []() -> Entity* { return new Player(); };
-	factories["Loot"]   = []() -> Entity* { return new Loot();   };
-	factories["Guard"]  = []() -> Entity* { return new Guard();  };
-	factories["Light"]  = []() -> Entity* { return new Light();  };
-	for(Blackguard::TileObject object : tileMap.getObjects())
-	{
-		// Entities
-		Entity* newEntity;
-		if(!object.type.empty())
-		{
-			newEntity = factories[object.type]();
-			newEntity->setWorldInterface(this);
-			newEntity->setPosition(sf::Vector2f(object.x, object.y - tileMap.getGridSize().y));
-			newEntity->initializeFromTileObject(object);
-			if(object.name.empty())
-				entities->add(newEntity);
-			else
-				entities->addNamed(object.name, newEntity);
-		}
-	}
-	player = dynamic_cast<Player*>(entities->getNamed("player"));
-	player->setGold(Game::instance->data.Player.gold);
+	numberOfGoals = 0;
+	reachedGoals = 0;
+	levels = std::vector<std::string>();
+	curLevel = 0;
 }
 
 BurglaryState::~BurglaryState()
 {
-	Game::instance->data.Player.gold = player->getGold();
-	delete entities;
 }
 
 bool BurglaryState::processEvent(sf::Event& event)
@@ -87,7 +61,8 @@ bool BurglaryState::processEvent(sf::Event& event)
 	{
 		if(event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::E)
 		{
-			player->activate();
+			if(player)
+				player->activate();
 			return true;
 		}
 
@@ -103,28 +78,31 @@ bool BurglaryState::processEvent(sf::Event& event)
 
 void BurglaryState::update(float deltaTime)
 {
-	bool w, s, a, d;
-	w = sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-	s = sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
-	a = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
-	d = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-	Direction dir=BoolSetToDir(w, s, a, d);
-	bool running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	player->setMoving(w || s || a || d);
-	player->setMovingDirection(dir);
-	player->setRunning(running);
-	entities->update(deltaTime);
+	if(player)
+	{
+		bool w, s, a, d;
+		w = sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+		s = sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+		a = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+		d = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+		Direction dir=BoolSetToDir(w, s, a, d);
+		bool running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+		player->setMoving(w || s || a || d);
+		player->setMovingDirection(dir);
+		player->setRunning(running);
+	}
+	entities.update(deltaTime);
 }
 
 void BurglaryState::draw(sf::RenderTarget* target)
 {
 	tileMap.drawBackground(target);
-	entities->draw(target);
+	entities.draw(target);
 	tileMap.drawForeground(target);
 	
 	targetLight.setView(Game::instance->getWindow()->getView());
 	targetLight.clear(sf::Color(19, 33, 55));
-	entities->drawLight(&targetLight);
+	entities.drawLight(&targetLight);
 	tileMap.drawShadows(&targetLight, sf::BlendAlpha);
 	targetLight.display();
 	
@@ -132,26 +110,28 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	toDraw.setTexture(targetLight.getTexture());
 	toDraw.setPosition(Game::instance->getWindow()->mapPixelToCoords(sf::Vector2i(0, 0)));
 	target->draw(toDraw, sf::RenderStates(sf::BlendMultiply));
+	
+	entities.drawGUI(target);
 }
 
 void BurglaryState::addEntity(Entity* toAdd)
 {
-	entities->add(toAdd);
+	entities.add(toAdd);
 }
 
 std::vector< Entity* > BurglaryState::getEntitiesByType(const std::string& type)
 {
-	return entities->getByType(type);
+	return entities.getByType(type);
 }
 
 std::vector< Entity* > BurglaryState::getEntitiesInsideRect(const BoundingBox& area)
 {
-	return entities->getInRect(area);
+	return entities.getInRect(area);
 }
 
 Entity* BurglaryState::getNamedEntity(const std::string& name)
 {
-	return entities->getNamed(name);
+	return entities.getNamed(name);
 }
 
 bool BurglaryState::isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const
@@ -178,6 +158,77 @@ void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
 {
 	tileMap.unblock(sf::Vector2i(pos));
 }
+
+void BurglaryState::BurglaryState::addGoal()
+{
+	numberOfGoals++;
+}
+
+void BurglaryState::BurglaryState::markGoalAsReached()
+{
+	reachedGoals++;
+	if(reachedGoals >= numberOfGoals)
+	{
+		std::cout << "Reached all " << numberOfGoals << " goals." << std::endl;
+		for(Entity* exit : entities.getByType("Exit"))
+			dynamic_cast<Exit*>(exit)->enable();
+	}
+}
+
+void BurglaryState::loadLevel(const std::string& level)
+{
+	tileMap.loadFromFile(level);
+	// This doesn't work. WTF???!
+	//delete entities;
+	//entities = new EntityManager();
+	entities.clear();
+	
+	sf::RenderWindow* window = Game::instance->getWindow();
+
+	entities.addNamed("camera", new Camera(Game::instance->getWindow()));
+	targetLight.create(window->getSize().x, window->getSize().y);
+	
+	std::map<std::string, std::function<Entity*()> > factories;
+	factories["Player"] = []() -> Entity* { return new Player(); };
+	factories["Loot"]   = []() -> Entity* { return new Loot();   };
+	factories["Guard"]  = []() -> Entity* { return new Guard();  };
+	factories["Light"]  = []() -> Entity* { return new Light();  };
+	factories["Exit"]   = []() -> Entity* { return new Exit();   };
+	for(Blackguard::TileObject object : tileMap.getObjects())
+	{
+		// Entities
+		Entity* newEntity;
+		if(!object.type.empty())
+		{
+			newEntity = factories[object.type]();
+			newEntity->setWorldInterface(this);
+			newEntity->setPosition(sf::Vector2f(object.x, object.y - tileMap.getGridSize().y));
+			newEntity->initializeFromTileObject(object);
+			cout << "Added " << newEntity << " of type " << object.type << endl;
+			if(object.name.empty())
+				entities.add(newEntity);
+			else
+				entities.addNamed(object.name, newEntity);
+		}
+	}
+	player = dynamic_cast<Player*>(entities.getNamed("player"));
+	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
+}
+
+void BurglaryState::BurglaryState::onReachedExit()
+{
+	curLevel++;
+	if(curLevel < levels.size())
+		loadLevel(levels[curLevel]);
+}
+
+void BurglaryState::loadLevels(const vector< string >& levels)
+{
+	curLevel = 0;
+	this->levels = levels;
+	loadLevel(levels[curLevel]);
+}
+
 
 }
 }

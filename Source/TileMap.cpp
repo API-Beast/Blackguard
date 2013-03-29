@@ -165,6 +165,12 @@ void TileMap::loadFromFile(const std::string& fileName)
 {
 	using namespace tinyxml2;
 	
+	tilesets.clear();
+	objects.clear();
+	backgroundLayers.clear();
+	foregroundLayers.clear();
+	shadowLayers.clear();
+	
 	std::string fullPath = Game::instance->assets.getPath(fileName);
 	XMLDocument file(true, COLLAPSE_WHITESPACE);
 	file.LoadFile(fullPath.c_str());

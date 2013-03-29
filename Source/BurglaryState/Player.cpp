@@ -77,16 +77,6 @@ void Player::setPosition(const sf::Vector2f& pos)
 	graphics.setPosition(position);
 }
 
-void Player::addGold(int value)
-{
-	this->gold += value;
-}
-
-int Player::getGold() const
-{
-	return this->gold;
-}
-
 bool Player::activate()
 {
 	BoundingBox activationRectangle = activationArea.translated(DirToVector(movingDir) * 32.f);
@@ -116,9 +106,4 @@ void Player::setMovingDirection(Direction dir)
 void Player::setRunning(bool running)
 {
 	this->isRunning = running;
-}
-
-void Player::setGold(int gold)
-{
-	this->gold=gold;
 }

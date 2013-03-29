@@ -12,12 +12,22 @@ Loot::Loot()
 	this->graphics.setTexture(Game::instance->assets.textures["Loot"]);
 	this->bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
 	lastPosition = sf::Vector2f(0.f, 0.f);
+	collected = false;
+}
+
+void Loot::finalize()
+{
+	world->addGoal();
 }
 
 Loot::~Loot()
 {
 	if(world)
+	{
 		world->unblockTileAt(position);
+		if(!collected)
+			world->markGoalAsReached();
+	}
 }
 
 void Loot::draw(sf::RenderTarget* target) const
@@ -37,8 +47,11 @@ void Loot::updatePosition()
 
 bool Loot::activate(Player& activator)
 {
-	// TODO: Well this should not give 300 gold everytime...
-	activator.addGold(300);
-	this->remove();
+	if(!collected)
+	{
+		collected = true;
+		world->markGoalAsReached();
+	}
 	return true;
 }
+

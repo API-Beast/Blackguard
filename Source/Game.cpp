@@ -35,9 +35,11 @@ Game::Game(int argc, char** argv)
 {
 	Game::instance = this;
 	
-	// Might want to add a few switches later
-	//SwitchParser parser;
-	//parser.parseArgv(argc, argv);
+	SwitchParser parser;
+	SimpleSwitch loadLevel;
+	parser.setAnonymousSwitch(loadLevel);
+	
+	parser.parseArgv(argc, argv);
 	
 	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Blackguard");
 	window->setVerticalSyncEnabled(true);
@@ -45,6 +47,15 @@ Game::Game(int argc, char** argv)
 	assets.load();
 
 	State.burglary = new BurglaryState::BurglaryState();
+	
+	std::vector<std::string> levels;
+	levels.push_back("level1.tmx");
+	levels.push_back("level3.tmx");
+	
+	if(loadLevel.isSet)
+		State.burglary->loadLevel(loadLevel.argument);
+	else
+		State.burglary->loadLevels(levels);
 	
 	currentGameState = State.burglary;
 }

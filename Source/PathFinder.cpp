@@ -16,7 +16,7 @@ int PathFinder::calculateMoveCosts(const PathNode& current, const PathNode& succ
 	return (successor.x - current.x != 0 && successor.y - current.y != 0) ? 14 : 10;
 }
 
-void PathFinder::expandNode(PathNode& currentNode, PathNode& endNode)
+void PathFinder::expandNode(PathNode& currentNode)
 {
 	int itterations = 0;
 	for(int y = -1; y < 2; y++)
@@ -50,7 +50,19 @@ void PathFinder::expandNode(PathNode& currentNode, PathNode& endNode)
 	}
 }
 
-void PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
+std::stack<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
+{
+	std::stack<sf::Vector2f> output;
+	PathNode currentNode = endNode;
+	while(currentNode.predecessor != nullptr)
+	{
+		output.push(sf::Vector2f(currentNode.x * gridSize.x,currentNode.y * gridSize.y));
+		currentNode = *currentNode.predecessor;
+	}
+	return output;
+}
+
+std::stack<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
 {
 	openList.clear();
 	closedList.clear();
@@ -65,11 +77,15 @@ void PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& en
 		PathNode currentNode = *openList.begin();
 		openList.erase(openList.begin());
 
-		if(currentNode == endNode)
+		if(currentNode == endNode) {
+			endNode.predecessor = currentNode.predecessor; // copy the correct predecessor
 			break;
+		}
 
 		currentNode.manhattanValue = abs(endNode.x - currentNode.x) + abs(endNode.y - currentNode.y);
-		expandNode(currentNode,endNode);
+		expandNode(currentNode);
 		closedList.insert(currentNode);
 	}
+
+	return createWaypoints(endNode);
 }

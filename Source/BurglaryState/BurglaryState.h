@@ -36,6 +36,8 @@ namespace Blackguard
 		public:
 			BurglaryState();
 			~BurglaryState();
+			void loadLevel(const std::string& level);
+			void loadLevels(const std::vector<std::string>& levels);
 			// GameState
 			virtual bool processEvent(sf::Event& event);
 			virtual void update(float deltaTime);
@@ -49,11 +51,18 @@ namespace Blackguard
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const;
 			virtual void blockTileAt(const sf::Vector2f& pos);
 			virtual void unblockTileAt(const sf::Vector2f& pos);
+			virtual void addGoal();
+			virtual void markGoalAsReached();
+			virtual void onReachedExit();
 		private:
-			EntityManager* entities;
+			EntityManager entities;
 			Player* player;
 			TileMap tileMap;
 			sf::RenderTexture targetLight;
+			int numberOfGoals;
+			int reachedGoals;
+			std::vector<std::string> levels;
+			int curLevel;
 		};
 	}
 }

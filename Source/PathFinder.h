@@ -5,6 +5,7 @@
 #include <set>
 #include <unordered_set>
 #include <cstdint>
+#include <stack>
 
 namespace Blackguard
 {
@@ -67,10 +68,11 @@ namespace Blackguard
 		PathFinder(TileMap* map);
 		~PathFinder() {}
 		
-		void calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
+		std::stack<sf::Vector2f> calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
 	private:
-		void expandNode(PathNode& currentNode, PathNode& endNode);
+		void expandNode(PathNode& currentNode);
 		int calculateMoveCosts(const PathNode& current, const PathNode& successor);
+		std::stack<sf::Vector2f> createWaypoints(const PathNode& endNode);
 	private:
 		TileMap* map;
 		std::set<PathNode> openList;

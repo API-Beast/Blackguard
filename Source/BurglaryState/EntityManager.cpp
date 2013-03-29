@@ -37,6 +37,12 @@ EntityManager::EntityManager()
 	idCounter = 0;
 }
 
+EntityManager::~EntityManager()
+{
+	for(Entity* entity : objects)
+		delete entity;
+}
+
 void EntityManager::addNamed(std::string id, Entity* entity)
 {
 	namedObjects[id] = entity;
@@ -47,6 +53,15 @@ void EntityManager::add(Entity* ptr)
 {
 	objects.push_back(ptr);
 	objectsByType[ptr->getType()].push_back(ptr);
+}
+
+void EntityManager::clear()
+{
+	for(Entity* entity : objects)
+		delete entity;
+	objects.clear();
+	namedObjects.clear();
+	objectsByType.clear();
 }
 
 void EntityManager::cleanup()
@@ -105,6 +120,14 @@ void EntityManager::draw(sf::RenderTarget* target)
 	}
 }
 
+void EntityManager::drawGUI(sf::RenderTarget* target)
+{
+	for(auto obj : objects)
+	{
+		obj->drawGUI(target);
+	}
+}
+
 void EntityManager::drawLight(sf::RenderTarget* target, sf::RenderStates states)
 {
 	for(auto obj : objects)
@@ -138,5 +161,8 @@ std::vector< Entity* > EntityManager::getByType(const std::string& type)
 
 Entity* EntityManager::getNamed(const std::string& name)
 {
-	return namedObjects[name];
+	auto it=namedObjects.find(name);
+	if(it != namedObjects.end())
+		return it->second;
+	return nullptr;
 }
