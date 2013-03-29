@@ -44,14 +44,14 @@ namespace BurglaryState
 
 BurglaryState::BurglaryState()
 {
-	entities = nullptr;
 	numberOfGoals = 0;
 	reachedGoals = 0;
+	levels = std::vector<std::string>();
+	curLevel = 0;
 }
 
 BurglaryState::~BurglaryState()
 {
-	delete entities;
 }
 
 bool BurglaryState::processEvent(sf::Event& event)
@@ -83,18 +83,18 @@ void BurglaryState::update(float deltaTime)
 		player->setMovingDirection(dir);
 		player->setRunning(running);
 	}
-	entities->update(deltaTime);
+	entities.update(deltaTime);
 }
 
 void BurglaryState::draw(sf::RenderTarget* target)
 {
 	tileMap.drawBackground(target);
-	entities->draw(target);
+	entities.draw(target);
 	tileMap.drawForeground(target);
 	
 	targetLight.setView(Game::instance->getWindow()->getView());
 	targetLight.clear(sf::Color(19, 33, 55));
-	entities->drawLight(&targetLight);
+	entities.drawLight(&targetLight);
 	tileMap.drawShadows(&targetLight, sf::BlendAlpha);
 	targetLight.display();
 	
@@ -103,27 +103,27 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	toDraw.setPosition(Game::instance->getWindow()->mapPixelToCoords(sf::Vector2i(0, 0)));
 	target->draw(toDraw, sf::RenderStates(sf::BlendMultiply));
 	
-	entities->drawGUI(target);
+	entities.drawGUI(target);
 }
 
 void BurglaryState::addEntity(Entity* toAdd)
 {
-	entities->add(toAdd);
+	entities.add(toAdd);
 }
 
 std::vector< Entity* > BurglaryState::getEntitiesByType(const std::string& type)
 {
-	return entities->getByType(type);
+	return entities.getByType(type);
 }
 
 std::vector< Entity* > BurglaryState::getEntitiesInsideRect(const BoundingBox& area)
 {
-	return entities->getInRect(area);
+	return entities.getInRect(area);
 }
 
 Entity* BurglaryState::getNamedEntity(const std::string& name)
 {
-	return entities->getNamed(name);
+	return entities.getNamed(name);
 }
 
 bool BurglaryState::isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const
@@ -162,7 +162,7 @@ void BurglaryState::BurglaryState::markGoalAsReached()
 	if(reachedGoals >= numberOfGoals)
 	{
 		std::cout << "Reached all " << numberOfGoals << " goals." << std::endl;
-		for(Entity* exit : entities->getByType("Exit"))
+		for(Entity* exit : entities.getByType("Exit"))
 			dynamic_cast<Exit*>(exit)->enable();
 	}
 }
@@ -170,12 +170,14 @@ void BurglaryState::BurglaryState::markGoalAsReached()
 void BurglaryState::loadLevel(const std::string& level)
 {
 	tileMap.loadFromFile(level);
-	if(entities != nullptr) delete entities;
-	entities = new EntityManager();
+	// This doesn't work. WTF???!
+	//delete entities;
+	//entities = new EntityManager();
+	entities.clear();
 	
 	sf::RenderWindow* window = Game::instance->getWindow();
 
-	entities->addNamed("camera", new Camera(Game::instance->getWindow()));
+	entities.addNamed("camera", new Camera(Game::instance->getWindow()));
 	targetLight.create(window->getSize().x, window->getSize().y);
 	
 	std::map<std::string, std::function<Entity*()> > factories;
@@ -194,19 +196,29 @@ void BurglaryState::loadLevel(const std::string& level)
 			newEntity->setWorldInterface(this);
 			newEntity->setPosition(sf::Vector2f(object.x, object.y - tileMap.getGridSize().y));
 			newEntity->initializeFromTileObject(object);
+			cout << "Added " << newEntity << " of type " << object.type << endl;
 			if(object.name.empty())
-				entities->add(newEntity);
+				entities.add(newEntity);
 			else
-				entities->addNamed(object.name, newEntity);
+				entities.addNamed(object.name, newEntity);
 		}
 	}
-	player = dynamic_cast<Player*>(entities->getNamed("player"));
+	player = dynamic_cast<Player*>(entities.getNamed("player"));
 	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
 }
 
 void BurglaryState::BurglaryState::onReachedExit()
 {
+	curLevel++;
+	if(curLevel < levels.size())
+		loadLevel(levels[curLevel]);
+}
 
+void BurglaryState::loadLevels(const vector< string >& levels)
+{
+	curLevel = 0;
+	this->levels = levels;
+	loadLevel(levels[curLevel]);
 }
 
 

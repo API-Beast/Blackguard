@@ -39,8 +39,10 @@ namespace Blackguard
 	{
 		public:
 			EntityManager();
+			~EntityManager();
 			void add(Blackguard::BurglaryState::Entity* ptr);
 			void addNamed(std::string id, Blackguard::BurglaryState::Entity* entity);
+			void clear();
 			void update(float deltaTime);
 			void draw(sf::RenderTarget* target);
 			void drawLight(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates(sf::BlendAdd));

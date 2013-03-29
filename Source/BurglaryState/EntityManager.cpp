@@ -37,6 +37,12 @@ EntityManager::EntityManager()
 	idCounter = 0;
 }
 
+EntityManager::~EntityManager()
+{
+	for(Entity* entity : objects)
+		delete entity;
+}
+
 void EntityManager::addNamed(std::string id, Entity* entity)
 {
 	namedObjects[id] = entity;
@@ -47,6 +53,15 @@ void EntityManager::add(Entity* ptr)
 {
 	objects.push_back(ptr);
 	objectsByType[ptr->getType()].push_back(ptr);
+}
+
+void EntityManager::clear()
+{
+	for(Entity* entity : objects)
+		delete entity;
+	objects.clear();
+	namedObjects.clear();
+	objectsByType.clear();
 }
 
 void EntityManager::cleanup()

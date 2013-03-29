@@ -47,10 +47,15 @@ Game::Game(int argc, char** argv)
 	assets.load();
 
 	State.burglary = new BurglaryState::BurglaryState();
+	
+	std::vector<std::string> levels;
+	levels.push_back("level1.tmx");
+	levels.push_back("level3.tmx");
+	
 	if(loadLevel.isSet)
 		State.burglary->loadLevel(loadLevel.argument);
 	else
-		State.burglary->loadLevel("level3.tmx");
+		State.burglary->loadLevels(levels);
 	
 	currentGameState = State.burglary;
 }
