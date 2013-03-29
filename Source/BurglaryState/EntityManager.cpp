@@ -138,5 +138,8 @@ std::vector< Entity* > EntityManager::getByType(const std::string& type)
 
 Entity* EntityManager::getNamed(const std::string& name)
 {
-	return namedObjects[name];
+	auto it=namedObjects.find(name);
+	if(it != namedObjects.end())
+		return it->second;
+	return nullptr;
 }

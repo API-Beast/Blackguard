@@ -36,6 +36,7 @@ namespace Blackguard
 		public:
 			BurglaryState();
 			~BurglaryState();
+			void loadLevel(const std::string&);
 			// GameState
 			virtual bool processEvent(sf::Event& event);
 			virtual void update(float deltaTime);
