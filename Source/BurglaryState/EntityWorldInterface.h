@@ -48,6 +48,8 @@ namespace Blackguard
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const=0;
 			virtual void blockTileAt(const sf::Vector2f& pos)=0;
 			virtual void unblockTileAt(const sf::Vector2f& pos)=0;
+			virtual void addGoal()=0;
+			virtual void markGoalAsReached()=0;
 		};
 	}
 }

@@ -31,6 +31,7 @@
 #include "../Game.h"
 
 #include <functional>
+#include <iostream>
 
 using namespace Blackguard;
 using namespace Utility;
@@ -71,12 +72,10 @@ BurglaryState::BurglaryState()
 		}
 	}
 	player = dynamic_cast<Player*>(entities->getNamed("player"));
-	player->setGold(Game::instance->data.Player.gold);
 }
 
 BurglaryState::~BurglaryState()
 {
-	Game::instance->data.Player.gold = player->getGold();
 	delete entities;
 }
 
@@ -170,6 +169,19 @@ void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
 {
 	tileMap.unblock(sf::Vector2i(pos));
 }
+
+void BurglaryState::BurglaryState::addGoal()
+{
+	numberOfGoals++;
+}
+
+void BurglaryState::BurglaryState::markGoalAsReached()
+{
+	reachedGoals++;
+	if(reachedGoals >= numberOfGoals)
+		std::cout << "Reached all " << numberOfGoals << " goals." << std::endl;
+}
+
 
 }
 }

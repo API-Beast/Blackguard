@@ -56,17 +56,11 @@ namespace Blackguard
 			void setRunning(bool running);
 			void setMoving(bool moving);
 			void setMovingDirection(Direction dir);
-			
-			// State
-			void addGold(int value);
-			void setGold(int gold);
-			int getGold() const;
 		private:
 			sf::Sprite graphics;
 			bool isRunning;
 			bool isMoving;
 			Direction movingDir;
-			int gold;
 			BoundingBox activationArea;
 		};
 	}

@@ -21,7 +21,9 @@ namespace Blackguard
 			virtual std::string getType(){ return "Loot"; };
 		protected:
 			virtual void updatePosition();
+			virtual void finalize();
 		private:
+			bool collected;
 			sf::Sprite graphics;
 			sf::Vector2f lastPosition;
 		};

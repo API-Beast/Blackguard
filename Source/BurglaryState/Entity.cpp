@@ -93,6 +93,7 @@ void Entity::setPosition(const sf::Vector2f& pos)
 
 Entity::Entity()
 {
+	world = nullptr;
 	toBeRemoved = false;
 }
 
@@ -104,6 +105,7 @@ void Entity::remove()
 void Entity::setWorldInterface(EntityWorldInterface* interface)
 {
 	this->world = interface;
+	this->finalize();
 }
 
 Entity::~Entity()

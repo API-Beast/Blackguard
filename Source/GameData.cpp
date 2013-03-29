@@ -25,5 +25,4 @@ using namespace Blackguard;
 
 GameData::GameData()
 {
-	Player.gold = 0;
 }

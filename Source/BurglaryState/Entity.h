@@ -83,6 +83,7 @@ namespace Blackguard
 			virtual BoundingBox& getBounds() { return bounds; }
 		protected:
 			virtual void updatePosition();
+			virtual void finalize(){};
 			sf::Vector2f position;
 			BoundingBox bounds;
 			bool toBeRemoved;

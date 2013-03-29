@@ -49,11 +49,15 @@ namespace Blackguard
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const;
 			virtual void blockTileAt(const sf::Vector2f& pos);
 			virtual void unblockTileAt(const sf::Vector2f& pos);
+			virtual void addGoal();
+			virtual void markGoalAsReached();
 		private:
 			EntityManager* entities;
 			Player* player;
 			TileMap tileMap;
 			sf::RenderTexture targetLight;
+			int numberOfGoals;
+			int reachedGoals;
 		};
 	}
 }
