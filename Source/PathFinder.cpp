@@ -1,76 +1,58 @@
 #include "PathFinder.h"
+#include <functional>
+#include <algorithm>
+#include <queue>
+#include <set>
 
 using namespace Blackguard;
 
 PathFinder::PathFinder(TileMap* map)
 {
 	this->map = map;
+	gridSize = map->getGridSize();
 }
 
-int PathFinder::calculateMoveCosts(const PathNode& node)
+int PathFinder::calculateMoveCosts(const PathNode& current, const PathNode& successor)
 {
-	return (node.x - node.parent->x != 0 && node.y - node.parent->y != 0) ? 14 : 10;
+	return (successor.x - current.x != 0 && successor.y - current.y != 0) ? 14 : 10;
+}
+
+void PathFinder::expandNode(PathNode& currentNode, PathNode& endNode)
+{
+	for(int y = -1; y < 2; y++)
+	{
+		for(int x = -1; x < 2; x++)
+		{
+			PathNode successor(currentNode.x + x, currentNode.y + y);
+			if(!map->isBlockedByTile(currentNode.x + x, currentNode.y + y) && closedList.find(successor) == closedList.end()) {
+				currentNode.movementCost = calculateMoveCosts(currentNode,successor);
+				currentNode.manhattanValue = abs(endNode.x - currentNode.x) + abs(endNode.y - currentNode.y);
+				
+			}
+		}
+	}
 }
 
 void PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
 {
-	sf::Vector2i gridSize = map->getGridSize();
-	std::vector<PathNode> open;
-	std::vector<PathNode> closed;
-	PathNode* selectedNode;
+	openList = std::priority_queue<PathNode, std::vector<PathNode>, std::greater<PathNode>>();
+	closedList.clear();
 
-	// Sorry for German Comments here but I wanted to document that in a way that I will understand it 2 weeks later. (For now)
-
-	/* Start Node hinzufügen und End Node erstellen */
-	PathNode startNode(start.x / gridSize.x, start.y / gridSize.y, nullptr);
-	PathNode endNode(end.x / gridSize.x, end.y / gridSize.y, nullptr);
-	startNode.manhattanValue = 0;
-	startNode.movementCost = 0;
-	open.push_back(startNode);
-
-	selectedNode = &startNode;
-
-	while(std::find(closed.begin(), closed.end(), endNode) == closed.end())
+	PathNode startNode(start.x / gridSize.x, start.y / gridSize.y);
+	PathNode endNode(end.x / gridSize.x, end.y / gridSize.y);
+	
+	openList.push(startNode);
+	
+	while(!openList.empty())
 	{
-		for(auto node : open)
-		{
-			if(node.movementCost + node.manhattanValue < selectedNode->movementCost + selectedNode->manhattanValue) {
-				selectedNode = &node;
-			}
-		}
+		PathNode currentNode = openList.top();
+		openList.pop();
 
-		
-		/* Begehbare Felder um den Start zur Open List hinzufügen */
-		for(int y = -1; y < 2; y++)
-		{
-			for(int x = -1; x < 2; x++)
-			{
-				if(!map->isBlockedByTile(selectedNode->x + x, selectedNode->y + y)) {
-					auto iterator = std::find(open.begin(), open.end(), PathNode(selectedNode->x + x, selectedNode->y + y, nullptr));
-					if(iterator != open.end()) {
-						PathNode node = *iterator;
-						PathNode newNode = PathNode(selectedNode->x + x, selectedNode->y + y, selectedNode);
-						newNode.movementCost = calculateMoveCosts(node);
-						if(newNode.movementCost < node.movementCost) {
-							node.movementCost = newNode.movementCost;
-							node.parent = selectedNode;
-							open.erase(iterator);
-							open.push_back(node);
-						}
-					}
-					else {
-						PathNode node(selectedNode->x + x, selectedNode->y + y, selectedNode);
-						node.movementCost = calculateMoveCosts(node);
-						node.manhattanValue = abs(endNode.x - node.x) + abs(endNode.y - node.y);
-						open.push_back(node);
-					}
-				}
-			}
-		}
+		if(currentNode == endNode)
+			break;
 
-		closed.push_back(*selectedNode);
-		open.erase(std::remove(open.begin(), open.end(), *selectedNode), open.end());
+		expandNode(currentNode);
+
+		closedList.insert(currentNode);
 	}
-
-	system("pause");
 }

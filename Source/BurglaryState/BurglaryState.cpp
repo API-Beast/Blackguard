@@ -25,6 +25,7 @@
 #include "Guard.h"
 #include "Camera.h"
 #include "Light.h"
+#include "../PathFinder.h"
 
 #include "../Utility/Direction.h"
 
@@ -87,6 +88,13 @@ bool BurglaryState::processEvent(sf::Event& event)
 		if(event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::E)
 		{
 			player->activate();
+			return true;
+		}
+
+		if(event.key.code = sf::Keyboard::K)
+		{
+			PathFinder finder(&tileMap);
+			finder.calculatePath(sf::Vector2f(544,352), sf::Vector2f(160,576));
 			return true;
 		}
 	}

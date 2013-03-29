@@ -7,24 +7,37 @@ namespace Blackguard
 {
 	struct PathNode
 	{
-		PathNode(int xTile, int yTile, PathNode* parentNode)
+		PathNode(int xTile, int yTile)
 		{
 			x = xTile;
 			y = yTile;
-			parent = parentNode;
 		}
 
 		PathNode() {}
 
-		bool operator ==(const PathNode& other)
+		bool operator ==(const PathNode& other) const
 		{
 			return x == other.x && y == other.y;
+		}
+
+		bool operator < (PathNode const& rhs) const
+		{
+			return getValue() < rhs.getValue();
+		}
+
+		bool operator > (PathNode const& rhs) const
+		{
+			return getValue() > rhs.getValue();
+		}
+
+		int getValue() const
+		{
+			return movementCost + manhattanValue;
 		}
 
 		int x, y;
 		int movementCost;
 		int manhattanValue;
-		PathNode* parent;
 	};
 
 	class PathFinder
@@ -34,11 +47,14 @@ namespace Blackguard
 		~PathFinder() {}
 		
 		void calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
-
 	private:
-		int calculateMoveCosts(const PathNode& node);
+		void expandNode(PathNode& currentNode, PathNode& endNode);
+		int calculateMoveCosts(const PathNode& current, const PathNode& successor);
 	private:
 		TileMap* map;
+		std::priority_queue<PathNode, std::vector<PathNode>, std::greater<PathNode>> openList;
+		std::set<PathNode> closedList;
+		sf::Vector2i gridSize;
 	};
 }
 
