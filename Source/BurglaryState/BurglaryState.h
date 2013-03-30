@@ -24,6 +24,7 @@
 
 #include "../GameState.h"
 #include "../TileMap.h"
+#include "../PathFinder.h"
 #include "EntityManager.h"
 #include "EntityWorldInterface.h"
 
@@ -54,10 +55,12 @@ namespace Blackguard
 			virtual void addGoal();
 			virtual void markGoalAsReached();
 			virtual void onReachedExit();
+			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
 		private:
 			EntityManager entities;
 			Player* player;
 			TileMap tileMap;
+			PathFinder pathFinder;
 			sf::RenderTexture targetLight;
 			int numberOfGoals;
 			int reachedGoals;

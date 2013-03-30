@@ -49,6 +49,7 @@ Game::Game(int argc, char** argv)
 	State.burglary = new BurglaryState::BurglaryState();
 	
 	std::vector<std::string> levels;
+	levels.push_back("testlevel.tmx");
 	levels.push_back("level1.tmx");
 	levels.push_back("level3.tmx");
 	

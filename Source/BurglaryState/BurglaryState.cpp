@@ -30,6 +30,7 @@
 #include "../Utility/Direction.h"
 
 #include "../Game.h"
+#include "SFML/System/Vector2.hpp"
 
 #include <functional>
 #include <iostream>
@@ -42,7 +43,7 @@ namespace Blackguard
 namespace BurglaryState
 {
 
-BurglaryState::BurglaryState()
+BurglaryState::BurglaryState() : pathFinder(tileMap)
 {
 	numberOfGoals = 0;
 	reachedGoals = 0;
@@ -65,6 +66,19 @@ bool BurglaryState::processEvent(sf::Event& event)
 				player->activate();
 			return true;
 		}
+		/*
+		if(event.key.code == sf::Keyboard::K)
+		{
+			PathFinder finder(&tileMap);
+			auto output = finder.calculatePath(sf::Vector2f(192,224), sf::Vector2f(256,416));
+			
+			while(output.size() > 0)
+			{
+				printf("{%f | %f}\n",output.top().x,output.top().y);
+				output.pop();
+			}
+			return true;
+		}*/
 	}
 	return false;
 }
@@ -169,12 +183,12 @@ void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
 	tileMap.unblock(sf::Vector2i(pos));
 }
 
-void BurglaryState::BurglaryState::addGoal()
+void BurglaryState::addGoal()
 {
 	numberOfGoals++;
 }
 
-void BurglaryState::BurglaryState::markGoalAsReached()
+void BurglaryState::markGoalAsReached()
 {
 	reachedGoals++;
 	if(reachedGoals >= numberOfGoals)
@@ -226,7 +240,7 @@ void BurglaryState::loadLevel(const std::string& level)
 	reachedEndOfLevel = false;
 }
 
-void BurglaryState::BurglaryState::onReachedExit()
+void BurglaryState::onReachedExit()
 {
 	reachedEndOfLevel = true;
 }
@@ -238,6 +252,10 @@ void BurglaryState::loadLevels(const vector< string >& levels)
 	loadLevel(levels[curLevel]);
 }
 
+std::stack<sf::Vector2f> BurglaryState::calculatePath(sf::Vector2f start, sf::Vector2f end)
+{
+	return pathFinder.calculatePath(start,end);
+}
 
 }
 }
