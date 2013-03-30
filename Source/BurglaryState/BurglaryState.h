@@ -63,6 +63,7 @@ namespace Blackguard
 			int reachedGoals;
 			std::vector<std::string> levels;
 			int curLevel;
+			bool reachedEndOfLevel;
 		};
 	}
 }
