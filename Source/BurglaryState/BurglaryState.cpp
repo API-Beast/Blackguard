@@ -109,7 +109,17 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	sf::Sprite toDraw;
 	toDraw.setTexture(targetLight.getTexture());
 	toDraw.setPosition(Game::instance->getWindow()->mapPixelToCoords(sf::Vector2i(0, 0)));
+	toDraw.setColor(sf::Color::White);
 	target->draw(toDraw, sf::RenderStates(sf::BlendMultiply));
+	
+	
+	targetLight.setView(Game::instance->getWindow()->getView());
+	targetLight.clear(sf::Color(19, 33, 55));
+	entities.drawLight(&targetLight);
+	targetLight.display();
+	toDraw.setTexture(targetLight.getTexture());
+	toDraw.setColor(sf::Color(32, 48, 16));
+	target->draw(toDraw, sf::RenderStates(sf::BlendAdd));
 	
 	entities.drawGUI(target);
 }
