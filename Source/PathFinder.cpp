@@ -5,10 +5,9 @@
 
 using namespace Blackguard;
 
-PathFinder::PathFinder(TileMap* map)
+PathFinder::PathFinder(TileMap& tileMap) : map(tileMap)
 {
-	this->map = map;
-	gridSize = map->getGridSize();
+
 }
 
 int PathFinder::calculateMoveCosts(const PathNode& current, const PathNode& successor)
@@ -30,14 +29,20 @@ void PathFinder::expandNode(PathNode& currentNode)
 
 			itterations++;
 
-			if(!map->isBlockedByTile(currentNode.x + x, currentNode.y + y) && closedList.find(successor) == closedList.end()) {
+			if(!map.isBlockedByTile(currentNode.x + x, currentNode.y + y) && closedList.find(successor) == closedList.end()) {
 				int movementCost = calculateMoveCosts(currentNode,successor);
 			
 				if(openList.find(successor) != openList.end() && movementCost >= successor.movementCost) {
 					continue;
 				}
 
-				successor.predecessor = &currentNode;
+				if(successor.predecessor == -1)
+				{
+					successor.predecessor = predecessorList.size();
+					predecessorList.push_back(currentNode);
+				}
+				else
+					predecessorList[successor.predecessor] = currentNode;
 				successor.movementCost = movementCost;
 
 				if(openList.find(successor) != openList.end()) {
@@ -54,18 +59,20 @@ std::stack<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
 {
 	std::stack<sf::Vector2f> output;
 	PathNode currentNode = endNode;
-	while(currentNode.predecessor != nullptr)
+	while(currentNode.predecessor != -1)
 	{
 		output.push(sf::Vector2f(currentNode.x * gridSize.x,currentNode.y * gridSize.y));
-		currentNode = *currentNode.predecessor;
+		currentNode = predecessorList[currentNode.predecessor];
 	}
 	return output;
 }
 
 std::stack<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
 {
+	gridSize = map.getGridSize();
 	openList.clear();
 	closedList.clear();
+	predecessorList.clear();
 
 	PathNode startNode(start.x / gridSize.x, start.y / gridSize.y);
 	PathNode endNode(end.x / gridSize.x, end.y / gridSize.y);

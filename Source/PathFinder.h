@@ -17,7 +17,7 @@ namespace Blackguard
 			y = yTile;
 			movementCost = -1;
 			manhattanValue = -1;
-			predecessor = nullptr;
+			predecessor = -1;
 		}
 
 		PathNode() 
@@ -26,7 +26,7 @@ namespace Blackguard
 			y = 0;
 			movementCost = -1;
 			manhattanValue = -1;
-			predecessor = nullptr;
+			predecessor = -1;
 		}
 
 		PathNode(const PathNode& rhs)
@@ -61,7 +61,7 @@ namespace Blackguard
 		int x, y;
 		int movementCost;
 		int manhattanValue;
-		PathNode* predecessor;
+		int predecessor;
 	};
 
 	struct PathNodeHash {
@@ -74,7 +74,7 @@ namespace Blackguard
 	class PathFinder
 	{
 	public:
-		PathFinder(TileMap* map);
+		PathFinder(TileMap& tileMap);
 		~PathFinder() {}
 		
 		std::stack<sf::Vector2f> calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
@@ -83,9 +83,10 @@ namespace Blackguard
 		int calculateMoveCosts(const PathNode& current, const PathNode& successor);
 		std::stack<sf::Vector2f> createWaypoints(const PathNode& endNode);
 	private:
-		TileMap* map;
+		TileMap& map;
 		std::set<PathNode> openList;
 		std::unordered_set<PathNode,PathNodeHash> closedList;
+		std::vector<PathNode> predecessorList;
 		sf::Vector2i gridSize;
 	};
 }

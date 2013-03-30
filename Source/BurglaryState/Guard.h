@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "SFML/Graphics.hpp"
 #include "Player.h"
+#include <stack>
 
 namespace sf
 {
@@ -26,6 +27,7 @@ namespace Blackguard
 
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const;
+			virtual void move(const sf::Vector2f& pos);
 			virtual std::string getType(){ return "Guard"; };
 		protected:
 			virtual void updatePosition();
@@ -34,6 +36,7 @@ namespace Blackguard
 		private:
 			sf::Sprite graphics;
 			BoundingBox detectionArea;
+			std::stack<sf::Vector2f> waypoints;
 		};
 	}
 }

@@ -25,7 +25,6 @@
 #include "Guard.h"
 #include "Camera.h"
 #include "Light.h"
-#include "../PathFinder.h"
 #include "Exit.h"
 
 #include "../Utility/Direction.h"
@@ -44,7 +43,7 @@ namespace Blackguard
 namespace BurglaryState
 {
 
-BurglaryState::BurglaryState()
+BurglaryState::BurglaryState() : pathFinder(tileMap)
 {
 	numberOfGoals = 0;
 	reachedGoals = 0;
@@ -67,7 +66,7 @@ bool BurglaryState::processEvent(sf::Event& event)
 				player->activate();
 			return true;
 		}
-
+		/*
 		if(event.key.code == sf::Keyboard::K)
 		{
 			PathFinder finder(&tileMap);
@@ -75,11 +74,11 @@ bool BurglaryState::processEvent(sf::Event& event)
 			
 			while(output.size() > 0)
 			{
-				printf("{%d | %d}",output.top().x,output.top().y);
+				printf("{%f | %f}\n",output.top().x,output.top().y);
 				output.pop();
 			}
 			return true;
-		}
+		}*/
 	}
 	return false;
 }
@@ -243,6 +242,10 @@ void BurglaryState::loadLevels(const vector< string >& levels)
 	loadLevel(levels[curLevel]);
 }
 
+std::stack<sf::Vector2f> BurglaryState::calculatePath(sf::Vector2f start, sf::Vector2f end)
+{
+	return pathFinder.calculatePath(start,end);
+}
 
 }
 }

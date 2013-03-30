@@ -24,6 +24,7 @@
 
 #include "Entity.h"
 #include <vector>
+#include <stack>
 
 namespace Blackguard
 {
@@ -51,6 +52,7 @@ namespace Blackguard
 			virtual void addGoal()=0;
 			virtual void markGoalAsReached()=0;
 			virtual void onReachedExit()=0;
+			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end)=0;
 		};
 	}
 }
