@@ -68,6 +68,7 @@ void Assets::load()
 	textures["Light"].loadFromFile(this->getPath("light.png"));
 	textures["Light/Ambient"].loadFromFile(this->getPath("lightAmbient.png"));
 	textures["Light/Sun"    ].loadFromFile(this->getPath("lightSun.png"    ));
+	textures["Light/Window" ].loadFromFile(this->getPath("lightWindow.png" ));
 }
 
 std::string Assets::getPath(const std::string& path) const
