@@ -50,6 +50,7 @@ BurglaryState::BurglaryState()
 	reachedGoals = 0;
 	levels = std::vector<std::string>();
 	curLevel = 0;
+	reachedEndOfLevel = false;
 }
 
 BurglaryState::~BurglaryState()
@@ -84,6 +85,13 @@ bool BurglaryState::processEvent(sf::Event& event)
 
 void BurglaryState::update(float deltaTime)
 {
+	if(reachedEndOfLevel)
+	{
+		curLevel++;
+		if(curLevel < levels.size())
+			loadLevel(levels[curLevel]);
+		reachedEndOfLevel = false; // Just for clarification, it's set in loadLevel too.
+	}
 	if(player)
 	{
 		bool w, s, a, d;
@@ -219,13 +227,12 @@ void BurglaryState::loadLevel(const std::string& level)
 	}
 	player = dynamic_cast<Player*>(entities.getNamed("player"));
 	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
+	reachedEndOfLevel = false;
 }
 
 void BurglaryState::onReachedExit()
 {
-	curLevel++;
-	if(curLevel < levels.size())
-		loadLevel(levels[curLevel]);
+	reachedEndOfLevel = true;
 }
 
 void BurglaryState::loadLevels(const vector< string >& levels)
