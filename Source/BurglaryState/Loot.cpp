@@ -50,6 +50,7 @@ bool Loot::activate(Player& activator)
 	if(!collected)
 	{
 		collected = true;
+		graphics.setTexture(Game::instance->assets.textures["Loot/Open"]);
 		world->markGoalAsReached();
 	}
 	return true;
