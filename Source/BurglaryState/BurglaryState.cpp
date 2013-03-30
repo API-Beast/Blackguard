@@ -71,7 +71,8 @@ bool BurglaryState::processEvent(sf::Event& event)
 		if(event.key.code == sf::Keyboard::K)
 		{
 			PathFinder finder(&tileMap);
-			auto output = finder.calculatePath(sf::Vector2f(544,352), sf::Vector2f(160,576));
+			auto output = finder.calculatePath(sf::Vector2f(192,224), sf::Vector2f(256,416));
+			
 			while(output.size() > 0)
 			{
 				printf("{%d | %d}",output.top().x,output.top().y);

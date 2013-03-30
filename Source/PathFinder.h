@@ -29,6 +29,15 @@ namespace Blackguard
 			predecessor = nullptr;
 		}
 
+		PathNode(const PathNode& rhs)
+		{
+			x = rhs.x;
+			y = rhs.y;
+			movementCost = rhs.movementCost;
+			manhattanValue = rhs.manhattanValue;
+			predecessor = rhs.predecessor;
+		}
+
 		bool operator ==(const PathNode& other) const
 		{
 			return x == other.x && y == other.y;
