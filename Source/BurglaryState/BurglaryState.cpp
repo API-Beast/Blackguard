@@ -128,6 +128,11 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	entities.drawGUI(target);
 }
 
+bool BurglaryState::isPathBlocked(const sf::Vector2f start, const sf::Vector2f end)
+{
+	return tileMap.isPathBlocked(sf::Vector2i(start),sf::Vector2i(end));
+}
+
 void BurglaryState::addEntity(Entity* toAdd)
 {
 	entities.add(toAdd);

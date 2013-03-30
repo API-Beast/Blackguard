@@ -83,6 +83,7 @@ public:
 public:
 	void loadFromFile(const std::string& fileName);
 	bool isBlocked(sf::Vector2i pos) const;
+	bool isPathBlocked(sf::Vector2i start, sf::Vector2i end);
 	bool isBlockedByTile(int x, int y) const;
 	void markAsBlocked(sf::Vector2i pos);
 	void markAsBlockedByTile(int x, int y);

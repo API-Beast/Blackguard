@@ -33,27 +33,35 @@ void Guard::update(float deltaTime)
 
 void Guard::chasePlayer()
 {
-	if(waypoints.size() <= 0) {
-		Entity* ent = world->getNamedEntity("player");
-		if(ent != nullptr)
-			waypoints = world->calculatePath(this->position,ent->getPosition());
+	Entity* ent = world->getNamedEntity("player");
+	if(!world->isPathBlocked(this->position,ent->getPosition()))
+	{
+		if(waypoints.size() <= 0) {
+			waypoints = std::stack<sf::Vector2f>();
+		}
+		this->move(Utility::VectorUnitAxis(ent->getPosition() - this->position));
 	}
 	else
 	{
-		if(this->position != waypoints.top()) {
-			printf("Waypoint: {%f | %f}\n",waypoints.top().x,waypoints.top().y);
-			printf("My Position: {%f | %f}\n",this->position.x,this->position.y);
-			this->move(Utility::VectorUnitAxis(waypoints.top() - this->position));
+		if(waypoints.size() <= 0) {
+			if(ent != nullptr)
+				waypoints = world->calculatePath(this->position,ent->getPosition());
 		}
 		else
-			this->waypoints.pop();
+		{
+			if(this->position != waypoints.top()) {
+				this->move(Utility::VectorUnitAxis(waypoints.top() - this->position));
+			}
+			else
+				this->waypoints.pop();
+		}
 	}
+
 }
 
 void Guard::move(const sf::Vector2f& pos)
 {
 	Entity::move(pos);
-	printf("Guard Move: {%f | %f}\n",pos.x,pos.y);
 }
 
 void Guard::draw(sf::RenderTarget* target) const

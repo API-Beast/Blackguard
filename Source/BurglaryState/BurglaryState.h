@@ -55,6 +55,7 @@ namespace Blackguard
 			virtual void addGoal();
 			virtual void markGoalAsReached();
 			virtual void onReachedExit();
+			virtual bool BurglaryState::isPathBlocked(const sf::Vector2f start, const sf::Vector2f end);
 			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
 		private:
 			EntityManager entities;

@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <stdexcept>
 #include <iostream>
+#include "Utility/GameMath.h"
 
 using namespace Blackguard;
 using namespace std;
@@ -94,6 +95,25 @@ void TileMap::drawForeground(sf::RenderTarget* target, sf::RenderStates states) 
 void TileMap::drawShadows(sf::RenderTarget* target, sf::RenderStates states) const
 {
 	drawLayers(shadowLayers, target, states);
+}
+
+bool TileMap::isPathBlocked(sf::Vector2i start, sf::Vector2i end)
+{
+	// Based on Bresenham's line algorithm
+	int dx =  abs(end.x - start.x), sx = start.x < end.x ? 1 : -1;
+	int dy = -abs(end.y - start.y), sy = start.y < end.y ? 1 : -1; 
+	int err = dx + dy, e2;
+	int x = start.x;
+	int y = start.y;
+
+	for(;;){
+		if(isBlocked(sf::Vector2i(x,y)))
+			return true;
+		if (x == end.x && y == end.y) return false;
+		e2 = 2 * err;
+		if (e2 > dy) { err += dy; x += sx; }
+		if (e2 < dx) { err += dx; y += sy; }
+	}
 }
 
 void TileMap::drawLayers(const vector< TileLayer >& layers, sf::RenderTarget* target, sf::RenderStates states) const
@@ -234,10 +254,10 @@ void TileMap::loadFromFile(const std::string& fileName)
 			for(unsigned int i=0; i < data.size(); i+=4)
 			{
 				layer.data.push_back(
-				            data[i + 0]       |
-				            data[i + 1] << 8  |
-				            data[i + 2] << 16 |
-				            data[i + 3] << 24 );
+							data[i + 0]       |
+							data[i + 1] << 8  |
+							data[i + 2] << 16 |
+							data[i + 3] << 24 );
 			}
 			
 			// There are a few layer names with special functionality.
