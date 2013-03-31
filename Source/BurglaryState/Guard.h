@@ -29,6 +29,7 @@ namespace Blackguard
 			virtual void draw(sf::RenderTarget* target) const;
 			virtual void move(const sf::Vector2f& pos);
 			virtual std::string getType(){ return "Guard"; };
+			void onNoise(sf::Vector2f source);
 		protected:
 			virtual void updatePosition();
 		private:

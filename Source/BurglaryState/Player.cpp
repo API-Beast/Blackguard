@@ -23,7 +23,9 @@
 #include "BurglaryState.h"
 #include "SFML/Graphics.hpp"
 #include "../Game.h"
+#include "../Utility/GameMath.h"
 #include "Camera.h"
+#include "Stone.h"
 
 using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
@@ -39,6 +41,7 @@ Player::Player() : Entity()
 	this->isRunning = false;
 	this->movingDir = South;
 	this->activationArea.size = sf::Vector2f(25, 25);
+	stone = nullptr;
 }
 
 Player::~Player()
@@ -106,4 +109,15 @@ void Player::setMovingDirection(Direction dir)
 void Player::setRunning(bool running)
 {
 	this->isRunning = running;
+}
+
+void Player::throwStone(sf::Vector2f target)
+{
+	if(stone == nullptr) { // This is sooo baaaad but we don't have a proper init method..
+		stone = new Stone();
+		stone->setWorldInterface(world);
+		world->addEntity(stone);
+	}
+	stone->setPosition(Utility::VectorFloor(this->position));
+	stone->toss(target);
 }

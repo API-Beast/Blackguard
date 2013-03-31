@@ -66,6 +66,12 @@ bool BurglaryState::processEvent(sf::Event& event)
 				player->activate();
 			return true;
 		}
+		if(event.key.code == sf::Keyboard::Q)
+		{
+			sf::Vector2f pos = Game::instance->getWindow()->mapPixelToCoords(sf::Mouse::getPosition(*Game::instance->getWindow()));
+			player->throwStone(pos);
+			printf("x: %f | y: %f\n",pos.x,pos.y);
+		}
 		/*
 		if(event.key.code == sf::Keyboard::K)
 		{
@@ -157,6 +163,12 @@ std::vector< Entity* > BurglaryState::getEntitiesInsideRect(const BoundingBox& a
 {
 	return entities.getInRect(area);
 }
+
+std::vector< Entity* > BurglaryState::getEntitiesInsideCircle(const BoundingCircle& area)
+{
+	return entities.getInCircle(area);
+}
+
 
 Entity* BurglaryState::getNamedEntity(const std::string& name)
 {

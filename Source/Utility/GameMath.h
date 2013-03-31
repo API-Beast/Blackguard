@@ -11,6 +11,7 @@ namespace Blackguard
 	{
 		template <typename T> sf::Vector2<T> VectorNormalize(const sf::Vector2<T>& source);
 		template <typename T> sf::Vector2<T> VectorUnitAxis(const sf::Vector2<T>& source);
+		template <typename T> sf::Vector2<T> VectorFloor(const sf::Vector2<T>& source);
 	}
 }
 

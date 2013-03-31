@@ -54,6 +54,8 @@ namespace Blackguard
 
 		struct BoundingCircle
 		{
+			BoundingCircle(sf::Vector2f center, float circleRadius) : position(center), radius(circleRadius) {} 
+			BoundingCircle() {}
 			bool contains(const sf::Vector2f& point) const;
 			sf::Vector2f position;
 			float radius;

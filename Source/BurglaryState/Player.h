@@ -37,6 +37,7 @@ namespace Blackguard
 	namespace BurglaryState
 	{
 		class Camera;
+		class Stone;
 
 		class Player : public Entity
 		{
@@ -56,12 +57,14 @@ namespace Blackguard
 			void setRunning(bool running);
 			void setMoving(bool moving);
 			void setMovingDirection(Direction dir);
+			void throwStone(sf::Vector2f target);
 		private:
 			sf::Sprite graphics;
 			bool isRunning;
 			bool isMoving;
 			Direction movingDir;
 			BoundingBox activationArea;
+			Stone* stone; // Le Stein
 		};
 	}
 }

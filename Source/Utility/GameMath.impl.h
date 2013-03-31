@@ -28,6 +28,11 @@ namespace Blackguard
 			return sf::Vector2<T>((source.x == 0) ? 0 : (source.x > 0) ? 1 : -1,(source.y == 0) ? 0 : (source.y > 0) ? 1 : -1);
 		}
 
+		template <typename T> sf::Vector2<T> VectorFloor(const sf::Vector2<T>& source)
+		{
+			return sf::Vector2<T>((int)source.x,(int)source.y);
+		}
+
 		#ifdef WIN32
 			#pragma warning(pop)
 		#endif

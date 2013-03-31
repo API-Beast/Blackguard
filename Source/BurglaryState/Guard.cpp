@@ -31,6 +31,19 @@ void Guard::update(float deltaTime)
 	this->chasePlayer();
 }
 
+void Guard::onNoise(sf::Vector2f source)
+{
+	if(!world->isPathBlocked(this->position,source))
+	{
+		waypoints = std::stack<sf::Vector2f>();
+		waypoints.push(source);
+	}
+	else
+	{
+		waypoints = world->calculatePath(this->position,source);
+	}
+}
+
 void Guard::chasePlayer()
 {
 	Entity* ent = world->getNamedEntity("player");
@@ -44,8 +57,8 @@ void Guard::chasePlayer()
 	else
 	{
 		if(waypoints.size() <= 0) {
-			if(ent != nullptr)
-				waypoints = world->calculatePath(this->position,ent->getPosition());
+			//if(ent != nullptr)
+			//	waypoints = world->calculatePath(this->position,ent->getPosition());
 		}
 		else
 		{
