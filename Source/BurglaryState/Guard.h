@@ -36,7 +36,6 @@ namespace Blackguard
 			void chasePlayer();
 		private:
 			sf::Sprite graphics;
-			BoundingBox detectionArea;
 			std::stack<sf::Vector2f> waypoints;
 		};
 	}
