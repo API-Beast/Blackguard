@@ -45,6 +45,7 @@ namespace Blackguard
 			virtual Entity* getNamedEntity(const std::string& name)=0;
 			virtual std::vector<Entity*> getEntitiesByType(const std::string& type)=0;
 			virtual std::vector<Entity*> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area)=0;
+			virtual std::vector<Entity*> getEntitiesInsideCircle(const Blackguard::BurglaryState::BoundingCircle& area)=0;
 			virtual bool isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const=0;
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const=0;
 			virtual void blockTileAt(const sf::Vector2f& pos)=0;
@@ -52,6 +53,7 @@ namespace Blackguard
 			virtual void addGoal()=0;
 			virtual void markGoalAsReached()=0;
 			virtual void onReachedExit()=0;
+			virtual bool isPathBlocked(const sf::Vector2f start, const sf::Vector2f end) = 0;
 			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end)=0;
 		};
 	}

@@ -94,5 +94,8 @@ std::stack<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, co
 		closedList.insert(currentNode);
 	}
 
+	if(openList.empty())
+		printf("[DEBUG] No way found to Path!\n");
+
 	return createWaypoints(endNode);
 }
