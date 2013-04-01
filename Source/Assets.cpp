@@ -69,6 +69,7 @@ void Assets::load()
 	textures["Exit"].loadFromFile(this->getPath("exit.png"));
 	textures["Light"].loadFromFile(this->getPath("light.png"));
 	textures["Light/Ambient"].loadFromFile(this->getPath("lightAmbient.png"));
+	textures["Light/Stripes"].loadFromFile(this->getPath("lightStripes.png"));
 	textures["Light/Sun"    ].loadFromFile(this->getPath("lightSun.png"    ));
 	textures["Light/Window" ].loadFromFile(this->getPath("lightWindow.png" ));
 }

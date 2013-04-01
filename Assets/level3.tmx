@@ -7,7 +7,7 @@
   <image source="Hints.png" width="96" height="32"/>
  </tileset>
  <tileset firstgid="121" name="shadows" tilewidth="32" tileheight="32">
-  <image source="shadows.png" width="192" height="384"/>
+  <image source="shadows.png" width="192" height="448"/>
  </tileset>
  <layer name="Background" width="20" height="25">
   <data encoding="base64">
@@ -44,9 +44,9 @@
   <object type="Light" x="-47" y="369" width="412" height="399">
    <ellipse/>
   </object>
-  <object type="Light" x="172" y="19" width="237" height="225">
+  <object type="Light" x="168" y="50" width="235" height="265">
    <properties>
-    <property name="variation" value="Sun"/>
+    <property name="variation" value="Window"/>
    </properties>
    <ellipse/>
   </object>
