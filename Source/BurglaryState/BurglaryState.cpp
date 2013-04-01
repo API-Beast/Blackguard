@@ -54,6 +54,7 @@ BurglaryState::BurglaryState() : pathFinder(tileMap)
 
 BurglaryState::~BurglaryState()
 {
+	entities.clear();
 }
 
 bool BurglaryState::processEvent(sf::Event& event)
