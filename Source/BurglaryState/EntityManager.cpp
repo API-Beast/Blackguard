@@ -114,6 +114,14 @@ void EntityManager::update(float deltaTime)
 
 void EntityManager::draw(sf::RenderTarget* target)
 {
+	// Sort by Y-Coordinates for painters algorithm
+	std::sort(objects.begin(), objects.end(),
+						[](Entity* const& objA, Entity* const& objB)
+						{
+							if(objA->getBounds().center.y == objB->getBounds().center.y)
+								return objA->getBounds().center.x <= objB->getBounds().center.x;
+							return objA->getBounds().center.y <= objB->getBounds().center.y;
+						});
 	for(auto obj : objects)
 	{
 		obj->draw(target);

@@ -34,6 +34,8 @@ BoundingBox BoundingBox::translated(const sf::Vector2f& by) const
 	BoundingBox retVal;
 	retVal.position = this->position + by;
 	retVal.size = this->size;
+	retVal.offset = this->offset;
+	retVal.center = this->center + by;
 	return std::move(retVal);
 }	
 
@@ -48,6 +50,7 @@ bool BoundingBox::intersects(const BoundingBox& other) const
 void BoundingBox::updatePosition(const sf::Vector2f& entityPosition)
 {
 	this->position = entityPosition+offset;
+	this->center   = entityPosition+size/2.f;
 }
 
 bool BoundingCircle::contains(const sf::Vector2f& point) const
@@ -111,6 +114,10 @@ void Entity::setWorldInterface(EntityWorldInterface* interface)
 Entity::~Entity()
 {
 
+}
+sf::Vector2f Entity::getPosition() const
+{
+	return this->position;
 }
 
 }

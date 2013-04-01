@@ -18,7 +18,9 @@ using namespace Blackguard::BurglaryState;
 Guard::Guard() : Entity()
 {
 	graphics = sf::Sprite(Game::instance->assets.textures["Guard"]);
-	bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
+	sf::Vector2u size = graphics.getTexture()->getSize();
+	bounds.offset = sf::Vector2f(size.x/4, size.y*(2/3.f));
+	bounds.size = sf::Vector2f(size.x/2, size.y/3);
 	detectionArea.size = sf::Vector2f(GUARD_DETECT_AREA_SIZE,GUARD_DETECT_AREA_SIZE);
 }
 

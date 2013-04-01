@@ -10,7 +10,7 @@ using namespace Blackguard;
 Loot::Loot()
 {
 	this->graphics.setTexture(Game::instance->assets.textures["Loot"]);
-	this->bounds.size = sf::Vector2f(graphics.getTexture()->getSize());
+	this->bounds.size = sf::Vector2f(32,32);
 	lastPosition = sf::Vector2f(0.f, 0.f);
 	collected = false;
 }

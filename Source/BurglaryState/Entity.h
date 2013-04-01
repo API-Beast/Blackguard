@@ -49,6 +49,7 @@ namespace Blackguard
 			void updatePosition(const sf::Vector2f& entityPosition);
 			sf::Vector2f size;
 			sf::Vector2f position;
+			sf::Vector2f center;
 			sf::Vector2f offset;
 		};
 
@@ -82,7 +83,7 @@ namespace Blackguard
 			virtual void setPosition(const sf::Vector2f& pos);
 			virtual void setWorldInterface(EntityWorldInterface* interface);
 			// Getter:
-			virtual sf::Vector2f getPosition() const { return position; }
+			virtual sf::Vector2f getPosition() const;
 			virtual BoundingBox& getBounds() { return bounds; }
 		protected:
 			virtual void updatePosition();
