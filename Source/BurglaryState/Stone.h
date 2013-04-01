@@ -27,6 +27,8 @@ namespace Blackguard
 			bool noiseMade;
 			sf::Vector2f target;
 			sf::Sprite graphics;
+			sf::CircleShape indicator;
+			float indicatorFadeout;
 		};
 	}
 }
