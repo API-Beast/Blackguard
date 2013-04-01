@@ -38,12 +38,12 @@ void Blackguard::BurglaryState::Light::drawLight(sf::RenderTarget* target, sf::R
 void Blackguard::BurglaryState::Light::initializeFromTileObject(const Blackguard::TileObject& obj)
 {
 	this->setPosition(sf::Vector2f(obj.x, obj.y));
-	graphics.setScale(obj.width/255.f, obj.height/255.f);
 	graphics.setRotation(obj.rotation);
 	if(obj.properties.find("strength") != obj.properties.end())
 		graphics.setColor(sf::Color(255, 255, 255, Utility::FromString<int>(obj.properties.at("strength"))));
 	if(obj.properties.find("variation") != obj.properties.end())
-		graphics.setTexture(Game::instance->assets.textures["Light/"+obj.properties.at("variation")]);
+		graphics.setTexture(Game::instance->assets.textures["Light/"+obj.properties.at("variation")], true);
+	graphics.setScale(obj.width/float(graphics.getTexture()->getSize().x), obj.height/float(graphics.getTexture()->getSize().y));
 }
 
 void Blackguard::BurglaryState::Light::updatePosition()

@@ -41,23 +41,23 @@
    </properties>
    <ellipse/>
   </object>
-  <object type="Light" x="-47" y="369" width="412" height="399">
+  <object type="Light" x="-1" y="378" width="320" height="320">
    <ellipse/>
   </object>
-  <object type="Light" x="168" y="50" width="235" height="265">
+  <object type="Light" x="145" y="15" width="288" height="320">
    <properties>
     <property name="variation" value="Window"/>
    </properties>
    <ellipse/>
   </object>
-  <object type="Light" x="93" y="138" width="380" height="374">
+  <object type="Light" x="118" y="183" width="456" height="293" rotation="16.29">
    <properties>
-    <property name="strength" value="100"/>
+    <property name="strength" value="50"/>
     <property name="variation" value="Ambient"/>
    </properties>
    <ellipse/>
   </object>
-  <object type="Light" x="395" y="834" width="254" height="449" rotation="-158.211">
+  <object type="Light" x="395" y="834" width="254" height="449" rotation="-158.21">
    <properties>
     <property name="strength" value="50"/>
     <property name="variation" value="Ambient"/>

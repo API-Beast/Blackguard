@@ -121,7 +121,7 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	tileMap.drawForeground(target);
 	
 	targetLight.setView(Game::instance->getWindow()->getView());
-	targetLight.clear(sf::Color(19, 33, 55));
+	targetLight.clear(sf::Color(10, 20, 60));
 	entities.drawLight(&targetLight);
 	tileMap.drawShadows(&targetLight, sf::BlendAlpha);
 	targetLight.display();
@@ -138,7 +138,7 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	entities.drawLight(&targetLight);
 	targetLight.display();
 	toDraw.setTexture(targetLight.getTexture());
-	toDraw.setColor(sf::Color(32, 48, 16));
+	toDraw.setColor(sf::Color(48, 36, 16));
 	target->draw(toDraw, sf::RenderStates(sf::BlendAdd));
 	
 	entities.drawGUI(target);

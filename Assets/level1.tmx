@@ -30,22 +30,16 @@
   <object type="Exit" x="416" y="384" width="32" height="64"/>
  </objectgroup>
  <objectgroup name="Lights" width="20" height="20">
-  <object type="Light" x="108" y="70" width="197" height="262">
+  <object type="Light" x="96" y="49" width="216" height="288">
    <properties>
     <property name="variation" value="Window"/>
    </properties>
    <ellipse/>
   </object>
-  <object type="Light" x="65" y="121" width="416" height="341">
+  <object type="Light" x="55" y="218" width="377" height="314">
    <properties>
     <property name="strength" value="75"/>
     <property name="variation" value="Ambient"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object type="Light" x="91" y="352" width="146" height="149" rotation="-21.0204">
-   <properties>
-    <property name="variation" value="Stripes"/>
    </properties>
    <ellipse/>
   </object>
