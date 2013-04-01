@@ -223,6 +223,8 @@ void BurglaryState::loadLevel(const std::string& level)
 	//delete entities;
 	//entities = new EntityManager();
 	entities.clear();
+	numberOfGoals = 0;
+	reachedGoals  = 0;
 	
 	sf::RenderWindow* window = Game::instance->getWindow();
 
