@@ -50,7 +50,7 @@ bool BoundingBox::intersects(const BoundingBox& other) const
 void BoundingBox::updatePosition(const sf::Vector2f& entityPosition)
 {
 	this->position = entityPosition+offset;
-	this->center   = entityPosition+size/2.f;
+	this->center   = entityPosition+offset+size/2.f;
 }
 
 bool BoundingCircle::contains(const sf::Vector2f& point) const
@@ -65,22 +65,36 @@ void Entity::move(const sf::Vector2f& movement)
 	auto verticalMovement   = sf::Vector2f(0.f       , movement.y);
 	if(world->isMovementPossible(bounds, movement))
 	{
-		position += movement;
+		this->position += movement;
+		this->movement += movement;
 		this->updatePosition();
 	}
 	else if(world->isMovementPossible(bounds, horizontalMovement) && std::abs(horizontalMovement.x) > 0)
 	{
-		position += horizontalMovement;
+		this->position += horizontalMovement;
+		this->movement += horizontalMovement;
 		this->updatePosition();
 	}
 	else if(world->isMovementPossible(bounds, verticalMovement) && std::abs(verticalMovement.y) > 0)
 	{
-		position += verticalMovement;
+		this->position += verticalMovement;
+		this->movement += verticalMovement;
 		this->updatePosition();
 	}
 	else
 		this->onHitWall();
 }
+
+void Entity::update(float deltaTime)
+{
+	movement = sf::Vector2f(0.f, 0.f);
+}
+
+sf::Vector2f Entity::getMovement() const
+{
+	return movement;
+}
+
 
 void Entity::updatePosition()
 {

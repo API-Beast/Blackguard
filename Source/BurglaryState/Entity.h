@@ -67,7 +67,7 @@ namespace Blackguard
 		public:
 			Entity();
 			virtual ~Entity();
-			virtual void update(float deltaTime) {}
+			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const {}
 			virtual void drawLight(sf::RenderTarget* target, sf::RenderStates renderStates=sf::RenderStates(sf::BlendAdd)) const {}
 			virtual void drawGUI(sf::RenderTarget* target) const {}
@@ -84,11 +84,15 @@ namespace Blackguard
 			virtual void setWorldInterface(EntityWorldInterface* interface);
 			// Getter:
 			virtual sf::Vector2f getPosition() const;
+			virtual sf::Vector2f getMovement() const;
+			// Convience
+			virtual sf::Vector2f getCenter() const { return bounds.center; };
 			virtual BoundingBox& getBounds() { return bounds; }
 		protected:
 			virtual void updatePosition();
 			virtual void finalize(){};
 			sf::Vector2f position;
+			sf::Vector2f movement;
 			BoundingBox bounds;
 			bool toBeRemoved;
 			EntityWorldInterface* world;

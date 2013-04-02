@@ -145,9 +145,63 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	entities.drawGUI(target);
 }
 
-bool BurglaryState::isPathBlocked(const sf::Vector2f start, const sf::Vector2f end)
+RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& end) const
 {
-	return tileMap.isPathBlocked(sf::Vector2i(start),sf::Vector2i(end));
+	RaycastResult returnValue;
+	returnValue.startPoint = start;
+	returnValue.endPoint   = end;
+	returnValue.obstructed = false;
+	
+	// Based on Bresenham's line algorithm
+	int dx =  abs(end.x - start.x)+1, sx = start.x < end.x ? 1 : -1;
+	int dy = -abs(end.y - start.y)-1, sy = start.y < end.y ? 1 : -1; 
+	int err = dx + dy, e2;
+	int x = start.x;
+	int y = start.y;
+	int endX = end.x;
+	int endY = end.y;
+
+	for(;;)
+	{
+		if(tileMap.isBlocked(sf::Vector2f(x,y)))
+		{
+			returnValue.endPoint = sf::Vector2f(x, y);
+			returnValue.obstructed = true;
+			break;
+		}
+		if(sx == +1 && x >= endX) break;
+		if(sx == -1 && x <= endX) break;
+		if(sy == +1 && y >= endY) break;
+		if(sy == -1 && y <= endY) break;
+		e2 = 2 * err;
+		if (e2 > dy) { err += dy; x += sx; }
+		if (e2 < dx) { err += dx; y += sy; }
+	}
+	
+	returnValue.ray = returnValue.endPoint - returnValue.startPoint;
+	return std::move(returnValue);
+	// Buggy and no time to find out why
+	/*float xDistance = abs(start.x - end.x);
+	float yDistance = abs(start.y - end.y);
+	
+	//float xSteps = xDistance/tileMap.getGridSize().x;
+	//float ySteps = yDistance/tileMap.getGridSize().y;
+	float xSteps = xDistance;
+	float ySteps = yDistance;
+	float steps  = std::max(xSteps, ySteps);
+	
+	sf::Vector2f step = (start-end)/steps;
+	sf::Vector2f curPos = start;
+	for(int i=0; i < steps; i++)
+	{
+		curPos += step;
+		if(tileMap.isBlocked(curPos))
+		{
+			returnValue.endPoint = curPos;
+			returnValue.obstructed = true;
+			break;
+		}
+	}*/
 }
 
 void BurglaryState::addEntity(Entity* toAdd)
@@ -178,27 +232,21 @@ Entity* BurglaryState::getNamedEntity(const std::string& name)
 
 bool BurglaryState::isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const
 {
-	bool a=tileMap.isBlocked(sf::Vector2i(bounds.position+movement));
-	bool b=tileMap.isBlocked(sf::Vector2i(bounds.position+bounds.size+movement));
-	bool c=tileMap.isBlocked(sf::Vector2i(bounds.position+sf::Vector2f(bounds.size.x, 0)+movement));
-	bool d=tileMap.isBlocked(sf::Vector2i(bounds.position+sf::Vector2f(0, bounds.size.y)+movement));
+	bool a=tileMap.isBlocked(bounds.position+movement);
+	bool b=tileMap.isBlocked(bounds.position+bounds.size+movement);
+	bool c=tileMap.isBlocked(bounds.position+sf::Vector2f(bounds.size.x, 0)+movement);
+	bool d=tileMap.isBlocked(bounds.position+sf::Vector2f(0, bounds.size.y)+movement);
 	return (a || b || c || d) == false;
-}
-
-RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision) const
-{
-	// TODO
-	return RaycastResult();
 }
 
 void BurglaryState::blockTileAt(const sf::Vector2f& pos)
 {
-	tileMap.markAsBlocked(sf::Vector2i(pos));
+	tileMap.markAsBlocked(pos);
 }
 
 void BurglaryState::unblockTileAt(const sf::Vector2f& pos)
 {
-	tileMap.unblock(sf::Vector2i(pos));
+	tileMap.unblock(pos);
 }
 
 void BurglaryState::addGoal()

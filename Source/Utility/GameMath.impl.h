@@ -1,17 +1,18 @@
-
-#ifndef BLACKGUARD_GAME_MATH_IMPL_H
-#define BLACKGUARD_GAME_MATH_IMPL_H
-
-
-
+#include "GameMath.h"
+#include <cmath>
 
 namespace Blackguard
 {
 	namespace Utility
 	{
+		template <typename T> float VectorLength(const sf::Vector2<T>& source)
+		{
+			return sqrt((source.x * source.x) + (source.y * source.y));
+		}
+		
 		template <typename T> sf::Vector2<T> VectorNormalize(const sf::Vector2<T>& source)
 		{
-			float length = sqrt((source.x * source.x) + (source.y * source.y));
+			float length = VectorLength(source);
 			if (length != 0)
 				return sf::Vector2<T>(source.x / length, source.y / length);
 			else
@@ -36,7 +37,14 @@ namespace Blackguard
 		#ifdef WIN32
 			#pragma warning(pop)
 		#endif
+		
+		template <typename T> float Angle(const sf::Vector2<T>& a, const sf::Vector2<T>& b)
+		{
+			return atan2(b.y - a.y, b.x - a.x);
+		};
+		template <typename T> float Distance(const sf::Vector2<T>& a, const sf::Vector2<T>& b)
+		{
+			return VectorLength(a - b);
+		};
 	}
 }
-
-#endif

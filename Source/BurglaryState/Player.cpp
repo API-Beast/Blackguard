@@ -50,6 +50,7 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
+	Entity::update(deltaTime);
 	float speed = 64.f;
 	if(this->isRunning)
 		speed = 128.f;

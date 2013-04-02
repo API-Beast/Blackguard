@@ -97,25 +97,6 @@ void TileMap::drawShadows(sf::RenderTarget* target, sf::RenderStates states) con
 	drawLayers(shadowLayers, target, states);
 }
 
-bool TileMap::isPathBlocked(sf::Vector2i start, sf::Vector2i end)
-{
-	// Based on Bresenham's line algorithm
-	int dx =  abs(end.x - start.x), sx = start.x < end.x ? 1 : -1;
-	int dy = -abs(end.y - start.y), sy = start.y < end.y ? 1 : -1; 
-	int err = dx + dy, e2;
-	int x = start.x;
-	int y = start.y;
-
-	for(;;){
-		if(isBlocked(sf::Vector2i(x,y)))
-			return true;
-		if (x == end.x && y == end.y) return false;
-		e2 = 2 * err;
-		if (e2 > dy) { err += dy; x += sx; }
-		if (e2 < dx) { err += dx; y += sy; }
-	}
-}
-
 void TileMap::drawLayers(const vector< TileLayer >& layers, sf::RenderTarget* target, sf::RenderStates states) const
 {
 	sf::Vector2u viewportSize = target->getSize();
@@ -322,7 +303,7 @@ void TileMap::loadFromFile(const std::string& fileName)
 	while(curElement=curElement->NextSiblingElement());
 }
 
-bool TileMap::isBlocked(sf::Vector2i pos) const
+bool TileMap::isBlocked(sf::Vector2f pos) const
 {
 	return isBlockedByTile(pos.x / gridWidth, pos.y / gridHeight); 
 }
@@ -332,7 +313,7 @@ bool TileMap::isBlockedByTile(int x, int y) const
 	return blockingLayer.getTile(x, y) > 0;
 }
 
-void TileMap::markAsBlocked(sf::Vector2i pos)
+void TileMap::markAsBlocked(sf::Vector2f pos)
 {
 	markAsBlockedByTile(pos.x / gridWidth, pos.y / gridHeight);
 }
@@ -349,7 +330,7 @@ void TileMap::markAsBlockedByTile(int x, int y)
 	}
 }
 
-void TileMap::unblock(sf::Vector2i pos)
+void TileMap::unblock(sf::Vector2f pos)
 {
 	unblockByTile(pos.x / gridWidth, pos.y / gridHeight);
 }

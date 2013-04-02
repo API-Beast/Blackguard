@@ -82,12 +82,11 @@ public:
 	class FormatNotSupported : public std::exception{};
 public:
 	void loadFromFile(const std::string& fileName);
-	bool isBlocked(sf::Vector2i pos) const;
-	bool isPathBlocked(sf::Vector2i start, sf::Vector2i end);
+	bool isBlocked(sf::Vector2f pos) const;
 	bool isBlockedByTile(int x, int y) const;
-	void markAsBlocked(sf::Vector2i pos);
+	void markAsBlocked(sf::Vector2f pos);
 	void markAsBlockedByTile(int x, int y);
-	void unblock(sf::Vector2i pos);
+	void unblock(sf::Vector2f pos);
 	void unblockByTile(int x, int y);
 	const std::vector<TileObject>& getObjects() const;
 	sf::Vector2i getGridSize() const;

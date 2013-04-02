@@ -50,13 +50,12 @@ namespace Blackguard
 			virtual std::vector<Entity*> getEntitiesInsideRect(const Blackguard::BurglaryState::BoundingBox& area);
 			virtual std::vector<Entity*> getEntitiesInsideCircle(const Blackguard::BurglaryState::BoundingCircle& area);
 			virtual bool isMovementPossible(const BoundingBox& bounds, const sf::Vector2f& movement) const;
-			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& distance, float precision=1.5f) const;
 			virtual void blockTileAt(const sf::Vector2f& pos);
 			virtual void unblockTileAt(const sf::Vector2f& pos);
 			virtual void addGoal();
 			virtual void markGoalAsReached();
 			virtual void onReachedExit();
-			virtual bool isPathBlocked(const sf::Vector2f start, const sf::Vector2f end);
+			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& end) const;
 			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
 		private:
 			EntityManager entities;
