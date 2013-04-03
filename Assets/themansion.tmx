@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tilesetHouse" tilewidth="32" tileheight="32">
+  <image source="tilesetHouse.png" width="288" height="416"/>
+ </tileset>
+ <layer name="Kachelebene 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2cluE0EUBdCChCzCTJiVgAW7gBgEGzCD+AYDO/L/n8Er2SVahduqToht0udIV7ZkWWr7ul5VOikBAAAADHMpcjlypcpOZHeD1zVW+5GrkRuRX5GTxfNrkesbvK6xOojcjTyoci9yf4PXNVZfIl8jbyJvI68i3yKfIp83eF3/o77Z35dle0Lp40PkY5p3oY/TKbP/e+RH5Gf6ex/ovrZsTziMHEVuR+5EbkZuRZ5Enp77J7hY+mZ/X/Ke8CwtXzvPI68XebTOD3GBPE7z33Nr8gx6kebrps7LNO/iYRpnH7PUNv/LzN9bvGe2eJ4ztI93kfepf/2MvY+++d9Nmfmlj720uo9a/XreGyYrMtZ9I3+3rfM/z/3d9KeP8ji0j7H+9lvk77ScNVvmflkjZ1kf+ug3tI98Ltqpks9E0070cXpD+jhOy89F+UxUeiid1KZJHy2G9LHqXKSPf2NIH33novw39bRKzbxqk/vI9yomDSln0FknWdnPu2ukpo/1cb7aLvrYLkPvl+jjfOlju5T/XUwaM9Z7UwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArM9vrtsvXA==
+  </data>
+ </layer>
+ <layer name="Kachelebene 2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1DsKwkAUBdA0opVoJdooWiqk0ZVk/3txHqQIIUSGGcHPOXAhSF4QLtymAQAAAAAAAOAbLVNWBfdtyibllLKt8Yf+3D7lMPrtPPN+O0iILo4p3cR3yDfVx3Xm/XEfcd81+qhlqo9X2sGzPuqKbbpk3ujjfWKbbgX3+qjrnvIouNfHZ4m9W/TJ3T3qi71b9ynZPeqIvdv1Kdk9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+GVPoS0KFQ==
+  </data>
+ </layer>
+</map>
