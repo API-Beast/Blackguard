@@ -118,6 +118,7 @@ void BurglaryState::update(float deltaTime)
 void BurglaryState::draw(sf::RenderTarget* target)
 {
 	tileMap.drawBackground(target);
+	entities.drawBackground(target);
 	entities.draw(target);
 	tileMap.drawForeground(target);
 	
@@ -163,7 +164,7 @@ RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector
 
 	for(;;)
 	{
-		if(tileMap.isBlocked(sf::Vector2f(x,y)))
+		if(tileMap.isBlocked(sf::Vector2f(x, y)))
 		{
 			returnValue.endPoint = sf::Vector2f(x, y);
 			returnValue.obstructed = true;

@@ -37,10 +37,10 @@ namespace Blackguard
 				float range;
 				float obstructedRange;
 				bool isObstructed;
-				ViewRay(float angle)
+				ViewRay(float angle, float range)
 				{
 					this->angle = angle;
-					this->range = 150.f;
+					this->range = range;
 					this->obstructedRange = range;
 					this->isObstructed = false;
 				};
@@ -51,13 +51,13 @@ namespace Blackguard
 
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const;
+			virtual void drawBackground(sf::RenderTarget* target) const;
 			virtual std::string getType(){ return "Guard"; };
 			void onNoise(sf::Vector2f source);
 		protected:
 			virtual void updatePosition();
 		private:
 			bool isInView(Blackguard::BurglaryState::Entity* obj);
-			
 		private:
 			sf::Sprite graphics;
 			//std::stack<sf::Vector2f> waypoints;

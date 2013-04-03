@@ -144,6 +144,14 @@ void EntityManager::drawLight(sf::RenderTarget* target, sf::RenderStates states)
 	}
 }
 
+void EntityManager::drawBackground(sf::RenderTarget* target)
+{
+	for(auto obj : objects)
+	{
+		obj->drawBackground(target);
+	}
+}
+
 std::vector< Entity* > EntityManager::getInRect(const BoundingBox& area)
 {
 	std::vector<Entity*> retValue;

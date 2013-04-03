@@ -15,8 +15,8 @@ using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
 using namespace Blackguard::Utility;
 
-constexpr float detectionCone     = Blackguard::Utility::PI() / 6.f;
-constexpr float detectionDistance = 200.f;
+constexpr float detectionCone     = Blackguard::Utility::PI() / 4.f;
+constexpr float detectionDistance = 250.f;
 
 Guard::Guard() : Entity()
 {
@@ -26,8 +26,8 @@ Guard::Guard() : Entity()
 	bounds.size = sf::Vector2f(size.x/2, size.y/3);
 	aiState = Watching;
 	viewAngle = 0.f;
-	for(float f=0.f-detectionCone; f < 0.f+detectionCone; f+=PI()/20)
-		viewcone.push_back(f);
+	for(float f=0.f-detectionCone; f < 0.f+detectionCone; f+=PI()/80)
+		viewcone.push_back(ViewRay(f, detectionDistance));
 }
 
 Guard::~Guard()
@@ -65,13 +65,18 @@ void Guard::update(float deltaTime)
 		if(viewray.obstructedRange > deadEndDistance)
 			viewsDeadEnd = false;
 	}
-	// fucking ugly, I know
+	farLeftViewDistance = farRightViewDistance = middleViewDistance = 0;
 	int elements = viewcone.size();
-	farLeftViewDistance  = viewcone[0].obstructedRange + viewcone[1].obstructedRange;
-	farRightViewDistance = viewcone[elements-1].obstructedRange + viewcone[elements-2].obstructedRange;
-	middleViewDistance   = viewcone[elements/2].obstructedRange + viewcone[elements/2-1].obstructedRange + viewcone[elements/2+1].obstructedRange;
-	farLeftViewDistance  += VectorLength(world->raycast(getCenter(), getCenter() + AngleToVector(-detectionCone*1.1f)).ray);
-	farRightViewDistance += VectorLength(world->raycast(getCenter(), getCenter() + AngleToVector(+detectionCone*1.1f)).ray);
+	for(int i=0; i<elements/3; i++)
+		farLeftViewDistance  += viewcone[i].obstructedRange;
+	for(int i=elements/2-elements/4; i<(elements/2+elements/4); i++)
+		middleViewDistance   += viewcone[i].obstructedRange;
+	for(int i=elements-elements/3; i<elements; i++)
+		farRightViewDistance += viewcone[i].obstructedRange;
+	
+	farLeftViewDistance  /= elements/3;
+	middleViewDistance   /= elements/4;
+	farRightViewDistance /= elements/3;
 	
 	//
 	// Artificial "Intelligence"
@@ -137,18 +142,26 @@ void Guard::onNoise(sf::Vector2f source)
 void Guard::draw(sf::RenderTarget* target) const
 {
 	target->draw(graphics);
-	sf::ConvexShape viewconeShape;
-	viewconeShape.setPosition(this->getCenter());
-	viewconeShape.setPointCount(viewcone.size()+1);
-	viewconeShape.setPoint(0, sf::Vector2f(0.f, 0.f));
+}
+
+void Guard::drawBackground(sf::RenderTarget* target) const
+{
+	target->pushGLStates();
+	sf::VertexArray viewconeShape(sf::TrianglesStrip, viewcone.size()*2);
+	sf::Color color(0, 0, 0, 25);
 	for(unsigned int i=0; i < viewcone.size(); i++)
 	{
-		sf::Vector2f point = AngleToVector(viewAngle + viewcone[i].angle) * viewcone[i].obstructedRange;
-		viewconeShape.setPoint(i+1, point);
+		sf::Vector2f pointA = AngleToVector(viewAngle + viewcone[i].angle) * 10.f;
+		sf::Vector2f pointB = AngleToVector(viewAngle + viewcone[i].angle) * viewcone[i].obstructedRange;
+		//sf::Vector2f pointC = AngleToVector(viewAngle + viewcone[i+1].angle) * 10.f;
+		//sf::Vector2f pointD = AngleToVector(viewAngle + viewcone[i+1].angle) * viewcone[i].obstructedRange;
+		viewconeShape[i*2  ] = sf::Vertex(getCenter() + pointA, color);
+		viewconeShape[i*2+1] = sf::Vertex(getCenter() + pointB, color);
+		//viewconeShape[i*4+3] = sf::Vertex(getCenter() + pointC, color);
+		//viewconeShape[i*4+2] = sf::Vertex(getCenter() + pointD, color);
 	}
-	viewconeShape.setFillColor(sf::Color(255, 255, 255, 50));
-	viewconeShape.setRotation(this->viewAngle);
 	target->draw(viewconeShape);
+	target->popGLStates();
 }
 
 void Guard::updatePosition()
