@@ -60,13 +60,12 @@ Assets::Assets()
 
 void Assets::load()
 {
-	textures["TitleTest"].loadFromFile(this->getPath("TitleTest.png"));
 	textures["Player"].loadFromFile(this->getPath("player.png"));
-	textures["Stone"].loadFromFile(this->getPath("stone.png"));
-	textures["Loot"].loadFromFile(this->getPath("loot.png"));
+	textures["Stone" ].loadFromFile(this->getPath("stone.png" ));
+	textures["Loot"  ].loadFromFile(this->getPath("loot.png"  ));
 	textures["Loot/Open"].loadFromFile(this->getPath("lootOpen.png"));
 	textures["Guard"].loadFromFile(this->getPath("guard.png"));
-	textures["Exit"].loadFromFile(this->getPath("exit.png"));
+	textures["Exit" ].loadFromFile(this->getPath("exit.png" ));
 	textures["Light"].loadFromFile(this->getPath("light.png"));
 	textures["Light/Ambient"].loadFromFile(this->getPath("lightAmbient.png"));
 	textures["Light/Stripes"].loadFromFile(this->getPath("lightStripes.png"));
@@ -74,6 +73,9 @@ void Assets::load()
 	textures["Light/Window" ].loadFromFile(this->getPath("lightWindow.png" ));
 	textures["Light/Torch"  ].loadFromFile(this->getPath("lightTorch.png"  ));
 	textures["Light/Smooth" ].loadFromFile(this->getPath("lightSmooth.png" ));
+	// Tilesets
+	textures["tilesetHouse.png"].loadFromFile(this->getPath("tilesetHouse.png"));
+	textures["shadows.png"].loadFromFile(this->getPath("shadows.png"));
 }
 
 std::string Assets::getPath(const std::string& path) const
