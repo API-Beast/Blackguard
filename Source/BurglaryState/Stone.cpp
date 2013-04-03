@@ -67,21 +67,7 @@ void Stone::setPosition(const sf::Vector2f& pos)
 void Stone::makeNoise()
 {
 	noiseMade = true;
-	std::vector<Entity*> entities = this->world->getEntitiesInsideCircle(BoundingCircle(this->position,STONE_NOISE_RADIUS));
-	this->indicatorFadeout = 255;
-	indicator = sf::CircleShape(STONE_NOISE_RADIUS,60U);
-	indicator.setFillColor(sf::Color(0,0,0,0));
-	indicator.setOutlineThickness(2);
-	indicator.setOutlineColor(sf::Color(255,0,0,indicatorFadeout));
-	indicator.setPosition(this->position - sf::Vector2f(STONE_NOISE_RADIUS,STONE_NOISE_RADIUS) + this->bounds.offset);
-	for(auto ent : entities)
-	{
-		if(ent->getType() == "Guard")
-		{
-			Guard* guard = (Guard*)ent;
-			guard->onNoise(this->position);
-		}
-	}
+	this->world->createNoise(STONE_NOISE_RADIUS,this->position);
 }
 
 void Stone::onHitWall()

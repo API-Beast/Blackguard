@@ -21,9 +21,9 @@ namespace Blackguard
 		template <typename T> sf::Vector2<T> VectorFloor(const sf::Vector2<T>& source);
 		template <typename T> float Angle(const sf::Vector2<T>& A, const sf::Vector2<T>& B);
 		template <typename T> float Distance(const sf::Vector2<T>& A, const sf::Vector2<T>& B);
-		constexpr double PI() { return std::atan(1)*4; }
+		inline double PI() { return std::atan(1)*4; }
 		bool InsideAngle(float angle, float minAngle, float maxAngle);
-		constexpr float NormalizeAngle(float angle);
+		float NormalizeAngle(float angle);
 		sf::Vector2f AngleToVector(float angle);
 	}
 }

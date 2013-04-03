@@ -1,6 +1,6 @@
 #include "GameMath.h"
 
-constexpr float Blackguard::Utility::NormalizeAngle(float angle)
+float Blackguard::Utility::NormalizeAngle(float angle)
 {
 	return std::fmod(PI()*2 + std::fmod(angle, PI()*2), PI()*2);
 }

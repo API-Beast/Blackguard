@@ -118,6 +118,7 @@ void BurglaryState::update(float deltaTime)
 		player->setMovingDirection(dir);
 		player->setRunning(running);
 	}
+	noiseSystem.update(this);
 	entities.update(deltaTime);
 }
 
@@ -126,6 +127,7 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	tileMap.drawBackground(target);
 	entities.drawBackground(target);
 	entities.draw(target);
+	noiseSystem.draw(target);
 	tileMap.drawForeground(target);
 	
 	targetLight.setView(Game::instance->getWindow()->getView());
@@ -211,6 +213,11 @@ RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector
 	}*/
 }
 
+void BurglaryState::createNoise(float radius, sf::Vector2f position)
+{
+	noiseSystem.createNoise(radius,position);
+}
+
 void BurglaryState::addEntity(Entity* toAdd)
 {
 	entities.add(toAdd);
@@ -279,6 +286,7 @@ void BurglaryState::loadLevel(const std::string& level)
 	//delete entities;
 	//entities = new EntityManager();
 	entities.clear();
+	noiseSystem.clear();
 	numberOfGoals = 0;
 	reachedGoals  = 0;
 	
@@ -312,6 +320,7 @@ void BurglaryState::loadLevel(const std::string& level)
 	}
 	player = dynamic_cast<Player*>(entities.getNamed("player"));
 	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
+
 	reachedEndOfLevel = false;
 }
 

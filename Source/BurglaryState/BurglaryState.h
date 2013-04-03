@@ -27,6 +27,7 @@
 #include "../PathFinder.h"
 #include "EntityManager.h"
 #include "EntityWorldInterface.h"
+#include "NoiseSystem.h"
 
 namespace Blackguard
 {
@@ -55,6 +56,7 @@ namespace Blackguard
 			virtual void addGoal();
 			virtual void markGoalAsReached();
 			virtual void onReachedExit();
+			virtual void createNoise(float radius, sf::Vector2f position);
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& end) const;
 			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
 		private:
@@ -62,6 +64,7 @@ namespace Blackguard
 			Player* player;
 			TileMap tileMap;
 			PathFinder pathFinder;
+			NoiseSystem noiseSystem;
 			sf::RenderTexture targetLight;
 			int numberOfGoals;
 			int reachedGoals;

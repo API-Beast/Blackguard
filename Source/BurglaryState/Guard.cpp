@@ -15,8 +15,8 @@ using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
 using namespace Blackguard::Utility;
 
-constexpr float detectionCone     = Blackguard::Utility::PI() / 4.f;
-constexpr float detectionDistance = 250.f;
+const float detectionCone     = Blackguard::Utility::PI() / 4.f;
+const float detectionDistance = 250.f;
 
 Guard::Guard() : Entity()
 {
@@ -52,7 +52,7 @@ void Guard::update(float deltaTime)
 	Entity::update(deltaTime);
 	
 	// Update viewcone
-	static constexpr float deadEndDistance=100.f;
+	static const float deadEndDistance=100.f;
 	viewsDeadEnd = true;
 	for(ViewRay& viewray : viewcone)
 	{

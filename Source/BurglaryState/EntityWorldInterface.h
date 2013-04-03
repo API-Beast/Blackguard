@@ -55,6 +55,7 @@ namespace Blackguard
 			virtual void markGoalAsReached()=0;
 			virtual void onReachedExit()=0;
 			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end)=0;
+			virtual void createNoise(float radius, sf::Vector2f position)=0;
 		};
 	}
 }
