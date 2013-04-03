@@ -73,6 +73,12 @@ bool BurglaryState::processEvent(sf::Event& event)
 			player->throwStone(pos);
 			printf("x: %f | y: %f\n",pos.x,pos.y);
 		}
+		if(event.key.code >= sf::Keyboard::F1 && event.key.code <= sf::Keyboard::F12)
+		{
+			int level = event.key.code - sf::Keyboard::F1;
+			if(level < levels.size())
+				loadLevel(levels[level]);
+		}
 		/*
 		if(event.key.code == sf::Keyboard::K)
 		{
