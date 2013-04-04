@@ -16,6 +16,7 @@ Stone::Stone()
 	this->shadow.setTexture(Game::instance->assets.textures["Stone/Shadow"]);
 	auto size = graphics.getTexture()->getSize();
 	this->bounds.size = sf::Vector2f(size.x, size.y);
+	stoneHit = sf::Sound(Game::instance->assets.sounds["stone_hit"]);
 }
 
 void Stone::update(float deltaTime)
@@ -50,6 +51,7 @@ void Stone::drawBackground(sf::RenderTarget* target) const
 
 void Stone::makeNoise()
 {
+	stoneHit.play();
 	this->world->createNoise(Utility::VectorLength(speed), getCenter());
 }
 

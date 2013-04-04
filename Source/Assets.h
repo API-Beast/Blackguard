@@ -23,6 +23,7 @@
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <map>
 #include "config.h"
 
@@ -36,6 +37,7 @@ namespace Blackguard
 		std::string getPath(const std::string&) const;
 	public:
 		std::map<std::string, sf::Texture> textures;
+		std::map<std::string, sf::SoundBuffer> sounds;
 		sf::Font font;
 		std::string path;
 	};

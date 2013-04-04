@@ -78,6 +78,8 @@ void Assets::load()
 	// Tilesets
 	textures["tilesetHouse.png"].loadFromFile(this->getPath("tilesetHouse.png"));
 	textures["shadows.png"].loadFromFile(this->getPath("shadows.png"));
+
+	sounds["stone_hit"].loadFromFile(this->getPath("stone_hit.wav"));
 	
 	font.loadFromFile(this->getPath("GenBasBl.ttf"));
 }

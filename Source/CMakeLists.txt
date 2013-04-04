@@ -1,4 +1,4 @@
-find_package(SFML REQUIRED COMPONENTS System Window Graphics)
+find_package(SFML REQUIRED COMPONENTS System Window Graphics Audio)
 
 include_directories(${SFML_INCLUDE_DIR})
 

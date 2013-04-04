@@ -4,6 +4,8 @@
 
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/Sound.hpp>
+
 
 namespace Blackguard
 {
@@ -27,6 +29,7 @@ namespace Blackguard
 			float height;
 			sf::Sprite graphics;
 			sf::Sprite shadow;
+			sf::Sound stoneHit;
 		};
 	}
 }

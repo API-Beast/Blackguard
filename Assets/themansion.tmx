@@ -5,7 +5,7 @@
   <image source="tilesetHouse.png" width="288" height="416"/>
  </tileset>
  <tileset firstgid="118" name="Hints" tilewidth="32" tileheight="32">
-  <image source="Hints.png" width="96" height="32"/>
+  <image source="Hints.png" width="96" height="64"/>
  </tileset>
  <layer name="Base" width="100" height="100">
   <data encoding="base64">
@@ -24,17 +24,17 @@
  </layer>
  <objectgroup name="Objects" width="100" height="100">
   <object name="player" type="Player" gid="120" x="437" y="699"/>
-  <object type="Loot" gid="119" x="1400" y="992"/>
-  <object type="Loot" gid="119" x="1452" y="992"/>
-  <object type="Loot" gid="119" x="1519" y="427"/>
-  <object type="Loot" gid="119" x="1239" y="561"/>
-  <object type="Loot" gid="119" x="908" y="560"/>
-  <object type="Loot" gid="119" x="591" y="685"/>
-  <object type="Loot" gid="119" x="628" y="684"/>
-  <object type="Loot" gid="119" x="1525" y="876"/>
-  <object type="Loot" gid="119" x="1236" y="981"/>
-  <object type="Loot" gid="119" x="1513" y="916"/>
-  <object type="Loot" gid="119" x="915" y="981"/>
+  <object type="Loot" gid="119" x="1408" y="992"/>
+  <object type="Loot" gid="119" x="1440" y="992"/>
+  <object type="Loot" gid="119" x="1536" y="416"/>
+  <object type="Loot" gid="119" x="1248" y="544"/>
+  <object type="Loot" gid="119" x="896" y="544"/>
+  <object type="Loot" gid="119" x="608" y="672"/>
+  <object type="Loot" gid="119" x="640" y="672"/>
+  <object type="Loot" gid="119" x="1536" y="896"/>
+  <object type="Loot" gid="119" x="1248" y="992"/>
+  <object type="Loot" gid="119" x="1536" y="928"/>
+  <object type="Loot" gid="119" x="896" y="992"/>
   <object type="Guard" gid="118" x="1184" y="795"/>
   <object type="Guard" gid="118" x="949" y="785"/>
   <object type="Guard" gid="118" x="1417" y="661"/>
