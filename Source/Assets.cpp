@@ -62,6 +62,8 @@ void Assets::load()
 {
 	textures["Player"].loadFromFile(this->getPath("player.png"));
 	textures["Stone" ].loadFromFile(this->getPath("stone.png" ));
+	textures["Stone/Shadow"].loadFromFile(this->getPath("stoneShadow.png" ));
+	textures["Noise" ].loadFromFile(this->getPath("Noise.png" ));
 	textures["Loot"  ].loadFromFile(this->getPath("loot.png"  ));
 	textures["Loot/Open"].loadFromFile(this->getPath("lootOpen.png"));
 	textures["Guard"].loadFromFile(this->getPath("guard.png"));

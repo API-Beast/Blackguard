@@ -3,75 +3,80 @@
 #include "EntityWorldInterface.h"
 #include "Guard.h"
 #include "../Game.h"
+#include "../Utility/GameMath.h"
 
+#include <iostream>
+
+using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
-
-#define STONE_NOISE_RADIUS 100
 
 Stone::Stone()
 {
-	isHidden = true;
-	isFlying = false;
-	noiseMade = false;
 	this->graphics.setTexture(Game::instance->assets.textures["Stone"]);
+	this->shadow.setTexture(Game::instance->assets.textures["Stone/Shadow"]);
 	auto size = graphics.getTexture()->getSize();
-	this->bounds.offset = sf::Vector2f(size.x - size.x / 2, size.y - size.y / 2);
 	this->bounds.size = sf::Vector2f(size.x, size.y);
-	indicatorFadeout = 255;
 }
 
 void Stone::update(float deltaTime)
 {
-	if(isFlying) {
-		this->move(Utility::VectorUnitAxis(target - this->position));
-		if(this->position == target) {
-			isFlying = false;
-			if(!noiseMade) this->makeNoise();
+	if(Utility::VectorLength(speed) > 0.f)
+	{
+		height -= 2.0f*deltaTime;
+		if(height <= 0)
+		{
+			height = 0;
+			speed = sf::Vector2f(0.f, 0.f);
 		}
-	}
-	if(this->indicatorFadeout > 0) {
-		indicator.setOutlineColor(sf::Color(255,0,0,indicatorFadeout));
-		this->indicatorFadeout -= 5;
+		this->move(speed*deltaTime);
 	}
 }
 
-void Stone::toss(sf::Vector2f targetPoint)
+void Stone::toss(sf::Vector2f speed)
 {
-	target = Utility::VectorFloor(targetPoint);
-	isHidden = false;
-	isFlying = true;
-	noiseMade = false;
+	height = 1.f;
+	this->speed = speed;
 }
 
 void Stone::draw(sf::RenderTarget* target) const
 {
-	if(!isHidden)
-	{
-		target->draw(graphics);
-		target->draw(indicator);
-	}
+	target->draw(graphics);
 }
 
-void Stone::move(const sf::Vector2f& pos)
+void Stone::drawBackground(sf::RenderTarget* target) const
 {
-	Entity::move(pos);
-	graphics.setPosition(position);
-}
-
-void Stone::setPosition(const sf::Vector2f& pos)
-{
-	Entity::setPosition(pos);
-	graphics.setPosition(position);
+	target->draw(shadow);
 }
 
 void Stone::makeNoise()
 {
-	noiseMade = true;
-	this->world->createNoise(STONE_NOISE_RADIUS,this->position);
+	this->world->createNoise(Utility::VectorLength(speed), getCenter());
+}
+
+void Stone::updatePosition()
+{
+	Blackguard::BurglaryState::Entity::updatePosition();
+	graphics.setPosition(this->position.x, this->position.y-height*height*15);
+	shadow.setPosition(this->position);
 }
 
 void Stone::onHitWall()
 {
-	isFlying = false;
-	if(!noiseMade) this->makeNoise();
+	this->makeNoise();
+	speed = speed*(-0.3f);
 }
+
+void Stone::onHitWallSideways(bool y)
+{
+	if(y)
+	{
+		makeNoise();
+		speed.y = speed.y*(-0.3f);
+	}
+	else
+	{
+		makeNoise();
+		speed.x = speed.x*(-0.3f);
+	}
+}
+

@@ -35,13 +35,13 @@ Player::Player() : Entity()
 {
 	this->graphics.setTexture(Game::instance->assets.textures["Player"]);
 	auto size = graphics.getTexture()->getSize();
-	this->bounds.offset = sf::Vector2f(size.x/4, size.y*(2/3.f));
-	this->bounds.size = sf::Vector2f(size.x/2, size.y/3);
+	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
+	bounds.size = sf::Vector2f(size.x/2, size.y/4);
 	this->isMoving = false;
 	this->isRunning = false;
 	this->movingDir = South;
 	this->activationArea.size = sf::Vector2f(25, 25);
-	stone = nullptr;
+	lastStoneThrown = 0.f;
 }
 
 Player::~Player()
@@ -50,7 +50,6 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
-	Entity::update(deltaTime);
 	float speed = 64.f;
 	if(this->isRunning)
 		speed = 128.f;
@@ -58,6 +57,8 @@ void Player::update(float deltaTime)
 	auto movementVector = DirToVector(movingDir) * speed * deltaTime;
 	if(this->isMoving)
 		this->move(movementVector);
+	
+	lastStoneThrown += deltaTime;
 }
 
 void Player::draw(sf::RenderTarget* target) const
@@ -108,13 +109,15 @@ void Player::setRunning(bool running)
 	this->isRunning = running;
 }
 
-void Player::throwStone(sf::Vector2f target)
+void Player::throwStone()
 {
-	if(stone == nullptr) { // This is sooo baaaad but we don't have a proper init method..
-		stone = new Stone();
+	if(lastStoneThrown > 1.f)
+	{
+		Stone* stone = new Stone();
 		stone->setWorldInterface(world);
 		world->addEntity(stone);
+		stone->setPosition(this->getCenter());
+		stone->toss(DirToVector(movingDir) * 512.f);
+		lastStoneThrown = 0.f;
 	}
-	stone->setPosition(Utility::VectorFloor(this->position));
-	stone->toss(target);
 }

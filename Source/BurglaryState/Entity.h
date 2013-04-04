@@ -79,6 +79,7 @@ namespace Blackguard
 			virtual void initializeFromTileObject(const TileObject&){};
 			// 
 			virtual void onHitWall(){};
+			virtual void onHitWallSideways(bool y){};
 			// Setter:
 			virtual void move(const sf::Vector2f& pos);
 			virtual void setPosition(const sf::Vector2f& pos);

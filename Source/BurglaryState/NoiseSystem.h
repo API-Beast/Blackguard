@@ -9,22 +9,25 @@ namespace Blackguard
 {
 	namespace BurglaryState
 	{
-		struct Noise : public BoundingCircle
+		struct Noise
 		{
 		public:
-			float animFadeout;
+			sf::Vector2f position;
+			float radius;
+			float time;
 		};
 
 		class NoiseSystem
 		{
 		public:
 			void createNoise(float radius, sf::Vector2f position); 
-			void update(EntityWorldInterface* world);
+			void update(float deltaTime);
 			void draw(sf::RenderTarget* target);
 			void clear();
 		private:
-			std::stack<Noise> noiseData;
-			std::vector<sf::CircleShape> indicatorData;
+			std::vector<Noise> noiseData;
+			sf::Sprite graphics;
+			float graphicsSize;
 		};
 	}
 }

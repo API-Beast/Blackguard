@@ -22,8 +22,8 @@ Guard::Guard() : Entity()
 {
 	graphics = sf::Sprite(Game::instance->assets.textures["Guard"]);
 	sf::Vector2u size = graphics.getTexture()->getSize();
-	bounds.offset = sf::Vector2f(size.x/4, size.y*(2/3.f));
-	bounds.size = sf::Vector2f(size.x/2, size.y/3);
+	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
+	bounds.size = sf::Vector2f(size.x/2, size.y/4);
 	aiState = Watching;
 	viewAngle = 0.f;
 	for(float f=0.f-detectionCone; f < 0.f+detectionCone; f+=PI()/80)

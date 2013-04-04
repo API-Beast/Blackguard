@@ -74,12 +74,14 @@ void Entity::move(const sf::Vector2f& movement)
 		this->position += horizontalMovement;
 		this->movement += horizontalMovement;
 		this->updatePosition();
+		this->onHitWallSideways(true);
 	}
 	else if(world->isMovementPossible(bounds, verticalMovement) && std::abs(verticalMovement.y) > 0)
 	{
 		this->position += verticalMovement;
 		this->movement += verticalMovement;
 		this->updatePosition();
+		this->onHitWallSideways(false);
 	}
 	else
 		this->onHitWall();

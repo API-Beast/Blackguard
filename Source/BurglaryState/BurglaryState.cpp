@@ -79,19 +79,18 @@ BurglaryState::~BurglaryState()
 
 bool BurglaryState::processEvent(sf::Event& event)
 {
+	if(levelTime < 1.f) return false;
 	if(event.type == sf::Event::KeyPressed)
 	{
-		if(event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::E)
+		if(event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::C)
 		{
 			if(player)
 				player->activate();
 			return true;
 		}
-		if(event.key.code == sf::Keyboard::Q)
+		if(event.key.code == sf::Keyboard::X)
 		{
-			sf::Vector2f pos = Game::instance->getWindow()->mapPixelToCoords(sf::Mouse::getPosition(*Game::instance->getWindow()));
-			player->throwStone(pos);
-			printf("x: %f | y: %f\n",pos.x,pos.y);
+			player->throwStone();
 		}
 		if(event.key.code >= sf::Keyboard::F1 && event.key.code <= sf::Keyboard::F12)
 		{
@@ -119,6 +118,7 @@ bool BurglaryState::processEvent(sf::Event& event)
 void BurglaryState::update(float deltaTime)
 {
 	levelTime += deltaTime;
+	if(levelTime < 1.f) return;
 	if(reachedEndOfLevel)
 	{
 		curLevel++;
@@ -144,7 +144,7 @@ void BurglaryState::update(float deltaTime)
 		player->setMovingDirection(dir);
 		player->setRunning(running);
 	}
-	noiseSystem.update(this);
+	noiseSystem.update(deltaTime);
 	entities.update(deltaTime);
 	
 	if(player)

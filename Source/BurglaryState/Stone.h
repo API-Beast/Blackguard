@@ -15,20 +15,18 @@ namespace Blackguard
 			Stone();
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const;
+			virtual void drawBackground(sf::RenderTarget* target) const;
 			void toss(sf::Vector2f targetPoint);
 			virtual void onHitWall();
-			virtual void move(const sf::Vector2f& pos);
-			virtual void setPosition(const sf::Vector2f& pos);
+			virtual void onHitWallSideways(bool y);
+			virtual void updatePosition();
 		private:
 			void makeNoise();
 		private:
-			bool isHidden;
-			bool isFlying;
-			bool noiseMade;
-			sf::Vector2f target;
+			sf::Vector2f speed;
+			float height;
 			sf::Sprite graphics;
-			sf::CircleShape indicator;
-			float indicatorFadeout;
+			sf::Sprite shadow;
 		};
 	}
 }

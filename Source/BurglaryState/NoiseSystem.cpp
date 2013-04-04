@@ -2,63 +2,49 @@
 #include <vector>
 #include "EntityWorldInterface.h"
 #include "Guard.h"
+#include "../Game.h"
 
+using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
 
 void NoiseSystem::createNoise(float radius, sf::Vector2f position)
 {
+	if(radius < 100.f)
+		return;
 	Noise noise;
 	noise.position = position;
 	noise.radius = radius;
-	noise.animFadeout = 255;
-	noiseData.push(noise);
+	noise.time = 0.f;
+	noiseData.push_back(noise);
+	sf::Texture& tex = Game::instance->assets.textures["Noise"];
+	graphics.setTexture(tex);
+	graphicsSize = tex.getSize().x;
 }
 
-void NoiseSystem::update(EntityWorldInterface* world)
+void NoiseSystem::update(float deltaTime)
 {
-	for(auto& indicator : indicatorData)
+	for(Noise& noise : noiseData)
 	{
-		float fadeOutVal = indicator.getOutlineColor().a;
-		indicator.setOutlineColor(sf::Color(255,0,0,fadeOutVal - 5));
+		noise.time+=deltaTime;
 	}
-
-	indicatorData.erase(std::remove_if(indicatorData.begin(), indicatorData.end(), [](const sf::CircleShape& indicator){ return indicator.getOutlineColor().a <= 0; }),indicatorData.end());
-
-	if(noiseData.size() > 0)
-	{
-		while(noiseData.size() > 0)
-		{
-			Noise noise = noiseData.top();
-			std::vector<Entity*> entities = world->getEntitiesInsideCircle(BoundingCircle(noise.position,noise.radius));
-			sf::CircleShape indicator = sf::CircleShape(noise.radius,60U);
-			indicator.setFillColor(sf::Color(0,0,0,0));
-			indicator.setOutlineThickness(2);
-			indicator.setOutlineColor(sf::Color(255,0,0,255));
-			indicator.setPosition(noise.position - sf::Vector2f(noise.radius,noise.radius));
-			for(auto ent : entities)
-			{
-				if(ent->getType() == "Guard")
-				{
-					Guard* guard = (Guard*)ent;
-					guard->onNoise(noise.position);
-				}
-			}
-			indicatorData.push_back(indicator);
-			noiseData.pop();
-		}
-	}
+	auto it=std::remove_if(noiseData.begin(), noiseData.end(), [](const Noise& a){ return a.time>0.5f; });
+	noiseData.erase(it, noiseData.end());
 }
 
 void NoiseSystem::clear()
 {
-	noiseData = std::stack<Noise>();
-	indicatorData.clear();
+	noiseData.clear();
 }
 
 void NoiseSystem::draw(sf::RenderTarget* target)
 {
-	for(auto indicator : indicatorData)
+	for(const Noise& noise : noiseData)
 	{
-		target->draw(indicator);
+		graphics.setScale(noise.radius/graphicsSize*noise.time, noise.radius/graphicsSize*noise.time);
+		sf::Vector2f origin = sf::Vector2f(graphics.getLocalBounds().width/2, graphics.getLocalBounds().height/2);
+		graphics.setOrigin(origin);
+		graphics.setPosition(noise.position);
+		graphics.setColor(sf::Color(255, 255, 255, 255-255*(noise.time*2)));
+		target->draw(graphics);
 	}
 }
