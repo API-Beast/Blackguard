@@ -48,16 +48,14 @@ namespace Blackguard
 		public:
 			Guard();
 			~Guard();
-
 			virtual void update(float deltaTime);
 			virtual void draw(sf::RenderTarget* target) const;
 			virtual void drawBackground(sf::RenderTarget* target) const;
 			virtual std::string getType(){ return "Guard"; };
-			void onNoise(sf::Vector2f source);
+			virtual bool activate(Player& activator);
 		protected:
 			virtual void updatePosition();
 		private:
-			void changeStateTo(AIState newState);
 			bool isInView(Blackguard::BurglaryState::Entity* obj);
 		private:
 			sf::Sprite graphics;

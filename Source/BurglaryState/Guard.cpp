@@ -141,11 +141,6 @@ void Guard::update(float deltaTime)
 	}
 }
 
-void Guard::onNoise(sf::Vector2f source)
-{
-	// TODO
-}
-
 void Guard::draw(sf::RenderTarget* target) const
 {
 	target->draw(graphics);
@@ -175,4 +170,11 @@ void Guard::updatePosition()
 {
 	Blackguard::BurglaryState::Entity::updatePosition();
 	graphics.setPosition(position);
+}
+
+bool Guard::activate(Player& activator)
+{
+	this->remove();
+	// TODO Leave unconscious guard
+	return true;
 }
