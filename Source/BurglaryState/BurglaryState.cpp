@@ -337,7 +337,7 @@ void BurglaryState::onReachedExit()
 	reachedEndOfLevel = true;
 }
 
-void BurglaryState::BurglaryState::onPlayerWasCatched()
+void BurglaryState::onPlayerWasCatched()
 {
 	guardCatchedPlayer = true;
 }
