@@ -18,6 +18,8 @@ using namespace Blackguard::Utility;
 const float detectionCone     = Blackguard::Utility::PI() / 4.f;
 const float detectionDistance = 250.f;
 
+std::map<std::string, std::vector<Guard::ViewPatternPoint> > Guard::possiblePatterns; 
+
 Guard::Guard() : Entity()
 {
 	graphics = sf::Sprite(Game::instance->assets.textures["Guard"]);
@@ -25,9 +27,46 @@ Guard::Guard() : Entity()
 	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
 	bounds.size = sf::Vector2f(size.x/2, size.y/4);
 	aiState = Watching;
-	viewAngle = 0.f;
+	defaultState = Watching;
+	viewAngle = 90.f;
 	for(float f=0.f-detectionCone; f < 0.f+detectionCone; f+=PI()/80)
 		viewcone.push_back(ViewRay(f, detectionDistance));
+	
+	if(possiblePatterns.empty())
+	{
+		std::vector<ViewPatternPoint> lightSway;
+		lightSway.push_back(ViewPatternPoint(2.f, -PI()/20));
+		lightSway.push_back(ViewPatternPoint(4.f, 0.f));
+		lightSway.push_back(ViewPatternPoint(2.f, +PI()/20));
+		lightSway.push_back(ViewPatternPoint(4.f, 0.f));
+		possiblePatterns["LightSway"] = lightSway;
+		
+		std::vector<ViewPatternPoint> strongSway;
+		strongSway.push_back(ViewPatternPoint(4.f, -PI()/7, 0.5f));
+		strongSway.push_back(ViewPatternPoint(8.f, 0.f, 0.5f));
+		strongSway.push_back(ViewPatternPoint(4.f, +PI()/7, 0.5f));
+		strongSway.push_back(ViewPatternPoint(8.f, 0.f, 0.5f));
+		possiblePatterns["StrongSway"] = strongSway;
+		
+		std::vector<ViewPatternPoint> turn;
+		turn.push_back(ViewPatternPoint(8.f, 0.f , 1.f));
+		turn.push_back(ViewPatternPoint(8.f, PI(), 1.f));
+		possiblePatterns["180Turn"] = turn;
+		
+		std::vector<ViewPatternPoint> ninety;
+		ninety.push_back(ViewPatternPoint(8.f, 0.f   , 0.7f));
+		ninety.push_back(ViewPatternPoint(8.f, PI()/2, 0.7f));
+		possiblePatterns["90Turn"] = ninety;
+		
+		std::vector<ViewPatternPoint> minusNinety;
+		ninety.push_back(ViewPatternPoint(8.f,  0.f   , 0.7f));
+		ninety.push_back(ViewPatternPoint(8.f, -PI()/2, 0.7f));
+		possiblePatterns["-90Turn"] = minusNinety;
+	}
+	this->viewPattern = possiblePatterns["LightSway"];
+
+	curViewpatternIndex = 0;
+	curViewPatternTime  = 0.f;
 }
 
 Guard::~Guard()
@@ -47,11 +86,33 @@ bool Guard::isInView(Entity* obj)
 	return true;
 }
 
+void Guard::initializeFromTileObject(const TileObject& object)
+{
+	TileObject obj = object;
+	this->home = sf::Vector2f(obj.x, obj.y);
+	if(obj.properties["behaviour"] == "Roaming")
+	{
+		this->defaultState = Roaming;
+		this->aiState = Roaming;
+	}
+	this->viewAngle = obj.rotation / 180.f * PI();
+	std::vector<Guard::ViewPatternPoint> pattern = possiblePatterns[obj.properties["viewPattern"]];
+	if(!pattern.empty())
+		viewPattern = pattern;
+	for(ViewPatternPoint& point : viewPattern)
+	{
+		point.targetAngle += this->viewAngle;
+	}
+}
+
 void Guard::update(float deltaTime)
 {
-	Entity::update(deltaTime);
-	
-	// Update viewcone
+	updateViewcone();
+	aiRoutine(deltaTime);
+}
+
+void Guard::updateViewcone()
+{
 	static const float deadEndDistance=100.f;
 	viewsDeadEnd = true;
 	for(ViewRay& viewray : viewcone)
@@ -69,20 +130,27 @@ void Guard::update(float deltaTime)
 	int elements = viewcone.size();
 	for(int i=0; i<elements/3; i++)
 		farLeftViewDistance  += viewcone[i].obstructedRange;
-	for(int i=elements/2-elements/4; i<(elements/2+elements/4); i++)
-		middleViewDistance   += viewcone[i].obstructedRange;
+	for(int i=elements/2-elements/6; i<(elements/2+elements/6); i++)
+		middleViewDistance   = std::min(viewcone[i].obstructedRange, middleViewDistance);
 	for(int i=elements-elements/3; i<elements; i++)
 		farRightViewDistance += viewcone[i].obstructedRange;
 	
 	farLeftViewDistance  /= elements/3;
-	middleViewDistance   /= elements/4;
 	farRightViewDistance /= elements/3;
+}
+
+
+// AI stands for Artificial "Intelligence"
+// Watch those " " they are important.
+void Guard::aiRoutine(float deltaTime)
+{
+	const float runningSpeed=100.f;
+	const float walkingSpeed= 50.f;
 	
-	//
-	// Artificial "Intelligence"
-	//
-	static const float movementSpeed=100.f;
-	if(aiState == Watching || aiState == ChasingOutOfView)
+	float movingSpeed=0.f;
+	sf::Vector2f movingDirection(0.f, 0.f);
+	
+	if(aiState != ChasingInView)
 	{
 		std::vector<Entity*> players=world->getEntitiesByType("Player");
 		for(Entity* player : players)
@@ -95,6 +163,28 @@ void Guard::update(float deltaTime)
 		}
 	}
 	
+	if(aiState == Watching)
+	{
+		ViewPatternPoint& point=viewPattern[curViewpatternIndex];
+		curViewPatternTime+=deltaTime;
+		if(curViewPatternTime >= point.time)
+		{
+			curViewPatternTime = 0.f;
+			curViewpatternIndex++;
+			if(curViewpatternIndex >= viewPattern.size())
+				curViewpatternIndex = 0;
+		}
+		
+		float difference=std::abs(point.targetAngle - viewAngle);
+		if(difference > 0.01f)
+		{
+			float change=std::min(float(PI())*curViewPatternTime*point.movementSpeed*deltaTime*difference*3.f, difference);
+			if(point.targetAngle > viewAngle)
+				viewAngle += change;
+			else if(point.targetAngle < viewAngle)
+				viewAngle -= change;
+		}
+	}
 	if(aiState == ChasingInView)
 	{
 		if(!isInView(currentTarget))
@@ -111,22 +201,33 @@ void Guard::update(float deltaTime)
 				}
 			}
 			currentTargetPosition = currentTarget->getCenter();
-			targetMovement = currentTarget->getMovement()/deltaTime;
+			sf::Vector2f targetMovement = currentTarget->getMovement()/deltaTime;
 			projectedTargetPosition = currentTargetPosition + targetMovement*0.2f;
-			if(world->raycast(getCenter(), projectedTargetPosition).obstructed)
-			{
-				viewAngle = Angle(getCenter(), currentTargetPosition);
-				this->move(VectorNormalize(currentTargetPosition-this->getCenter())*movementSpeed*deltaTime);
-			}
+			movingSpeed = runningSpeed;
+			viewAngle = Angle(getCenter(), currentTargetPosition);
+			// Try to intercept if possible
+			if(world->raycast(getCenter(), projectedTargetPosition).obstructed == false)
+				movingDirection = VectorNormalize(projectedTargetPosition-this->getCenter());
 			else
-			{
-				viewAngle = Angle(getCenter(), projectedTargetPosition);
-				this->move(VectorNormalize(projectedTargetPosition-this->getCenter())*movementSpeed*deltaTime);
-			}
+				movingDirection = VectorNormalize(currentTargetPosition-this->getCenter());
 		}
 	}
-	if(aiState == ChasingOutOfView)
+	if(aiState == Investigating || aiState == ChasingOutOfView)
 	{
+		movingSpeed = walkingSpeed;
+		if(aiState == ChasingOutOfView)
+		{
+			movingSpeed = runningSpeed;
+		}
+		
+	}
+	if(aiState == Panicked || aiState == Roaming)
+	{
+		movingDirection = AngleToVector(viewAngle);
+		movingSpeed = walkingSpeed;
+		if(aiState == Panicked)
+			movingSpeed = runningSpeed;
+		
 		if(farLeftViewDistance > middleViewDistance || farRightViewDistance > middleViewDistance)
 		{
 			if(farLeftViewDistance > farRightViewDistance)
@@ -137,7 +238,13 @@ void Guard::update(float deltaTime)
 		if(viewsDeadEnd)
 			viewAngle += PI()*4*deltaTime;
 		viewAngle = NormalizeAngle(viewAngle);
-		move(AngleToVector(viewAngle)*movementSpeed*deltaTime);
+	}
+	
+	//
+	
+	if(movingSpeed > 1.f)
+	{
+		this->move(movingDirection*movingSpeed*deltaTime);
 	}
 }
 

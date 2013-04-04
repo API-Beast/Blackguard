@@ -29,7 +29,9 @@ namespace Blackguard
 				ChasingInView,    // The guard is chasing it's prey, a tasty player.
 				ChasingOutOfView, // The guard doesn't see the player anymore but has a idea where he could be.
 				Investigating,    // The guard is investigating a noise.
-				Panicked          // The guard has seen & chased the player but doesn't have a clue where he is anymore.
+				Roaming,          // 
+				Panicked,         // The guard has seen & chased the player but doesn't have a clue where he is anymore.
+				MoveHome          // 
 			};
 			struct ViewRay
 			{
@@ -45,6 +47,18 @@ namespace Blackguard
 					this->isObstructed = false;
 				};
 			};
+			struct ViewPatternPoint
+			{
+				float time;
+				float targetAngle;
+				float movementSpeed;
+				ViewPatternPoint(float time, float targetAngle, float movementSpeed=0.333f)
+				{
+					this->time = time;
+					this->targetAngle = targetAngle;
+					this->movementSpeed = movementSpeed;
+				};
+			};
 		public:
 			Guard();
 			~Guard();
@@ -55,14 +69,16 @@ namespace Blackguard
 			virtual bool activate(Player& activator);
 		protected:
 			virtual void updatePosition();
+			virtual void initializeFromTileObject(const TileObject&);
 		private:
+			void aiRoutine(float deltaTime);
+			void changeAiState(AIState newState);
+			void updateViewcone();
 			bool isInView(Blackguard::BurglaryState::Entity* obj);
 		private:
 			sf::Sprite graphics;
-			//std::stack<sf::Vector2f> waypoints;
 			sf::Vector2f currentTargetPosition;
 			sf::Vector2f projectedTargetPosition;
-			sf::Vector2f targetMovement;
 			std::vector<ViewRay> viewcone;
 			bool viewsDeadEnd;
 			float middleViewDistance;
@@ -70,7 +86,18 @@ namespace Blackguard
 			float farRightViewDistance;
 			Entity* currentTarget;
 			float viewAngle;
+			
 			AIState aiState;
+			float currentStateTime;
+			
+			AIState defaultState;
+			sf::Vector2f home;
+			
+			std::vector<ViewPatternPoint> viewPattern;
+			int curViewpatternIndex;
+			float curViewPatternTime;
+			
+			static std::map<std::string, std::vector<ViewPatternPoint> > possiblePatterns;
 		};
 	}
 }

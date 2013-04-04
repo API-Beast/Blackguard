@@ -8,9 +8,9 @@
   <image source="tilesetHouse.png" width="288" height="416"/>
  </tileset>
  <tileset firstgid="118" name="Hints" tilewidth="32" tileheight="32">
-  <image source="Hints.png" width="96" height="32"/>
+  <image source="Hints.png" width="96" height="64"/>
  </tileset>
- <tileset firstgid="121" name="shadows" tilewidth="32" tileheight="32">
+ <tileset firstgid="124" name="shadows" tilewidth="32" tileheight="32">
   <image source="shadows.png" width="192" height="448"/>
  </tileset>
  <layer name="Background" width="20" height="30">
@@ -30,12 +30,16 @@
  </layer>
  <objectgroup name="Objects" width="20" height="30">
   <object type="Exit" x="575" y="384" width="32" height="64"/>
-  <object type="Guard" gid="120" x="305" y="438"/>
   <object type="Loot" gid="118" x="288" y="128"/>
   <object name="player" type="Player" gid="119" x="303" y="755"/>
   <object type="Loot" gid="118" x="320" y="128"/>
+  <object type="Guard" gid="121" x="304" y="442">
+   <properties>
+    <property name="viewPattern" value="180Turn"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup name="Lights" width="20" height="30">
+ <objectgroup name="Lights" width="20" height="30" visible="0">
   <object type="Light" x="72" y="527" width="337" height="446" rotation="-73.1909">
    <properties>
     <property name="strength" value="50"/>
