@@ -22,6 +22,7 @@
 #define GRG_ASSETS_H
 
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <map>
 #include "config.h"
 
@@ -35,6 +36,7 @@ namespace Blackguard
 		std::string getPath(const std::string&) const;
 	public:
 		std::map<std::string, sf::Texture> textures;
+		sf::Font font;
 		std::string path;
 	};
 }

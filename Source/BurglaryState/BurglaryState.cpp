@@ -50,6 +50,26 @@ BurglaryState::BurglaryState() : pathFinder(tileMap)
 	levels = std::vector<std::string>();
 	curLevel = 0;
 	reachedEndOfLevel = false;
+	
+	sf::RenderWindow* window = Game::instance->getWindow();
+	window->setView(window->getDefaultView());
+	targetLight.create(window->getSize().x, window->getSize().y);
+	camera.setSize(window->getSize());
+	
+	levelNameText.setStyle(sf::Text::Bold);
+	levelNameText.setCharacterSize(16);
+	levelNameText.setColor(sf::Color::White);
+	levelNameText.setFont(Game::instance->assets.font);
+	levelNameText.setPosition(window->mapPixelToCoords(sf::Vector2i(50, 50)));
+	
+	levelSubtext .setStyle(0);
+	levelSubtext .setCharacterSize(12);
+	levelSubtext .setColor(sf::Color::White);
+	levelSubtext .setFont(Game::instance->assets.font);
+	levelSubtext .setPosition(window->mapPixelToCoords(sf::Vector2i(50, 100)));
+	
+	blackout.setPosition(0, 0);
+	blackout.setSize(sf::Vector2f(window->getSize()));
 }
 
 BurglaryState::~BurglaryState()
@@ -98,12 +118,18 @@ bool BurglaryState::processEvent(sf::Event& event)
 
 void BurglaryState::update(float deltaTime)
 {
+	levelTime += deltaTime;
 	if(reachedEndOfLevel)
 	{
 		curLevel++;
 		if(curLevel < levels.size())
 			loadLevel(levels[curLevel]);
 		reachedEndOfLevel = false; // Just for clarification, it's set in loadLevel too.
+	}
+	if(guardCatchedPlayer)
+	{
+		reloadEntities();
+		guardCatchedPlayer = false;
 	}
 	if(player)
 	{
@@ -120,10 +146,19 @@ void BurglaryState::update(float deltaTime)
 	}
 	noiseSystem.update(this);
 	entities.update(deltaTime);
+	
+	if(player)
+	{
+		// getCenter makes the camera shake again, wtf?
+		camera.setPosition(player->getCenter());
+	}
 }
 
 void BurglaryState::draw(sf::RenderTarget* target)
 {
+	// The map
+	target->setView(camera.getViewport());
+	
 	tileMap.drawBackground(target);
 	entities.drawBackground(target);
 	entities.draw(target);
@@ -142,8 +177,7 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	toDraw.setColor(sf::Color::White);
 	target->draw(toDraw, sf::RenderStates(sf::BlendMultiply));
 	
-	
-	targetLight.setView(Game::instance->getWindow()->getView());
+	targetLight.setView(target->getView());
 	targetLight.clear(sf::Color(19, 33, 55));
 	entities.drawLight(&targetLight);
 	targetLight.display();
@@ -152,6 +186,17 @@ void BurglaryState::draw(sf::RenderTarget* target)
 	target->draw(toDraw, sf::RenderStates(sf::BlendAdd));
 	
 	entities.drawGUI(target);
+	
+	// The stuff that is drawn over the map
+	target->setView(target->getDefaultView());
+	if(levelTime < 1.f)
+	{
+		blackout.setFillColor(sf::Color(0, 0, 0, 255-255*levelTime));
+		target->draw(blackout);
+	}
+	// SFML::Text u no work?!?!
+	target->draw(levelNameText);
+	target->draw(levelSubtext);
 }
 
 RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& end) const
@@ -282,18 +327,27 @@ void BurglaryState::markGoalAsReached()
 void BurglaryState::loadLevel(const std::string& level)
 {
 	tileMap.loadFromFile(level);
-	// This doesn't work. WTF???!
-	//delete entities;
-	//entities = new EntityManager();
+	levelNameText.setString(tileMap.getProperty("Name", "moew"));
+	levelSubtext.setString(tileMap.getProperty("Subtext", "moew"));
+	reloadEntities();
+}
+
+void BurglaryState::onReachedExit()
+{
+	reachedEndOfLevel = true;
+}
+
+void BurglaryState::BurglaryState::onPlayerWasCatched()
+{
+	guardCatchedPlayer = true;
+}
+
+void BurglaryState::reloadEntities()
+{
 	entities.clear();
 	noiseSystem.clear();
 	numberOfGoals = 0;
 	reachedGoals  = 0;
-	
-	sf::RenderWindow* window = Game::instance->getWindow();
-
-	entities.addNamed("camera", new Camera(Game::instance->getWindow()));
-	targetLight.create(window->getSize().x, window->getSize().y);
 	
 	std::map<std::string, std::function<Entity*()> > factories;
 	factories["Player"] = []() -> Entity* { return new Player(); };
@@ -322,12 +376,9 @@ void BurglaryState::loadLevel(const std::string& level)
 	if(player == nullptr) cout << "WARNING: No Player named \"player\"" << endl;
 
 	reachedEndOfLevel = false;
+	levelTime = 0.f;
 }
 
-void BurglaryState::onReachedExit()
-{
-	reachedEndOfLevel = true;
-}
 
 void BurglaryState::loadLevels(const vector< string >& levels)
 {

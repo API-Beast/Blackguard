@@ -190,7 +190,9 @@ void TileMap::loadFromFile(const std::string& fileName)
   do
   {
 		std::string section = curElement->Value();
-		if(section == "tileset")
+		if(section == "properties")
+			properties = parseProperties(curElement);
+		else if(section == "tileset")
 		{
 			TileSet tileset;
 			
@@ -201,8 +203,9 @@ void TileMap::loadFromFile(const std::string& fileName)
 			tileset.lastGID    = INT_MAX;
 			
 			std::string imageSource = curElement->FirstChildElement("image")->Attribute("source");
-			imageSource = Game::instance->assets.getPath(imageSource);
-			tileset.texture.loadFromFile(imageSource);
+			//imageSource = Game::instance->assets.getPath(imageSource);
+			//tileset.texture.loadFromFile(imageSource);
+			tileset.texture = Game::instance->assets.textures[imageSource];
 			tileset.amountTilesPerRow = tileset.texture.getSize().x / tileset.tileWidth;
 			//tileset.normalizedTileWidth  = tileset.tileWidth  / float(tileset.texture.getSize().x);
 			//tileset.normalizedTileHeight = tileset.tileHeight / float(tileset.texture.getSize().y);
@@ -283,14 +286,8 @@ void TileMap::loadFromFile(const std::string& fileName)
 				
 				XMLElement* objectProperties=curObject->FirstChildElement("properties");
 				if(objectProperties)
-				{
-					XMLElement* curProperty = objectProperties->FirstChildElement("property");
-					do
-					{
-						objectDef.properties[curProperty->Attribute("name")] = curProperty->Attribute("value");
-					}
-					while(curProperty = objectProperties->NextSiblingElement("property"));
-				}
+					objectDef.properties = parseProperties(objectProperties);
+
 				objectDef.shape = TileObject::Rectangle;
 				if(curObject->FirstChildElement("ellipse"))
 					objectDef.shape = TileObject::Ellipse;
@@ -301,6 +298,19 @@ void TileMap::loadFromFile(const std::string& fileName)
 		}
 	}
 	while(curElement=curElement->NextSiblingElement());
+}
+
+map< string, string > TileMap::parseProperties(tinyxml2::XMLElement* properties)
+{
+	using namespace tinyxml2;
+	std::map<string, string> retval;
+	XMLElement* curProperty = properties->FirstChildElement("property");
+	do
+	{
+		retval[curProperty->Attribute("name")] = curProperty->Attribute("value");
+	}
+	while(curProperty = properties->NextSiblingElement("property"));
+	return std::move(retval);
 }
 
 bool TileMap::isBlocked(sf::Vector2f pos) const
@@ -356,4 +366,12 @@ const vector< TileObject >& TileMap::getObjects() const
 sf::Vector2i TileMap::getGridSize() const
 {
 	return sf::Vector2i(gridWidth, gridHeight);
+}
+
+std::string TileMap::getProperty(const string& property, const string& defaultValue) const
+{
+	auto it = properties.find(property);
+	if(it == properties.end())
+		return defaultValue;
+	return (*it).second;
 }

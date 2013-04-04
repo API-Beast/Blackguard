@@ -58,9 +58,6 @@ void Player::update(float deltaTime)
 	auto movementVector = DirToVector(movingDir) * speed * deltaTime;
 	if(this->isMoving)
 		this->move(movementVector);
-	
-	((Camera*)this->world->getNamedEntity("camera"))->setPosition(position);
-	((Camera*)this->world->getNamedEntity("camera"))->use();
 }
 
 void Player::draw(sf::RenderTarget* target) const

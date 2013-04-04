@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="25" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="Name" value="Level 3"/>
+  <property name="Subtext" value="Rock and Chase"/>
+ </properties>
  <tileset firstgid="1" name="NewHouseTileset" tilewidth="32" tileheight="32">
   <image source="tilesetHouse.png" width="288" height="416"/>
  </tileset>
@@ -33,8 +37,10 @@
   <object type="Loot" gid="119" x="256" y="128"/>
   <object type="Loot" gid="119" x="288" y="128"/>
   <object name="player" type="Player" gid="120" x="160" y="576"/>
+  <object type="Guard" gid="118" x="272" y="288"/>
+  <object type="Guard" gid="118" x="530" y="366"/>
  </objectgroup>
- <objectgroup name="Lights" width="20" height="25" opacity="0.37">
+ <objectgroup name="Lights" width="20" height="25" visible="0" opacity="0.37">
   <object type="Light" x="414" y="256" width="286" height="384">
    <properties>
     <property name="strength" value="150"/>

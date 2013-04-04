@@ -10,17 +10,15 @@ namespace Blackguard
 {
 	namespace BurglaryState
 	{
-		class Camera : public Entity
+		class Camera
 		{
 		public:
-			Camera(sf::RenderWindow* window);
-			~Camera();
-			void use();
-			virtual void move(const sf::Vector2f& pos);
-			virtual void setPosition(const sf::Vector2f& pos);
+			void setSize(const sf::Vector2u& size);
+			void setPosition(const sf::Vector2f& pos);
+			const sf::View& getViewport() const;
 		private:
-			sf::View* viewport;
-			sf::RenderWindow* window;
+			sf::View viewport;
+			sf::Vector2f position;
 		};
 	}
 }

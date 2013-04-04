@@ -28,11 +28,14 @@
 #include "EntityManager.h"
 #include "EntityWorldInterface.h"
 #include "NoiseSystem.h"
+#include "Camera.h"
 
 namespace Blackguard
 {
 	namespace BurglaryState
 	{
+
+class Camera;
 		class BurglaryState : public GameState, public EntityWorldInterface
 		{
 		public:
@@ -57,8 +60,11 @@ namespace Blackguard
 			virtual void markGoalAsReached();
 			virtual void onReachedExit();
 			virtual void createNoise(float radius, sf::Vector2f position);
+			virtual void onPlayerWasCatched();
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& end) const;
 			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
+		private:
+			virtual void reloadEntities();
 		private:
 			EntityManager entities;
 			Player* player;
@@ -71,6 +77,12 @@ namespace Blackguard
 			std::vector<std::string> levels;
 			int curLevel;
 			bool reachedEndOfLevel;
+			bool guardCatchedPlayer;
+			float levelTime;
+			Camera camera;
+			sf::Text levelNameText;
+			sf::Text levelSubtext;
+			sf::RectangleShape blackout;
 		};
 	}
 }

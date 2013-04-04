@@ -28,6 +28,7 @@
 #include <vector>
 #include <map>
 #include <exception>
+#include "Dependencies/tinyxml2.h"
 
 namespace Blackguard
 {
@@ -93,9 +94,11 @@ public:
 	void drawBackground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawForeground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawShadows(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
+	std::string getProperty(const std::string& property, const std::string& defaultValue = "") const;
 protected:
 	void drawLayers(const std::vector<TileLayer>& layers, sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawLayer(const Blackguard::TileLayer& layer, sf::RenderTarget* target, sf::RenderStates states, int minX, int minY, int maxX, int maxY) const;
+	std::map< std::string, std::string > parseProperties(tinyxml2::XMLElement* properties);
 private:
 	std::vector<TileLayer> backgroundLayers;
 	std::vector<TileLayer> foregroundLayers;
@@ -103,6 +106,7 @@ private:
 	TileLayer blockingLayer;
 	std::vector<TileSet> tilesets;
 	std::vector<TileObject> objects;
+	std::map<std::string, std::string> properties;
 	int width, height;
 	int gridWidth, gridHeight;
 };

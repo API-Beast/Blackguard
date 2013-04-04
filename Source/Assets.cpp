@@ -76,6 +76,8 @@ void Assets::load()
 	// Tilesets
 	textures["tilesetHouse.png"].loadFromFile(this->getPath("tilesetHouse.png"));
 	textures["shadows.png"].loadFromFile(this->getPath("shadows.png"));
+	
+	font.loadFromFile(this->getPath("GenBasBl.ttf"));
 }
 
 std::string Assets::getPath(const std::string& path) const

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="30" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="Name" value="Level 2"/>
+  <property name="Subtext" value="Playgroup"/>
+ </properties>
  <tileset firstgid="1" name="NewHouseTileset" tilewidth="32" tileheight="32">
   <image source="tilesetHouse.png" width="288" height="416"/>
  </tileset>

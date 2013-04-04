@@ -103,6 +103,13 @@ void Guard::update(float deltaTime)
 		}
 		else
 		{
+			if(Distance(this->getCenter(), currentTarget->getCenter()) < 10.f)
+			{
+				if(currentTarget->getType() == "Player")
+				{
+					world->onPlayerWasCatched();
+				}
+			}
 			currentTargetPosition = currentTarget->getCenter();
 			targetMovement = currentTarget->getMovement()/deltaTime;
 			projectedTargetPosition = currentTargetPosition + targetMovement*0.2f;

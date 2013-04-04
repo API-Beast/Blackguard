@@ -57,6 +57,7 @@ namespace Blackguard
 		protected:
 			virtual void updatePosition();
 		private:
+			void changeStateTo(AIState newState);
 			bool isInView(Blackguard::BurglaryState::Entity* obj);
 		private:
 			sf::Sprite graphics;
