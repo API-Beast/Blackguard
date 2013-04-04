@@ -25,6 +25,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include "Entity.h"
 #include "../Utility/Direction.h"
+#include <SFML/Audio/Sound.hpp>
 
 namespace sf
 {
@@ -64,6 +65,7 @@ namespace Blackguard
 			bool isMoving;
 			Direction movingDir;
 			BoundingBox activationArea;
+			sf::Sound walk;
 			float lastStoneThrown;
 		};
 	}

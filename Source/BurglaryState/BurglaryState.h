@@ -29,6 +29,7 @@
 #include "EntityWorldInterface.h"
 #include "NoiseSystem.h"
 #include "Camera.h"
+#include <SFML/Audio/Sound.hpp>
 
 namespace Blackguard
 {
@@ -83,6 +84,7 @@ class Camera;
 			sf::Text levelNameText;
 			sf::Text levelSubtext;
 			sf::RectangleShape blackout;
+			sf::Sound gameOver;
 		};
 	}
 }

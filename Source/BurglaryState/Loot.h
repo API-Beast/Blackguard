@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/Sound.hpp>
 
 namespace Blackguard
 {
@@ -26,6 +27,7 @@ namespace Blackguard
 			bool collected;
 			sf::Sprite graphics;
 			sf::Vector2f lastPosition;
+			sf::Sound collect;
 		};
 	}
 }

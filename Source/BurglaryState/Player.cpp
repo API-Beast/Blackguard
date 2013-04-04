@@ -26,6 +26,8 @@
 #include "../Utility/GameMath.h"
 #include "Camera.h"
 #include "Stone.h"
+#include "SFML/Audio/SoundSource.hpp"
+#include <SFML/Audio/Music.hpp>
 
 using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
@@ -33,6 +35,8 @@ using namespace Blackguard::Utility;
 
 Player::Player() : Entity()
 {
+	sf::Music music();
+	
 	this->graphics.setTexture(Game::instance->assets.textures["Player"]);
 	auto size = graphics.getTexture()->getSize();
 	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
@@ -42,6 +46,7 @@ Player::Player() : Entity()
 	this->movingDir = South;
 	this->activationArea.size = sf::Vector2f(25, 25);
 	lastStoneThrown = 0.f;
+	walk = sf::Sound(Game::instance->assets.sounds["walk"]);
 }
 
 Player::~Player()
@@ -69,6 +74,8 @@ void Player::draw(sf::RenderTarget* target) const
 void Player::move(const sf::Vector2f& pos)
 {
 	Entity::move(pos);
+	if(walk.getStatus() != sf::SoundSource::Status::Playing)
+		walk.play();
 	graphics.setPosition(position);
 }
 

@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio/Sound.hpp"
 #include "Player.h"
 #include <stack>
 #include "../Utility/GameMath.h"
@@ -92,6 +93,7 @@ namespace Blackguard
 			
 			AIState defaultState;
 			sf::Vector2f home;
+			sf::Sound playerNoticed;
 			
 			std::vector<ViewPatternPoint> viewPattern;
 			int curViewpatternIndex;

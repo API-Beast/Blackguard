@@ -50,6 +50,7 @@ BurglaryState::BurglaryState() : pathFinder(tileMap)
 	levels = std::vector<std::string>();
 	curLevel = 0;
 	reachedEndOfLevel = false;
+	guardCatchedPlayer = false;
 	
 	sf::RenderWindow* window = Game::instance->getWindow();
 	window->setView(window->getDefaultView());
@@ -70,6 +71,8 @@ BurglaryState::BurglaryState() : pathFinder(tileMap)
 	
 	blackout.setPosition(0, 0);
 	blackout.setSize(sf::Vector2f(window->getSize()));
+
+	gameOver = sf::Sound(Game::instance->assets.sounds["game_over"]);
 }
 
 BurglaryState::~BurglaryState()
@@ -128,6 +131,8 @@ void BurglaryState::update(float deltaTime)
 	}
 	if(guardCatchedPlayer)
 	{
+		gameOver.setVolume(25);
+		gameOver.play();
 		reloadEntities();
 		guardCatchedPlayer = false;
 	}
@@ -344,6 +349,9 @@ void BurglaryState::onPlayerWasCatched()
 
 void BurglaryState::reloadEntities()
 {
+	Game::instance->assets.ambient.play();
+	Game::instance->assets.ambient.setLoop(true);
+	Game::instance->assets.ambient.setVolume(8);
 	entities.clear();
 	noiseSystem.clear();
 	numberOfGoals = 0;

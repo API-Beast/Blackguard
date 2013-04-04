@@ -10,6 +10,7 @@ using namespace Blackguard;
 Loot::Loot()
 {
 	this->graphics.setTexture(Game::instance->assets.textures["Loot"]);
+	collect = sf::Sound(Game::instance->assets.sounds["collect_loot"]);
 	this->bounds.size = sf::Vector2f(32,32);
 	lastPosition = sf::Vector2f(0.f, 0.f);
 	collected = false;
@@ -50,6 +51,7 @@ bool Loot::activate(Player& activator)
 	if(!collected)
 	{
 		collected = true;
+		collect.play();
 		graphics.setTexture(Game::instance->assets.textures["Loot/Open"]);
 		world->markGoalAsReached();
 	}

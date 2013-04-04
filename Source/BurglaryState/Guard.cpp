@@ -23,6 +23,7 @@ std::map<std::string, std::vector<Guard::ViewPatternPoint> > Guard::possiblePatt
 Guard::Guard() : Entity()
 {
 	graphics = sf::Sprite(Game::instance->assets.textures["Guard"]);
+	playerNoticed = sf::Sound(Game::instance->assets.sounds["player_noticed"]);
 	sf::Vector2u size = graphics.getTexture()->getSize();
 	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
 	bounds.size = sf::Vector2f(size.x/2, size.y/4);
@@ -157,6 +158,7 @@ void Guard::aiRoutine(float deltaTime)
 		{
 			if(!isInView(player))
 				continue;
+			playerNoticed.play();
 			aiState = ChasingInView;
 			currentTarget = player;
 			break;
