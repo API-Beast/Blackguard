@@ -36,7 +36,7 @@ namespace Blackguard
 struct TileLayer
 {
 	TileLayer(){};
-	unsigned int getTile(int x, int y) const;
+	unsigned int getTile(int x, int y, int defaultValue) const;
 	unsigned int& getTileRef(int x, int y);
 	std::vector<unsigned int> data;
 	int width, height;

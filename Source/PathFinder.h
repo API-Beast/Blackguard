@@ -77,14 +77,14 @@ namespace Blackguard
 		PathFinder(TileMap& tileMap);
 		~PathFinder() {}
 		
-		std::stack<sf::Vector2f> calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
+		std::vector< sf::Vector2f > calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
 	private:
 		void expandNode(PathNode& currentNode);
 		int calculateMoveCosts(const PathNode& current, const PathNode& successor);
-		std::stack<sf::Vector2f> createWaypoints(const PathNode& endNode);
+		std::vector< sf::Vector2f > createWaypoints(const Blackguard::PathNode& endNode);
 	private:
 		TileMap& map;
-		std::set<PathNode> openList;
+		std::vector<PathNode> openList;
 		std::unordered_set<PathNode,PathNodeHash> closedList;
 		std::vector<PathNode> predecessorList;
 		sf::Vector2i gridSize;

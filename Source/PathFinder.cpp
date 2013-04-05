@@ -12,12 +12,11 @@ PathFinder::PathFinder(TileMap& tileMap) : map(tileMap)
 
 int PathFinder::calculateMoveCosts(const PathNode& current, const PathNode& successor)
 {
-	return (successor.x - current.x != 0 && successor.y - current.y != 0) ? 14 : 10;
+	return (successor.x - current.x != 0 && successor.y - current.y != 0) ? 10 : 14;
 }
 
 void PathFinder::expandNode(PathNode& currentNode)
 {
-	int itterations = 0;
 	for(int y = -1; y < 2; y++)
 	{
 		for(int x = -1; x < 2; x++)
@@ -27,14 +26,12 @@ void PathFinder::expandNode(PathNode& currentNode)
 			if(x == 0 && y == 0)
 				continue;
 
-			itterations++;
-
 			if(!map.isBlockedByTile(currentNode.x + x, currentNode.y + y) && closedList.find(successor) == closedList.end()) {
 				int movementCost = calculateMoveCosts(currentNode,successor);
 			
-				if(openList.find(successor) != openList.end() && movementCost >= successor.movementCost) {
+				auto iter = std::find(openList.begin(), openList.end(), successor);
+				if(iter != openList.end() && movementCost <= successor.movementCost)
 					continue;
-				}
 
 				if(successor.predecessor == -1)
 				{
@@ -45,29 +42,30 @@ void PathFinder::expandNode(PathNode& currentNode)
 					predecessorList[successor.predecessor] = currentNode;
 				successor.movementCost = movementCost;
 
-				if(openList.find(successor) != openList.end()) {
-					openList.erase(successor);
-				}
-
-				openList.insert(successor);
+				
+				if(iter == openList.end())
+					openList.push_back(successor);
+				else
+					(*iter) = successor;
+				
 			}
 		}
 	}
 }
 
-std::stack<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
+std::vector<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
 {
-	std::stack<sf::Vector2f> output;
+	std::vector<sf::Vector2f> output;
 	PathNode currentNode = endNode;
 	while(currentNode.predecessor != -1)
 	{
-		output.push(sf::Vector2f(currentNode.x * gridSize.x,currentNode.y * gridSize.y));
+		output.push_back(sf::Vector2f(currentNode.x * gridSize.x + gridSize.x/2,currentNode.y * gridSize.y  + gridSize.y/2));
 		currentNode = predecessorList[currentNode.predecessor];
 	}
 	return output;
 }
 
-std::stack<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
+std::vector<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
 {
 	gridSize = map.getGridSize();
 	openList.clear();
@@ -75,14 +73,22 @@ std::stack<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, co
 	predecessorList.clear();
 
 	PathNode startNode(start.x / gridSize.x, start.y / gridSize.y);
-	PathNode endNode(end.x / gridSize.x, end.y / gridSize.y);
+	PathNode endNode  (end.x   / gridSize.x, end.y   / gridSize.y);
+	if(map.isBlockedByTile(startNode.x, startNode.y)) printf("[DEBUG] Startpoint buried!\n");
+	if(map.isBlockedByTile(endNode.x, endNode.y)) printf("[DEBUG] Endpoint buried!\n");
 	
-	openList.insert(startNode);
+	openList.push_back(startNode);
 	
 	while(!openList.empty())
 	{
-		PathNode currentNode = *openList.begin();
-		openList.erase(openList.begin());
+		std::vector<PathNode>::iterator best=openList.begin();
+		for(auto it = openList.begin(); it<openList.end(); it++)
+		{
+			if((*it) > (*best))
+				best = it;
+		}
+		PathNode currentNode = *best;
+		openList.erase(best);
 
 		if(currentNode == endNode) {
 			endNode.predecessor = currentNode.predecessor; // copy the correct predecessor

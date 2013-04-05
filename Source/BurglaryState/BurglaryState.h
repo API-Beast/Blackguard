@@ -62,7 +62,7 @@ class Camera;
 			virtual void createNoise(float radius, sf::Vector2f position);
 			virtual void onPlayerWasCatched();
 			virtual RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& end) const;
-			virtual std::stack<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
+			virtual std::vector<sf::Vector2f> calculatePath(sf::Vector2f start, sf::Vector2f end);
 		private:
 			virtual void reloadEntities();
 		private:

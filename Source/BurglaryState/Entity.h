@@ -77,9 +77,10 @@ namespace Blackguard
 			virtual bool canBeRemoved() { return toBeRemoved; }
 			virtual std::string getType(){ return "unknown"; };
 			virtual void initializeFromTileObject(const TileObject&){};
-			// 
+			// Signals:
 			virtual void onHitWall(){};
 			virtual void onHitWallSideways(bool y){};
+			virtual void onNoise(sf::Vector2f position, float strength){};
 			// Setter:
 			virtual void move(const sf::Vector2f& pos);
 			virtual void setPosition(const sf::Vector2f& pos);
@@ -87,7 +88,6 @@ namespace Blackguard
 			// Getter:
 			virtual sf::Vector2f getPosition() const;
 			virtual sf::Vector2f getMovement() const;
-			// Convience
 			virtual sf::Vector2f getCenter() const { return bounds.center; };
 			virtual BoundingBox& getBounds() { return bounds; }
 		protected:

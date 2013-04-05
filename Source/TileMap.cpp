@@ -55,11 +55,11 @@ namespace
 	};
 }
 
-unsigned int TileLayer::getTile(int x, int y) const
+unsigned int TileLayer::getTile(int x, int y, int defaultValue=0) const
 {
 	if(x < 0 || y < 0 || x >= width || y >= height)
 	{
-		return 0;
+		return defaultValue;
 	}
 	return data[y*width + x];
 }
@@ -320,7 +320,7 @@ bool TileMap::isBlocked(sf::Vector2f pos) const
 
 bool TileMap::isBlockedByTile(int x, int y) const
 {
-	return blockingLayer.getTile(x, y) > 0;
+	return blockingLayer.getTile(x, y, 1) > 0;
 }
 
 void TileMap::markAsBlocked(sf::Vector2f pos)

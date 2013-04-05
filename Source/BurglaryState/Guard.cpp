@@ -163,6 +163,7 @@ void Guard::aiRoutine(float deltaTime)
 		}
 	}
 	
+	
 	if(aiState == Watching)
 	{
 		ViewPatternPoint& point=viewPattern[curViewpatternIndex];
@@ -185,11 +186,13 @@ void Guard::aiRoutine(float deltaTime)
 				viewAngle -= change;
 		}
 	}
+	
+	
 	if(aiState == ChasingInView)
 	{
 		if(!isInView(currentTarget))
 		{
-			aiState = ChasingOutOfView;
+			changeAiState(ChasingOutOfView);
 		}
 		else
 		{
@@ -212,15 +215,29 @@ void Guard::aiRoutine(float deltaTime)
 				movingDirection = VectorNormalize(currentTargetPosition-this->getCenter());
 		}
 	}
-	if(aiState == Investigating || aiState == ChasingOutOfView)
+	
+	
+	if(aiState == Investigating || aiState == ChasingOutOfView || aiState == MoveHome)
 	{
+		if(waypoints.empty())
+		{
+			if(aiState == Investigating)
+				changeAiState(MoveHome);
+			else if(aiState == MoveHome)
+				changeAiState(defaultState);
+			else
+				changeAiState(Panicked);
+		}
 		movingSpeed = walkingSpeed;
 		if(aiState == ChasingOutOfView)
 		{
 			movingSpeed = runningSpeed;
 		}
-		
+		movingDirection = followWaypoints();
+		viewAngle = Angle(sf::Vector2f(0, 0), movingDirection);
 	}
+	
+	
 	if(aiState == Panicked || aiState == Roaming)
 	{
 		movingDirection = AngleToVector(viewAngle);
@@ -240,11 +257,41 @@ void Guard::aiRoutine(float deltaTime)
 		viewAngle = NormalizeAngle(viewAngle);
 	}
 	
-	//
-	
+	// Move dammit
 	if(movingSpeed > 1.f)
 	{
 		this->move(movingDirection*movingSpeed*deltaTime);
+	}
+}
+
+void Guard::changeAiState(Guard::AIState newState)
+{
+	aiState = newState;
+	if(newState == MoveHome)
+		waypoints = world->calculatePath(getCenter(), home);
+}
+
+// Okay that was easier than I thought.
+sf::Vector2f Guard::followWaypoints()
+{
+	if(waypoints.empty())
+		return sf::Vector2f(0.f, 0.f);
+	sf::Vector2f targetPoint = waypoints.back();
+	sf::Vector2f difference = targetPoint - this->getCenter();
+	if(Utility::VectorLength(difference) < 1.f)
+	{
+		waypoints.pop_back();
+		return followWaypoints();
+	}
+	return VectorNormalize(difference);
+}
+
+void Guard::onNoise(sf::Vector2f position, float strength)
+{
+	if(aiState != ChasingInView)
+	{
+		changeAiState(Investigating);
+		waypoints = world->calculatePath(getCenter(), position);
 	}
 }
 
@@ -255,7 +302,6 @@ void Guard::draw(sf::RenderTarget* target) const
 
 void Guard::drawBackground(sf::RenderTarget* target) const
 {
-	target->pushGLStates();
 	sf::VertexArray viewconeShape(sf::TrianglesStrip, viewcone.size()*2);
 	sf::Color color(0, 0, 0, 25);
 	for(unsigned int i=0; i < viewcone.size(); i++)
@@ -270,7 +316,19 @@ void Guard::drawBackground(sf::RenderTarget* target) const
 		//viewconeShape[i*4+2] = sf::Vertex(getCenter() + pointD, color);
 	}
 	target->draw(viewconeShape);
-	target->popGLStates();
+	
+	if(false)
+	{
+		sf::RectangleShape waypointShape;
+		waypointShape.setSize(sf::Vector2f(32, 32));
+		waypointShape.setOrigin(16, 16);
+		waypointShape.setFillColor(sf::Color(0, 255, 0, 25));
+		for(sf::Vector2f waypoint : waypoints)
+		{
+			waypointShape.setPosition(waypoint);
+			target->draw(waypointShape);
+		}
+	}
 }
 
 void Guard::updatePosition()
