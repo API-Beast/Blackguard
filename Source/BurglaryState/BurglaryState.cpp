@@ -265,7 +265,12 @@ RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector
 
 void BurglaryState::createNoise(float radius, sf::Vector2f position)
 {
-	noiseSystem.createNoise(radius,position);
+	noiseSystem.createNoise(radius, position);
+	auto objs = entities.getInCircle(BoundingCircle(position, radius));
+	for(auto obj : objs)
+	{
+		obj->onNoise(position, radius);
+	}
 }
 
 void BurglaryState::addEntity(Entity* toAdd)
@@ -395,7 +400,7 @@ void BurglaryState::loadLevels(const vector< string >& levels)
 	loadLevel(levels[curLevel]);
 }
 
-std::stack<sf::Vector2f> BurglaryState::calculatePath(sf::Vector2f start, sf::Vector2f end)
+vector< sf::Vector2f > BurglaryState::calculatePath(sf::Vector2f start, sf::Vector2f end)
 {
 	return pathFinder.calculatePath(start,end);
 }

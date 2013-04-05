@@ -68,6 +68,7 @@ namespace Blackguard
 			virtual void drawBackground(sf::RenderTarget* target) const;
 			virtual std::string getType(){ return "Guard"; };
 			virtual bool activate(Player& activator);
+			virtual void onNoise(sf::Vector2f position, float strength);
 		protected:
 			virtual void updatePosition();
 			virtual void initializeFromTileObject(const TileObject&);
@@ -75,25 +76,30 @@ namespace Blackguard
 			void aiRoutine(float deltaTime);
 			void changeAiState(AIState newState);
 			void updateViewcone();
+			sf::Vector2f followWaypoints();
 			bool isInView(Blackguard::BurglaryState::Entity* obj);
 		private:
 			sf::Sprite graphics;
-			sf::Vector2f currentTargetPosition;
-			sf::Vector2f projectedTargetPosition;
+
+			float viewAngle;
 			std::vector<ViewRay> viewcone;
 			bool viewsDeadEnd;
 			float middleViewDistance;
 			float farLeftViewDistance;
 			float farRightViewDistance;
-			Entity* currentTarget;
-			float viewAngle;
 			
 			AIState aiState;
 			float currentStateTime;
+			sf::Vector2f currentTargetPosition;
+			sf::Vector2f projectedTargetPosition;
+			
+			Entity* currentTarget;
 			
 			AIState defaultState;
 			sf::Vector2f home;
 			sf::Sound playerNoticed;
+			
+			std::vector<sf::Vector2f> waypoints;
 			
 			std::vector<ViewPatternPoint> viewPattern;
 			int curViewpatternIndex;
