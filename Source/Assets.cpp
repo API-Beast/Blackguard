@@ -85,7 +85,6 @@ void Assets::load()
 	sounds["collect_loot"].loadFromFile(this->getPath("collect_loot.wav"));
 	sounds["game_over"].loadFromFile(this->getPath("game_over.wav"));
 	
-	font.loadFromFile(this->getPath("GenBasBl.ttf"));
 	ambient.openFromFile(this->getPath("ambience.ogg"));
 }
 

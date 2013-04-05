@@ -40,7 +40,6 @@ namespace Blackguard
 		std::map<std::string, sf::Texture> textures;
 		std::map<std::string, sf::SoundBuffer> sounds;
 		sf::Music ambient;
-		sf::Font font;
 		std::string path;
 	};
 }

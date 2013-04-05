@@ -59,18 +59,6 @@ BurglaryState::BurglaryState() : pathFinder(tileMap)
 	targetLight.create(window->getSize().x, window->getSize().y);
 	camera.setSize(window->getSize());
 	
-	levelNameText.setStyle(sf::Text::Bold);
-	levelNameText.setCharacterSize(16);
-	levelNameText.setColor(sf::Color::White);
-	levelNameText.setFont(Game::instance->assets.font);
-	levelNameText.setPosition(window->mapPixelToCoords(sf::Vector2i(50, 50)));
-	
-	levelSubtext .setStyle(0);
-	levelSubtext .setCharacterSize(12);
-	levelSubtext .setColor(sf::Color::White);
-	levelSubtext .setFont(Game::instance->assets.font);
-	levelSubtext .setPosition(window->mapPixelToCoords(sf::Vector2i(50, 100)));
-	
 	blackout.setPosition(0, 0);
 	blackout.setSize(sf::Vector2f(window->getSize()));
 
@@ -201,9 +189,6 @@ void BurglaryState::draw(sf::RenderTarget* target)
 		blackout.setFillColor(sf::Color(0, 0, 0, 255-255*levelTime));
 		target->draw(blackout);
 	}
-	// SFML::Text u no work?!?!
-	target->draw(levelNameText);
-	target->draw(levelSubtext);
 }
 
 RaycastResult BurglaryState::raycast(const sf::Vector2f& start, const sf::Vector2f& end) const
@@ -285,8 +270,6 @@ void BurglaryState::markGoalAsReached()
 void BurglaryState::loadLevel(const std::string& level)
 {
 	tileMap.loadFromFile(level);
-	levelNameText.setString(tileMap.getProperty("Name", "moew"));
-	levelSubtext.setString(tileMap.getProperty("Subtext", "moew"));
 	reloadEntities();
 }
 

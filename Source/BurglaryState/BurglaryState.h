@@ -81,8 +81,6 @@ class Camera;
 			bool guardCatchedPlayer;
 			float levelTime;
 			Camera camera;
-			sf::Text levelNameText;
-			sf::Text levelSubtext;
 			sf::RectangleShape blackout;
 			sf::Sound gameOver;
 		};
