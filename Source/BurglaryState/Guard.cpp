@@ -354,7 +354,7 @@ void Guard::drawBackground(sf::RenderTarget* target) const
 	}
 	target->draw(viewconeShape);
 	
-	if(true)
+	if(false)
 	{
 		sf::RectangleShape waypointShape;
 		waypointShape.setSize(sf::Vector2f(32, 32));
