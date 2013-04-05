@@ -24,19 +24,12 @@
 
 #include "Entity.h"
 #include <vector>
+#include "../TileMap.h"
 
 namespace Blackguard
 {
 	namespace BurglaryState
-	{
-		struct RaycastResult
-		{
-			sf::Vector2f startPoint;
-			sf::Vector2f endPoint;
-			sf::Vector2f ray;
-			bool obstructed;
-		};
-		
+	{		
 		class Player;
 		class EntityWorldInterface
 		{

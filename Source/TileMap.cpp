@@ -162,6 +162,43 @@ void TileMap::drawLayer(const TileLayer& layer, sf::RenderTarget* target, sf::Re
 }
 
 
+RaycastResult TileMap::raycast(const sf::Vector2f& start, const sf::Vector2f& end) const
+{
+	RaycastResult returnValue;
+	returnValue.startPoint = start;
+	returnValue.endPoint   = end;
+	returnValue.obstructed = false;
+	
+	// Based on Bresenham's line algorithm
+	int dx =  abs(end.x - start.x)+1, sx = start.x < end.x ? 1 : -1;
+	int dy = -abs(end.y - start.y)-1, sy = start.y < end.y ? 1 : -1; 
+	int err = dx + dy, e2;
+	int x = start.x;
+	int y = start.y;
+	int endX = end.x;
+	int endY = end.y;
+
+	for(;;)
+	{
+		if(isBlocked(sf::Vector2f(x, y)))
+		{
+			returnValue.endPoint = sf::Vector2f(x, y);
+			returnValue.obstructed = true;
+			break;
+		}
+		if(sx == +1 && x >= endX) break;
+		if(sx == -1 && x <= endX) break;
+		if(sy == +1 && y >= endY) break;
+		if(sy == -1 && y <= endY) break;
+		e2 = 2 * err;
+		if (e2 > dy) { err += dy; x += sx; }
+		if (e2 < dx) { err += dx; y += sy; }
+	}
+	
+	returnValue.ray = returnValue.endPoint - returnValue.startPoint;
+	return returnValue;
+}
+
 void TileMap::loadFromFile(const std::string& fileName)
 {
 	using namespace tinyxml2;

@@ -33,6 +33,14 @@
 namespace Blackguard
 {
 
+struct RaycastResult
+{
+	sf::Vector2f startPoint;
+	sf::Vector2f endPoint;
+	sf::Vector2f ray;
+	bool obstructed;
+};
+	
 struct TileLayer
 {
 	TileLayer(){};
@@ -95,6 +103,7 @@ public:
 	void drawForeground(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawShadows(sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	std::string getProperty(const std::string& property, const std::string& defaultValue = "") const;
+	RaycastResult raycast(const sf::Vector2f& start, const sf::Vector2f& end) const;
 protected:
 	void drawLayers(const std::vector<TileLayer>& layers, sf::RenderTarget* target, sf::RenderStates states=sf::RenderStates()) const;
 	void drawLayer(const Blackguard::TileLayer& layer, sf::RenderTarget* target, sf::RenderStates states, int minX, int minY, int maxX, int maxY) const;

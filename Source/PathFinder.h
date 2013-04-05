@@ -57,6 +57,11 @@ namespace Blackguard
 		{
 			return movementCost + manhattanValue;
 		}
+		
+		operator sf::Vector2f() const
+		{
+			return sf::Vector2f(x, y);
+		}
 
 		int x, y;
 		int movementCost;

@@ -57,11 +57,23 @@ std::vector<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
 {
 	std::vector<sf::Vector2f> output;
 	PathNode currentNode = endNode;
+	PathNode lastNode = currentNode;
+	PathNode lastBlockedNode = currentNode;
+	auto toV2  = [&](const PathNode& node){ return sf::Vector2f(node.x * gridSize.x + gridSize.x/2, node.y * gridSize.y  + gridSize.y/2);};
+	auto toV2T = [&](const PathNode& node){ return sf::Vector2f(node.x * gridSize.x, node.y * gridSize.y);};
+	auto toV2B = [&](const PathNode& node){ return sf::Vector2f(node.x * gridSize.x + gridSize.x, node.y * gridSize.y  + gridSize.y);};
+	output.push_back(toV2(endNode));
 	while(currentNode.predecessor != -1)
 	{
-		output.push_back(sf::Vector2f(currentNode.x * gridSize.x + gridSize.x/2,currentNode.y * gridSize.y  + gridSize.y/2));
+		if(map.raycast(toV2(lastBlockedNode), toV2(currentNode)).obstructed)
+		{
+			output.push_back(toV2(currentNode));
+			lastBlockedNode = lastNode;
+		}
+		lastNode = currentNode;
 		currentNode = predecessorList[currentNode.predecessor];
 	}
+	output.push_back(toV2(currentNode));
 	return output;
 }
 

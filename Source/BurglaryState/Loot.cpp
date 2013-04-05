@@ -26,8 +26,8 @@ Loot::~Loot()
 	if(world)
 	{
 		world->unblockTileAt(position);
-		if(!collected)
-			world->markGoalAsReached();
+		//if(!collected)
+		//	world->markGoalAsReached();
 	}
 }
 

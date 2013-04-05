@@ -23,7 +23,7 @@ void Stone::update(float deltaTime)
 {
 	if(Utility::VectorLength(speed) > 0.f)
 	{
-		height -= 2.0f*deltaTime;
+		height -= 1.0f*deltaTime;
 		if(height <= 0)
 		{
 			height = 0;
