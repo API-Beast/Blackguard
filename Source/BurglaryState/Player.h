@@ -67,6 +67,7 @@ namespace Blackguard
 			BoundingBox activationArea;
 			sf::Sound walk;
 			float lastStoneThrown;
+			float stepTimer;
 		};
 	}
 }

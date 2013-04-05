@@ -32,6 +32,8 @@ namespace Blackguard
 				Investigating,    // The guard is investigating a noise.
 				Roaming,          // 
 				Panicked,         // The guard has seen & chased the player but doesn't have a clue where he is anymore.
+				LookAround,       //
+				Wait,             //
 				MoveHome          // 
 			};
 			struct ViewRay
@@ -80,6 +82,7 @@ namespace Blackguard
 			bool isInView(Blackguard::BurglaryState::Entity* obj);
 		private:
 			sf::Sprite graphics;
+			sf::Sound noiseNoticed;
 
 			float viewAngle;
 			std::vector<ViewRay> viewcone;
@@ -97,7 +100,8 @@ namespace Blackguard
 			
 			AIState defaultState;
 			sf::Vector2f home;
-			sf::Sound playerNoticed;
+			float noiseTimer;
+			
 			
 			std::vector<sf::Vector2f> waypoints;
 			

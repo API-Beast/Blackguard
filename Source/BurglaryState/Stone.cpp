@@ -52,7 +52,7 @@ void Stone::drawBackground(sf::RenderTarget* target) const
 void Stone::makeNoise()
 {
 	stoneHit.play();
-	this->world->createNoise(Utility::VectorLength(speed), getCenter());
+	this->world->createNoise(Utility::VectorLength(speed)/2, getCenter());
 }
 
 void Stone::updatePosition()

@@ -10,6 +10,7 @@
 #include "EntityWorldInterface.h"
 #include "../PathFinder.h"
 #include <iostream>
+#include <stdlib.h>
 
 using namespace Blackguard;
 using namespace Blackguard::BurglaryState;
@@ -23,13 +24,15 @@ std::map<std::string, std::vector<Guard::ViewPatternPoint> > Guard::possiblePatt
 Guard::Guard() : Entity()
 {
 	graphics = sf::Sprite(Game::instance->assets.textures["Guard"]);
-	playerNoticed = sf::Sound(Game::instance->assets.sounds["player_noticed"]);
+	noiseNoticed = sf::Sound(Game::instance->assets.sounds["player_noticed"]);
 	sf::Vector2u size = graphics.getTexture()->getSize();
 	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
 	bounds.size = sf::Vector2f(size.x/2, size.y/4);
 	aiState = Watching;
 	defaultState = Watching;
 	viewAngle = 90.f;
+	noiseTimer = 0.f;
+	currentStateTime = 0.f;
 	for(float f=0.f-detectionCone; f < 0.f+detectionCone; f+=PI()/80)
 		viewcone.push_back(ViewRay(f, detectionDistance));
 	
@@ -110,6 +113,7 @@ void Guard::update(float deltaTime)
 {
 	updateViewcone();
 	aiRoutine(deltaTime);
+	noiseTimer += deltaTime;
 }
 
 void Guard::updateViewcone()
@@ -145,8 +149,9 @@ void Guard::updateViewcone()
 // Watch those " " they are important.
 void Guard::aiRoutine(float deltaTime)
 {
-	const float runningSpeed=100.f;
-	const float walkingSpeed= 50.f;
+	currentStateTime += deltaTime;
+	const float runningSpeed=110.f;
+	const float walkingSpeed= 80.f;
 	
 	float movingSpeed=0.f;
 	sf::Vector2f movingDirection(0.f, 0.f);
@@ -158,7 +163,6 @@ void Guard::aiRoutine(float deltaTime)
 		{
 			if(!isInView(player))
 				continue;
-			playerNoticed.play();
 			aiState = ChasingInView;
 			currentTarget = player;
 			break;
@@ -195,6 +199,8 @@ void Guard::aiRoutine(float deltaTime)
 		if(!isInView(currentTarget))
 		{
 			changeAiState(ChasingOutOfView);
+			waypoints.clear();
+			waypoints = world->calculatePath(getCenter(), currentTarget->getCenter());
 		}
 		else
 		{
@@ -228,7 +234,7 @@ void Guard::aiRoutine(float deltaTime)
 			else if(aiState == MoveHome)
 				changeAiState(defaultState);
 			else
-				changeAiState(Panicked);
+				changeAiState(LookAround);
 		}
 		movingSpeed = walkingSpeed;
 		if(aiState == ChasingOutOfView)
@@ -236,7 +242,8 @@ void Guard::aiRoutine(float deltaTime)
 			movingSpeed = runningSpeed;
 		}
 		movingDirection = followWaypoints();
-		viewAngle = Angle(sf::Vector2f(0, 0), movingDirection);
+		float difference = Angle(sf::Vector2f(0, 0), movingDirection) - viewAngle;
+		viewAngle += difference*deltaTime*6;
 	}
 	
 	
@@ -259,6 +266,21 @@ void Guard::aiRoutine(float deltaTime)
 		viewAngle = NormalizeAngle(viewAngle);
 	}
 	
+	if(aiState == LookAround)
+	{
+		viewAngle += PI()*1*deltaTime;
+		movingSpeed = 0.f;
+		if(currentStateTime > 1.f)
+			changeAiState(MoveHome);
+	}
+	
+	if(aiState == Wait)
+	{
+		movingSpeed = 0.0f;
+		if(currentStateTime > 3.f)
+			changeAiState(MoveHome);
+	}
+	
 	// Move dammit
 	if(movingSpeed > 1.f)
 	{
@@ -269,8 +291,9 @@ void Guard::aiRoutine(float deltaTime)
 void Guard::changeAiState(Guard::AIState newState)
 {
 	aiState = newState;
-	if(newState == MoveHome)
+	if(newState == MoveHome && defaultState != Roaming)
 		waypoints = world->calculatePath(getCenter(), home);
+	currentStateTime = 0.f;
 }
 
 // Okay that was easier than I thought.
@@ -290,10 +313,22 @@ sf::Vector2f Guard::followWaypoints()
 
 void Guard::onNoise(sf::Vector2f position, float strength)
 {
-	if(aiState != ChasingInView)
+	if(noiseTimer > 3.f)
 	{
-		changeAiState(Investigating);
-		waypoints = world->calculatePath(getCenter(), position);
+		if(aiState != ChasingInView && aiState != Investigating)
+		{
+			if(aiState == Roaming || aiState == Watching)
+			{
+				if(rand()>RAND_MAX/3)
+				{
+					noiseNoticed.setPitch(0.6f);
+					noiseNoticed.play();
+				}
+			}
+			if(aiState != ChasingOutOfView)
+				changeAiState(Investigating);
+			waypoints = world->calculatePath(getCenter(), position, true);
+		}
 	}
 }
 

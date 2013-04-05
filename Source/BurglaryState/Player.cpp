@@ -55,13 +55,27 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
-	float speed = 64.f;
+	float speed = 100.f;
 	if(this->isRunning)
-		speed = 128.f;
+		speed = 180.f;
 
 	auto movementVector = DirToVector(movingDir) * speed * deltaTime;
 	if(this->isMoving)
 		this->move(movementVector);
+	
+	if(this->isMoving && this->isRunning)
+	{
+		stepTimer+=deltaTime;
+		if(stepTimer >= 0.5f)
+		{
+			if(walk.getStatus() != sf::SoundSource::Status::Playing)
+				walk.play();
+			world->createNoise(300, getCenter());
+			stepTimer = 0.f;
+		}
+	}
+	else
+		stepTimer = 0.f;
 	
 	lastStoneThrown += deltaTime;
 }
@@ -74,8 +88,6 @@ void Player::draw(sf::RenderTarget* target) const
 void Player::move(const sf::Vector2f& pos)
 {
 	Entity::move(pos);
-	if(walk.getStatus() != sf::SoundSource::Status::Playing)
-		walk.play();
 	graphics.setPosition(position);
 }
 

@@ -34,6 +34,8 @@
 
 #include <functional>
 #include <iostream>
+#include <stdlib.h>
+
 using namespace std;
 
 using namespace Blackguard;
@@ -346,9 +348,16 @@ void BurglaryState::loadLevels(const vector< string >& levels)
 	loadLevel(levels[curLevel]);
 }
 
-vector< sf::Vector2f > BurglaryState::calculatePath(sf::Vector2f start, sf::Vector2f end)
+vector< sf::Vector2f > BurglaryState::calculatePath(sf::Vector2f start, sf::Vector2f end, bool justInView)
 {
-	return pathFinder.calculatePath(start,end);
+	if(raycast(start, end).obstructed)
+		return pathFinder.calculatePath(start, end, justInView);
+	vector<sf::Vector2f> directPath;
+	if(justInView)
+		directPath.push_back((start+end)*0.5f);
+	else
+		directPath.push_back(end);
+	return directPath;
 }
 
 }

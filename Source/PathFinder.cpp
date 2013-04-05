@@ -53,16 +53,15 @@ void PathFinder::expandNode(PathNode& currentNode)
 	}
 }
 
-std::vector<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
+std::vector<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode, bool justInView)
 {
 	std::vector<sf::Vector2f> output;
 	PathNode currentNode = endNode;
 	PathNode lastNode = currentNode;
 	PathNode lastBlockedNode = currentNode;
 	auto toV2  = [&](const PathNode& node){ return sf::Vector2f(node.x * gridSize.x + gridSize.x/2, node.y * gridSize.y  + gridSize.y/2);};
-	auto toV2T = [&](const PathNode& node){ return sf::Vector2f(node.x * gridSize.x, node.y * gridSize.y);};
-	auto toV2B = [&](const PathNode& node){ return sf::Vector2f(node.x * gridSize.x + gridSize.x, node.y * gridSize.y  + gridSize.y);};
-	output.push_back(toV2(endNode));
+	if(!justInView)
+		output.push_back(toV2(endNode));
 	while(currentNode.predecessor != -1)
 	{
 		if(map.raycast(toV2(lastBlockedNode), toV2(currentNode)).obstructed)
@@ -73,11 +72,10 @@ std::vector<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode)
 		lastNode = currentNode;
 		currentNode = predecessorList[currentNode.predecessor];
 	}
-	output.push_back(toV2(currentNode));
 	return output;
 }
 
-std::vector<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end)
+std::vector<sf::Vector2f> PathFinder::calculatePath(const sf::Vector2f& start, const sf::Vector2f& end, bool justInView)
 {
 	gridSize = map.getGridSize();
 	openList.clear();

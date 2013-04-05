@@ -82,11 +82,11 @@ namespace Blackguard
 		PathFinder(TileMap& tileMap);
 		~PathFinder() {}
 		
-		std::vector< sf::Vector2f > calculatePath(const sf::Vector2f& start, const sf::Vector2f& end);
+		std::vector< sf::Vector2f > calculatePath(const sf::Vector2f& start, const sf::Vector2f& end, bool justInView=false);
 	private:
 		void expandNode(PathNode& currentNode);
 		int calculateMoveCosts(const PathNode& current, const PathNode& successor);
-		std::vector< sf::Vector2f > createWaypoints(const Blackguard::PathNode& endNode);
+		std::vector< sf::Vector2f > createWaypoints(const Blackguard::PathNode& endNode, bool justInView=false);
 	private:
 		TileMap& map;
 		std::vector<PathNode> openList;

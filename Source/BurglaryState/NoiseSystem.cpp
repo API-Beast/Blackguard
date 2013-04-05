@@ -18,7 +18,7 @@ void NoiseSystem::createNoise(float radius, sf::Vector2f position)
 	noiseData.push_back(noise);
 	sf::Texture& tex = Game::instance->assets.textures["Noise"];
 	graphics.setTexture(tex);
-	graphicsSize = tex.getSize().x;
+	graphicsSize = tex.getSize().x/2;
 }
 
 void NoiseSystem::update(float deltaTime)
