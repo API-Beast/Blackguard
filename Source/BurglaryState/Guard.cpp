@@ -53,18 +53,18 @@ Guard::Guard() : Entity()
 		possiblePatterns["StrongSway"] = strongSway;
 		
 		std::vector<ViewPatternPoint> turn;
-		turn.push_back(ViewPatternPoint(8.f, 0.f , 1.f));
-		turn.push_back(ViewPatternPoint(8.f, PI(), 1.f));
+		turn.push_back(ViewPatternPoint(4.f, 0.f , 1.f));
+		turn.push_back(ViewPatternPoint(6.f, PI(), 1.f));
 		possiblePatterns["180Turn"] = turn;
 		
 		std::vector<ViewPatternPoint> ninety;
-		ninety.push_back(ViewPatternPoint(8.f, 0.f   , 0.7f));
-		ninety.push_back(ViewPatternPoint(8.f, PI()/2, 0.7f));
+		ninety.push_back(ViewPatternPoint(4.f, 0.f   , 0.7f));
+		ninety.push_back(ViewPatternPoint(6.f, PI()/2, 0.7f));
 		possiblePatterns["90Turn"] = ninety;
 		
 		std::vector<ViewPatternPoint> minusNinety;
-		ninety.push_back(ViewPatternPoint(8.f,  0.f   , 0.7f));
-		ninety.push_back(ViewPatternPoint(8.f, -PI()/2, 0.7f));
+		ninety.push_back(ViewPatternPoint(4.f,  0.f   , 0.7f));
+		ninety.push_back(ViewPatternPoint(6.f, -PI()/2, 0.7f));
 		possiblePatterns["-90Turn"] = minusNinety;
 	}
 	this->viewPattern = possiblePatterns["LightSway"];
@@ -107,6 +107,7 @@ void Guard::initializeFromTileObject(const TileObject& object)
 	{
 		point.targetAngle += this->viewAngle;
 	}
+	curViewPatternTime = (rand()/float(RAND_MAX))*viewPattern[0].time;
 }
 
 void Guard::update(float deltaTime)
@@ -150,7 +151,7 @@ void Guard::updateViewcone()
 void Guard::aiRoutine(float deltaTime)
 {
 	currentStateTime += deltaTime;
-	const float runningSpeed=110.f;
+	const float runningSpeed=140.f;
 	const float walkingSpeed= 80.f;
 	
 	float movingSpeed=0.f;
@@ -340,7 +341,8 @@ void Guard::draw(sf::RenderTarget* target) const
 void Guard::drawBackground(sf::RenderTarget* target) const
 {
 	sf::VertexArray viewconeShape(sf::TrianglesStrip, viewcone.size()*2);
-	sf::Color color(0, 0, 0, 25);
+	sf::Color color(128, 128, 255, 125);
+	sf::Color color2(128, 128, 255, 10);
 	for(unsigned int i=0; i < viewcone.size(); i++)
 	{
 		sf::Vector2f pointA = AngleToVector(viewAngle + viewcone[i].angle) * 10.f;
@@ -348,7 +350,7 @@ void Guard::drawBackground(sf::RenderTarget* target) const
 		//sf::Vector2f pointC = AngleToVector(viewAngle + viewcone[i+1].angle) * 10.f;
 		//sf::Vector2f pointD = AngleToVector(viewAngle + viewcone[i+1].angle) * viewcone[i].obstructedRange;
 		viewconeShape[i*2  ] = sf::Vertex(getCenter() + pointA, color);
-		viewconeShape[i*2+1] = sf::Vertex(getCenter() + pointB, color);
+		viewconeShape[i*2+1] = sf::Vertex(getCenter() + pointB, color2);
 		//viewconeShape[i*4+3] = sf::Vertex(getCenter() + pointC, color);
 		//viewconeShape[i*4+2] = sf::Vertex(getCenter() + pointD, color);
 	}

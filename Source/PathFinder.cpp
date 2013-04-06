@@ -66,7 +66,7 @@ std::vector<sf::Vector2f> PathFinder::createWaypoints(const PathNode& endNode, b
 	{
 		if(map.raycast(toV2(lastBlockedNode), toV2(currentNode)).obstructed)
 		{
-			output.push_back(toV2(currentNode));
+			output.push_back(toV2(lastNode));
 			lastBlockedNode = lastNode;
 		}
 		lastNode = currentNode;

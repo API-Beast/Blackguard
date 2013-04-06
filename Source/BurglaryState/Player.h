@@ -68,6 +68,7 @@ namespace Blackguard
 			sf::Sound walk;
 			float lastStoneThrown;
 			float stepTimer;
+			float exhaustion;
 		};
 	}
 }

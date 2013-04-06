@@ -35,18 +35,18 @@ using namespace Blackguard::Utility;
 
 Player::Player() : Entity()
 {
-	sf::Music music();
-	
-	this->graphics.setTexture(Game::instance->assets.textures["Player"]);
+	graphics.setTexture(Game::instance->assets.textures["Player"]);
 	auto size = graphics.getTexture()->getSize();
-	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
-	bounds.size = sf::Vector2f(size.x/2, size.y/4);
-	this->isMoving = false;
-	this->isRunning = false;
-	this->movingDir = South;
-	this->activationArea.size = sf::Vector2f(25, 25);
+	bounds.offset = sf::Vector2f(size.x*0.25f, size.y*(0.75f));
+	bounds.size = sf::Vector2f(size.x*0.5f, size.y*0.25f);
+	activationArea.offset = sf::Vector2f(-(size.x*0.25f), 0);
+	activationArea.size = sf::Vector2f(32.f, 32.f);
+	isMoving = false;
+	isRunning = false;
+	movingDir = South;
 	lastStoneThrown = 0.f;
 	walk = sf::Sound(Game::instance->assets.sounds["walk"]);
+	exhaustion = 0.f;
 }
 
 Player::~Player()
@@ -55,9 +55,9 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
-	float speed = 100.f;
+	float speed = 90.f;
 	if(this->isRunning)
-		speed = 180.f;
+		speed = std::max(180.f - exhaustion*10.f, 90.f);
 
 	auto movementVector = DirToVector(movingDir) * speed * deltaTime;
 	if(this->isMoving)
@@ -65,8 +65,9 @@ void Player::update(float deltaTime)
 	
 	if(this->isMoving && this->isRunning)
 	{
+		exhaustion += deltaTime;
 		stepTimer+=deltaTime;
-		if(stepTimer >= 0.5f)
+		if(stepTimer >= 0.35f)
 		{
 			if(walk.getStatus() != sf::SoundSource::Status::Playing)
 				walk.play();
@@ -75,9 +76,14 @@ void Player::update(float deltaTime)
 		}
 	}
 	else
+	{
 		stepTimer = 0.f;
+		if(exhaustion > 0.f)
+			exhaustion -= deltaTime;
+	}
 	
 	lastStoneThrown += deltaTime;
+	activationArea.updatePosition(position + DirToVector(movingDir) * 16.f);
 }
 
 void Player::draw(sf::RenderTarget* target) const
@@ -99,9 +105,7 @@ void Player::setPosition(const sf::Vector2f& pos)
 
 bool Player::activate()
 {
-	BoundingBox activationRectangle = activationArea.translated(DirToVector(movingDir) * 32.f);
-	activationRectangle.position = this->position;
-	std::vector<Entity*> objects = world->getEntitiesInsideRect(activationRectangle);
+	std::vector<Entity*> objects = world->getEntitiesInsideRect(activationArea);
 	for(Entity* obj : objects)
 	{
 		if(obj->activate(*this))
