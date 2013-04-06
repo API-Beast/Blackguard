@@ -20,11 +20,13 @@ const float detectionCone     = Blackguard::Utility::PI() / 4.f;
 const float detectionDistance = 250.f;
 
 std::map<std::string, std::vector<Guard::ViewPatternPoint> > Guard::possiblePatterns; 
+sf::Sound Guard::eliminated;
 
 Guard::Guard() : Entity()
 {
 	graphics = sf::Sprite(Game::instance->assets.textures["Guard"]);
 	noiseNoticed = sf::Sound(Game::instance->assets.sounds["player_noticed"]);
+	eliminated = sf::Sound(Game::instance->assets.sounds["body_drop"]);
 	sf::Vector2u size = graphics.getTexture()->getSize();
 	bounds.offset = sf::Vector2f(size.x/4, size.y*(3/4.f));
 	bounds.size = sf::Vector2f(size.x/2, size.y/4);
@@ -378,7 +380,9 @@ void Guard::updatePosition()
 
 bool Guard::activate(Player& activator)
 {
+	if(aiState == ChasingInView || aiState == ChasingOutOfView) return false;
 	this->remove();
+	eliminated.play();
 	// TODO Leave unconscious guard
 	return true;
 }

@@ -81,6 +81,7 @@ void Assets::load()
 
 	sounds["stone_hit"].loadFromFile(this->getPath("stone_hit.ogg"));
 	sounds["player_noticed"].loadFromFile(this->getPath("player_noticed.ogg"));
+	sounds["body_drop"].loadFromFile(this->getPath("body_drop.ogg"));
 	sounds["walk"].loadFromFile(this->getPath("walk.ogg"));
 	sounds["collect_loot"].loadFromFile(this->getPath("collect_loot.ogg"));
 	sounds["game_over"].loadFromFile(this->getPath("game_over.ogg"));

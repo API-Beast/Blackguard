@@ -83,6 +83,7 @@ namespace Blackguard
 		private:
 			sf::Sprite graphics;
 			sf::Sound noiseNoticed;
+			static sf::Sound eliminated;
 
 			float viewAngle;
 			std::vector<ViewRay> viewcone;
