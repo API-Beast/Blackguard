@@ -28,6 +28,8 @@ void Stone::update(float deltaTime)
 		{
 			height = 0;
 			speed = sf::Vector2f(0.f, 0.f);
+			stoneHit.setVolume(20);
+			stoneHit.play();
 		}
 		this->move(speed*deltaTime);
 	}
@@ -51,8 +53,10 @@ void Stone::drawBackground(sf::RenderTarget* target) const
 
 void Stone::makeNoise()
 {
+	float power=Utility::VectorLength(speed);
+	stoneHit.setVolume(power / 4.f);
 	stoneHit.play();
-	this->world->createNoise(Utility::VectorLength(speed)/2, getCenter());
+	this->world->createNoise(power/2, getCenter());
 }
 
 void Stone::updatePosition()

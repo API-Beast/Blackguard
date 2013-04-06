@@ -11,6 +11,7 @@ Loot::Loot()
 {
 	this->graphics.setTexture(Game::instance->assets.textures["Loot"]);
 	collect = sf::Sound(Game::instance->assets.sounds["collect_loot"]);
+	collect.setPitch(1.f);
 	this->bounds.size = sf::Vector2f(32,32);
 	lastPosition = sf::Vector2f(0.f, 0.f);
 	collected = false;
