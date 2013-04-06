@@ -64,8 +64,8 @@ Guard::Guard() : Entity()
 		
 		std::vector<ViewPatternPoint> minusNinety;
 		ninety.push_back(ViewPatternPoint(4.f,  0.f   , 0.7f));
-		ninety.push_back(ViewPatternPoint(6.f, -PI()/2, 0.7f));
-		possiblePatterns["-90Turn"] = minusNinety;
+		ninety.push_back(ViewPatternPoint(6.f, PI()*2+PI()/2, 0.7f));
+		possiblePatterns["90TurnLeft"] = minusNinety;
 	}
 	this->viewPattern = possiblePatterns["LightSway"];
 
