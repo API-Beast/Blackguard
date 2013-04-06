@@ -85,7 +85,7 @@ void Assets::load()
 	sounds["collect_loot"].loadFromFile(this->getPath("collect_loot.wav"));
 	sounds["game_over"].loadFromFile(this->getPath("game_over.wav"));
 	
-	ambient.openFromFile(this->getPath("ambience.ogg"));
+	ambient.openFromFile(this->getPath("Music.ogg"));
 }
 
 std::string Assets::getPath(const std::string& path) const
