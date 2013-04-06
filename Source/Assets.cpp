@@ -79,11 +79,11 @@ void Assets::load()
 	textures["tilesetHouse.png"].loadFromFile(this->getPath("tilesetHouse.png"));
 	textures["shadows.png"].loadFromFile(this->getPath("shadows.png"));
 
-	sounds["stone_hit"].loadFromFile(this->getPath("stone_hit.wav"));
-	sounds["player_noticed"].loadFromFile(this->getPath("player_noticed.wav"));
-	sounds["walk"].loadFromFile(this->getPath("walk.wav"));
-	sounds["collect_loot"].loadFromFile(this->getPath("collect_loot.wav"));
-	sounds["game_over"].loadFromFile(this->getPath("game_over.wav"));
+	sounds["stone_hit"].loadFromFile(this->getPath("stone_hit.ogg"));
+	sounds["player_noticed"].loadFromFile(this->getPath("player_noticed.ogg"));
+	sounds["walk"].loadFromFile(this->getPath("walk.ogg"));
+	sounds["collect_loot"].loadFromFile(this->getPath("collect_loot.ogg"));
+	sounds["game_over"].loadFromFile(this->getPath("game_over.ogg"));
 	
 	ambient.openFromFile(this->getPath("Music.ogg"));
 }
