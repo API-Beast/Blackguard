@@ -52,6 +52,7 @@ Game::Game(int argc, char** argv)
 	levels.push_back("level1.tmx");
 	levels.push_back("level2.tmx");
 	levels.push_back("level3.tmx");
+	levels.push_back("level4.tmx");
 	levels.push_back("tavern.tmx");
 	levels.push_back("themansion.tmx");
 	
