@@ -45,7 +45,11 @@
     <property name="viewPattern" value="StrongSway"/>
    </properties>
   </object>
-  <object type="Exit" x="671" y="996" width="55" height="92"/>
+  <object type="Exit" x="672" y="1024" width="32" height="64">
+   <properties>
+    <property name="orientation" value="Left"/>
+   </properties>
+  </object>
   <object type="Guard" gid="121" x="768" y="608" rotation="180">
    <properties>
     <property name="viewPattern" value="90TurnLeft"/>

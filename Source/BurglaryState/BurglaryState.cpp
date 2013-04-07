@@ -89,7 +89,10 @@ bool BurglaryState::processEvent(sf::Event& event)
 		{
 			int level = event.key.code - sf::Keyboard::F1;
 			if(level < levels.size())
-				loadLevel(levels[level]);
+			{
+				curLevel = level;
+				loadLevel(levels[curLevel]);
+			}
 		}
 		/*
 		if(event.key.code == sf::Keyboard::K)
@@ -121,7 +124,7 @@ void BurglaryState::update(float deltaTime)
 	}
 	if(guardCatchedPlayer)
 	{
-		gameOver.setVolume(25);
+		gameOver.setVolume(50);
 		gameOver.play();
 		reloadEntities();
 		guardCatchedPlayer = false;

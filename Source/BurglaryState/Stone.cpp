@@ -56,7 +56,7 @@ void Stone::makeNoise()
 	float power=Utility::VectorLength(speed);
 	stoneHit.setVolume(power / 4.f);
 	stoneHit.play();
-	this->world->createNoise(power/2, getCenter());
+	this->world->createNoise(power, getCenter());
 }
 
 void Stone::updatePosition()

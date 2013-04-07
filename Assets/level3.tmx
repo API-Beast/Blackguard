@@ -44,9 +44,13 @@
    </properties>
   </object>
   <object name="player" type="Player" gid="123" x="448" y="128"/>
-  <object type="Exit" x="100" y="353" width="32" height="64"/>
+  <object type="Exit" x="100" y="353" width="32" height="64">
+   <properties>
+    <property name="orientation" value="Left"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup name="Lights" width="20" height="20">
+ <objectgroup name="Lights" width="20" height="20" visible="0">
   <object type="Light" x="311" y="15" width="303" height="216">
    <ellipse/>
   </object>

@@ -22,14 +22,18 @@
   </data>
  </layer>
  <objectgroup name="Objects" width="44" height="25">
-  <object type="Exit" x="1056" y="512" width="64" height="96"/>
+  <object type="Exit" x="1088" y="544" width="32" height="64"/>
   <object name="player" type="Player" gid="120" x="160" y="384"/>
   <object type="Loot" gid="119" x="1184" y="160"/>
   <object type="Loot" gid="119" x="1216" y="160"/>
   <object type="Loot" gid="119" x="1248" y="160"/>
   <object type="Loot" gid="119" x="1312" y="160"/>
   <object type="Loot" gid="119" x="1280" y="160"/>
-  <object type="Exit" x="35" y="349" width="64" height="64"/>
+  <object type="Exit" x="35" y="349" width="32" height="64">
+   <properties>
+    <property name="orientation" value="Left"/>
+   </properties>
+  </object>
   <object type="Guard" gid="121" x="960" y="224">
    <properties>
     <property name="behaviour" value="Roaming"/>
@@ -53,7 +57,7 @@
   </object>
   <object type="Guard" gid="121" x="192" y="608"/>
  </objectgroup>
- <objectgroup name="Lights" width="44" height="25">
+ <objectgroup name="Lights" width="44" height="25" visible="0">
   <object type="Light" x="89" y="43" width="196" height="259" rotation="16.6992">
    <properties>
     <property name="variation" value="Window"/>

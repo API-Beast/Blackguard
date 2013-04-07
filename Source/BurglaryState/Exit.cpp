@@ -40,10 +40,18 @@ void Blackguard::BurglaryState::Exit::drawGUI(sf::RenderTarget* target) const
 	}
 }
 
-void Blackguard::BurglaryState::Exit::initializeFromTileObject(const Blackguard::TileObject& obj)
+void Blackguard::BurglaryState::Exit::initializeFromTileObject(const Blackguard::TileObject& object)
 {
+	TileObject obj = object;
 	this->setPosition(sf::Vector2f(obj.x, obj.y));
 	this->bounds.size = sf::Vector2f(obj.width, obj.height);
+	if(obj.properties["orientation"] == "Left")
+	{
+		sf::IntRect rect=this->graphics.getTextureRect();
+		rect.left  =  rect.width;
+		rect.width = -rect.width;
+		this->graphics.setTextureRect(rect);
+	}
 }
 
 void Blackguard::BurglaryState::Exit::update(float deltaTime)

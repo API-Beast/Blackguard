@@ -41,16 +41,16 @@ Guard::Guard() : Entity()
 	if(possiblePatterns.empty())
 	{
 		std::vector<ViewPatternPoint> lightSway;
-		lightSway.push_back(ViewPatternPoint(2.f, -PI()/20));
+		lightSway.push_back(ViewPatternPoint(2.f, -PI()/10));
 		lightSway.push_back(ViewPatternPoint(4.f, 0.f));
-		lightSway.push_back(ViewPatternPoint(2.f, +PI()/20));
+		lightSway.push_back(ViewPatternPoint(2.f, +PI()/10));
 		lightSway.push_back(ViewPatternPoint(4.f, 0.f));
 		possiblePatterns["LightSway"] = lightSway;
 		
 		std::vector<ViewPatternPoint> strongSway;
-		strongSway.push_back(ViewPatternPoint(4.f, -PI()/7, 0.5f));
+		strongSway.push_back(ViewPatternPoint(4.f, -PI()/5, 0.5f));
 		strongSway.push_back(ViewPatternPoint(8.f, 0.f, 0.5f));
-		strongSway.push_back(ViewPatternPoint(4.f, +PI()/7, 0.5f));
+		strongSway.push_back(ViewPatternPoint(4.f, +PI()/5, 0.5f));
 		strongSway.push_back(ViewPatternPoint(8.f, 0.f, 0.5f));
 		possiblePatterns["StrongSway"] = strongSway;
 		
@@ -59,14 +59,19 @@ Guard::Guard() : Entity()
 		turn.push_back(ViewPatternPoint(6.f, PI(), 1.f));
 		possiblePatterns["180Turn"] = turn;
 		
+		std::vector<ViewPatternPoint> turnX;
+		turnX.push_back(ViewPatternPoint(4.f, 0.f , 1.f));
+		turnX.push_back(ViewPatternPoint(6.f, PI()*0.75, 1.f));
+		possiblePatterns["135Turn"] = turnX;
+		
 		std::vector<ViewPatternPoint> ninety;
 		ninety.push_back(ViewPatternPoint(4.f, 0.f   , 0.7f));
 		ninety.push_back(ViewPatternPoint(6.f, PI()/2, 0.7f));
 		possiblePatterns["90Turn"] = ninety;
 		
 		std::vector<ViewPatternPoint> minusNinety;
-		ninety.push_back(ViewPatternPoint(4.f,  0.f   , 0.7f));
-		ninety.push_back(ViewPatternPoint(6.f, PI()*2+PI()/2, 0.7f));
+		minusNinety.push_back(ViewPatternPoint(4.f,  0.f   , 0.7f));
+		minusNinety.push_back(ViewPatternPoint(6.f, PI()*2+PI()/2, 0.7f));
 		possiblePatterns["90TurnLeft"] = minusNinety;
 	}
 	this->viewPattern = possiblePatterns["LightSway"];

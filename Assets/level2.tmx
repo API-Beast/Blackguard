@@ -33,9 +33,9 @@
   <object type="Loot" gid="118" x="288" y="128"/>
   <object name="player" type="Player" gid="119" x="303" y="755"/>
   <object type="Loot" gid="118" x="320" y="128"/>
-  <object type="Guard" gid="121" x="304" y="442">
+  <object type="Guard" gid="121" x="312" y="407" rotation="14.83">
    <properties>
-    <property name="viewPattern" value="180Turn"/>
+    <property name="viewPattern" value="135Turn"/>
    </properties>
   </object>
  </objectgroup>
