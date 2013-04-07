@@ -37,11 +37,18 @@ Game::Game(int argc, char** argv)
 	
 	SwitchParser parser;
 	SimpleSwitch loadLevel;
+	SimpleSwitch windowed;
 	parser.setAnonymousSwitch(loadLevel);
-	
+	parser.registerSwitch(windowed, "windowed", 'w');
 	parser.parseArgv(argc, argv);
 	
-	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Blackguard");
+	if(windowed.isSet)
+		window = new sf::RenderWindow(sf::VideoMode(800, 600), "Blackguard", sf::Style::Titlebar);
+	else
+	{
+		sf::VideoMode mode=sf::VideoMode::getDesktopMode();
+		window = new sf::RenderWindow(mode, "Blackguard", sf::Style::Fullscreen);
+	}
 	window->setVerticalSyncEnabled(true);
 
 	assets.load();

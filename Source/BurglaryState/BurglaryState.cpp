@@ -55,9 +55,15 @@ BurglaryState::BurglaryState() : pathFinder(tileMap)
 	guardCatchedPlayer = false;
 	
 	sf::RenderWindow* window = Game::instance->getWindow();
-	window->setView(window->getDefaultView());
-	targetLight.create(window->getSize().x, window->getSize().y);
-	camera.setSize(window->getSize());
+	
+	{
+		sf::Vector2u size = window->getSize();
+		if(size.x > 1600)
+			size = sf::Vector2u(size.x / 2, size.y / 2);
+		camera.setSize(size);
+		targetLight.create(size.x, size.y);
+		targetLight.setSmooth(true);
+	}
 	
 	blackout.setPosition(0, 0);
 	blackout.setSize(sf::Vector2f(window->getSize()));
